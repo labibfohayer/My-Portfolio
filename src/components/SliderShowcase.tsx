@@ -279,51 +279,7 @@ export default function SliderShowcase() {
             willChange: "transform",
           }}
         >
-          {/* Slide 1: Video (Replaced & Zoom to Fill) */}
-          <div className="showcase-slide" style={{ flexShrink: 0 }}>
-            <div
-              className="showcase-slide-img w-background-video w-background-video-atom"
-              data-autoplay="true"
-              data-loop="true"
-              data-wf-ignore="true"
-              style={{ width: "100%", height: "100%", position: "relative", backgroundColor: "#000000" }}
-            >
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                data-object-fit="cover"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  inset: 0,
-                  margin: "auto",
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                  zIndex: 1,
-                  backgroundColor: "#000000",
-                }}
-                poster="/videos/new-vdo-poster.jpg"
-              >
-                <source
-                  src="/home/labib-fohayer/Downloads/New vdo.mp4"
-                  type="video/mp4"
-                />
-                <source
-                  src="/videos/new-vdo.mp4"
-                  type="video/mp4"
-                />
-              </video>
-            </div>
-          </div>
-
-          {/* Slide 2: Astronaut Cat */}
+          {/* Slide 1: Astronaut Cat */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
               src="/images/marquee/marquee-slide-1.png"
@@ -339,7 +295,7 @@ export default function SliderShowcase() {
             />
           </div>
 
-          {/* Slide 3: AI Brain on Microchip */}
+          {/* Slide 2: AI Brain on Microchip */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
               src="/images/marquee/marquee-slide-2.png"
@@ -355,7 +311,7 @@ export default function SliderShowcase() {
             />
           </div>
 
-          {/* Slide 4: Space Robot */}
+          {/* Slide 3: Space Robot */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
               src="/images/marquee/marquee-slide-3.png"
@@ -371,7 +327,7 @@ export default function SliderShowcase() {
             />
           </div>
 
-          {/* Slide 5: Cyberpunk Neon Robot */}
+          {/* Slide 4: Cyberpunk Neon Robot */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
               src="/images/marquee/marquee-slide-4.png"
@@ -387,7 +343,7 @@ export default function SliderShowcase() {
             />
           </div>
 
-          {/* Slide 6: Programming Workspace */}
+          {/* Slide 5: Programming Workspace */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
               src="/images/marquee/marquee-slide-5.png"
