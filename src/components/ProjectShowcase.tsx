@@ -86,7 +86,7 @@ const PROJECTS: ProjectItem[] = [
     id: "bd-mess",
     name: "BD Mess",
     detail: "MANAGEMENT SYSTEM",
-    href: "https://github.com/labibfohayer/bd-mess",
+    href: "https://bd-mess.pages.dev/",
     logo: "/projects/bd-mess-static.jpg",
     mainImg: "/projects/bd-mess-static.jpg",
     hoverImg: "/projects/bd-mess-hover.jpg",
