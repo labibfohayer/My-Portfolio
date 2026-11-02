@@ -323,14 +323,12 @@ export default function SliderShowcase() {
             </div>
           </div>
 
-          {/* Slide 2: Shot 2 (Meatology Dog) */}
+          {/* Slide 2: Astronaut Cat */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
-              src="/cdn-assets/6ab263498b14a38a7a109afc_Shot%202.jpg"
+              src="/images/marquee/marquee-slide-1.png"
               loading="lazy"
-              sizes="(max-width: 1200px) 100vw, 1200px"
-              srcSet="/cdn-assets/6ab263498b14a38a7a109afc_Shot%202-p-500.jpg 500w, /cdn-assets/6ab263498b14a38a7a109afc_Shot%202-p-800.jpg 800w, /cdn-assets/6ab263498b14a38a7a109afc_Shot%202-p-1080.jpg 1080w, /cdn-assets/6ab263498b14a38a7a109afc_Shot%202.jpg 1200w"
-              alt="Meatology Dog"
+              alt="Astronaut Cat"
               className="showcase-slide-img"
               style={{
                 width: "100%",
@@ -341,49 +339,12 @@ export default function SliderShowcase() {
             />
           </div>
 
-          {/* Slide 3: Video (Vitabun Probio Kid Gummy Bears) */}
-          <div className="showcase-slide" style={{ flexShrink: 0 }}>
-            <div
-              className="showcase-slide-img w-background-video w-background-video-atom"
-              data-autoplay="true"
-              data-loop="true"
-              data-wf-ignore="true"
-              style={{ width: "100%", height: "100%", position: "relative" }}
-            >
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                data-object-fit="cover"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                }}
-                poster="/cdn-assets/6ab263f29cc7204d5832b66d_Shot%203_poster.0000000.jpg"
-              >
-                <source
-                  src="/cdn-assets/6ab263f29cc7204d5832b66d_Shot%203_mp4.mp4"
-                  type="video/mp4"
-                />
-                <source
-                  src="/cdn-assets/6ab263f29cc7204d5832b66d_Shot%203_webm.webm"
-                  type="video/webm"
-                />
-              </video>
-            </div>
-          </div>
-
-          {/* Slide 4: Shot 4 */}
+          {/* Slide 3: AI Brain on Microchip */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
-              src="/cdn-assets/6ab2633da8fa39ec5216880b_Shot%204.jpg"
+              src="/images/marquee/marquee-slide-2.png"
               loading="lazy"
-              sizes="(max-width: 1200px) 100vw, 1200px"
-              srcSet="/cdn-assets/6ab2633da8fa39ec5216880b_Shot%204-p-500.jpg 500w, /cdn-assets/6ab2633da8fa39ec5216880b_Shot%204-p-800.jpg 800w, /cdn-assets/6ab2633da8fa39ec5216880b_Shot%204-p-1080.jpg 1080w, /cdn-assets/6ab2633da8fa39ec5216880b_Shot%204.jpg 1200w"
-              alt="Labib Showcase 4"
+              alt="AI Brain on Microchip"
               className="showcase-slide-img"
               style={{
                 width: "100%",
@@ -394,14 +355,12 @@ export default function SliderShowcase() {
             />
           </div>
 
-          {/* Slide 5: Shot 5 */}
+          {/* Slide 4: Space Robot */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
-              src="/cdn-assets/6ab2633d3e5b6a35a15d74d7_Shot%205.jpg"
+              src="/images/marquee/marquee-slide-3.png"
               loading="lazy"
-              sizes="(max-width: 1200px) 100vw, 1200px"
-              srcSet="/cdn-assets/6ab2633d3e5b6a35a15d74d7_Shot%205-p-500.jpg 500w, /cdn-assets/6ab2633d3e5b6a35a15d74d7_Shot%205-p-800.jpg 800w, /cdn-assets/6ab2633d3e5b6a35a15d74d7_Shot%205-p-1080.jpg 1080w, /cdn-assets/6ab2633d3e5b6a35a15d74d7_Shot%205.jpg 1200w"
-              alt="Labib Showcase 5"
+              alt="Space Robot"
               className="showcase-slide-img"
               style={{
                 width: "100%",
@@ -412,14 +371,28 @@ export default function SliderShowcase() {
             />
           </div>
 
-          {/* Slide 6: Shot 6 (Wine Bottle Illustration) */}
+          {/* Slide 5: Cyberpunk Neon Robot */}
           <div className="showcase-slide" style={{ flexShrink: 0 }}>
             <img
-              src="/cdn-assets/6ab2634dc8995221637e120c_Shot%206.png"
+              src="/images/marquee/marquee-slide-4.png"
               loading="lazy"
-              sizes="(max-width: 1200px) 100vw, 1200px"
-              srcSet="/cdn-assets/6ab2634dc8995221637e120c_Shot%206-p-500.png 500w, /cdn-assets/6ab2634dc8995221637e120c_Shot%206-p-800.png 800w, /cdn-assets/6ab2634dc8995221637e120c_Shot%206-p-1080.png 1080w, /cdn-assets/6ab2634dc8995221637e120c_Shot%206.png 1200w"
-              alt="Wine Bottle Illustration"
+              alt="Cyberpunk Neon Robot"
+              className="showcase-slide-img"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+          </div>
+
+          {/* Slide 6: Programming Workspace */}
+          <div className="showcase-slide" style={{ flexShrink: 0 }}>
+            <img
+              src="/images/marquee/marquee-slide-5.png"
+              loading="lazy"
+              alt="Programming Workspace"
               className="showcase-slide-img"
               style={{
                 width: "100%",
