@@ -364,8 +364,8 @@ export default function Hero({ onOpenContact }: HeroProps) {
         {/* Characters Walking Placards Animation Loop Video */}
         <div className="hero-video-loop">
           <div
-            data-poster-url="https://cdn.prod.website-files.com/6a7d9d7d7c99784ba2cac874%2F6a7db9b17a581584f4171aad_Hero_poster.0000000.jpg"
-            data-video-urls="https://cdn.prod.website-files.com/6aaad679fdb9d914f7f52049/6aaad679fdb9d914f7f52055_Hero_mp4.mp4,https://cdn.prod.website-files.com/6aaad679fdb9d914f7f52049/6aaad679fdb9d914f7f52055_Hero_webm.webm"
+            data-poster-url="/cdn-assets/hero-walking-labib-poster.jpg"
+            data-video-urls="/cdn-assets/hero-walking-labib.mp4,/cdn-assets/hero-walking-labib.webm"
             data-autoplay="true"
             data-loop="true"
             data-wf-ignore="true"
@@ -378,7 +378,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
               loop
               style={{
                 backgroundImage:
-                  'url("https://cdn.prod.website-files.com/6a7d9d7d7c99784ba2cac874%2F6a7db9b17a581584f4171aad_Hero_poster.0000000.jpg")',
+                  'url("/cdn-assets/hero-walking-labib-poster.jpg")',
               }}
               muted
               playsInline
@@ -386,11 +386,11 @@ export default function Hero({ onOpenContact }: HeroProps) {
               data-object-fit="cover"
             >
               <source
-                src="/cdn-assets/6aaad679fdb9d914f7f52055_Hero_mp4.mp4"
+                src="/cdn-assets/hero-walking-labib.mp4"
                 data-wf-ignore="true"
               />
               <source
-                src="/cdn-assets/6aaad679fdb9d914f7f52055_Hero_webm.webm"
+                src="/cdn-assets/hero-walking-labib.webm"
                 data-wf-ignore="true"
               />
             </video>
