@@ -226,7 +226,7 @@ body {
 }
 
 .navbar-right {
-  gap: 3.5em;
+  gap: 1.25em;
   min-width: 17.25em;
   color: var(--brand-black);
   justify-content: flex-end;

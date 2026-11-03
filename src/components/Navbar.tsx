@@ -343,10 +343,49 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
           </div>
         </Link>
 
-        {/* Right Timing & Let's Talk CTA */}
+        {/* Right CTA Buttons: Resume & Let's Talk */}
         <div className="navbar-right">
-          <div className="navbar-timing">
-            Monday–Friday<br />10:00 – 17:00
+          <div className="cta-wrap">
+            <a
+              href="/Labib_Fohayer_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cta-btn cursor-pointer"
+            >
+              <span className="cta-text">Resume</span>
+              <div className="cta-btn-arrow">
+                <div className="svg-arrow-cta">
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 10 10"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clipPath="url(#clip0_cta_arrow_resume)">
+                      <path
+                        d="M1.46439 8.53621L8.53546 1.46515M3.05538 1.28837L8.53546 1.46515L8.71223 6.94522"
+                        stroke="white"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_cta_arrow_resume">
+                        <rect
+                          width="10"
+                          height="10"
+                          fill="white"
+                          transform="translate(10) rotate(90)"
+                        />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+              <div className="cta-btn-fill-hover" />
+            </a>
           </div>
           <div className="cta-wrap">
             <button
