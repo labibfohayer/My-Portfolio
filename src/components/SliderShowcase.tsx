@@ -2,6 +2,37 @@
 
 import React, { useEffect, useRef } from "react";
 
+const MARQUEE_VIDEOS = [
+  {
+    file: "CONTINUITY:_This_is_the_second_057fcb3d.mp4",
+    clean: "video-1.mp4",
+  },
+  {
+    file: "Commercial_for_ATREEZ_parfum_94e63a01_1080p.mp4",
+    clean: "video-2.mp4",
+  },
+  {
+    file: "Create_a_10-second,_ultra-photorealistic,_cinematic_300f6d32.mp4",
+    clean: "video-3.mp4",
+  },
+  {
+    file: "Xiaomi_smartphone_levitates_in_s…_c5d07a54_1080p.mp4",
+    clean: "video-4.mp4",
+  },
+  {
+    file: "_ad__no_sound__animation__unboxing_57d12869_1080p.mp4",
+    clean: "video-5.mp4",
+  },
+  {
+    file: "_cokearound_fo_ad__colours_of_0b78dbf3_1080p.mp4",
+    clean: "video-6.mp4",
+  },
+  {
+    file: "_cokearound_fo_ad__colours_of_feef6522_1080p.mp4",
+    clean: "video-7.mp4",
+  },
+];
+
 export default function SliderShowcase() {
   const sectionRef = useRef<HTMLElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -150,6 +181,15 @@ export default function SliderShowcase() {
 
       measureAll();
 
+      const slideVideos = track.querySelectorAll("video");
+      slideVideos.forEach((vid) => {
+        if (vid.readyState >= 1) {
+          measureAll();
+        } else {
+          vid.addEventListener("loadedmetadata", measureAll, { once: true });
+        }
+      });
+
       const slideImages = track.querySelectorAll("img");
       slideImages.forEach((img) => {
         if (!img.complete) {
@@ -279,85 +319,37 @@ export default function SliderShowcase() {
             willChange: "transform",
           }}
         >
-          {/* Slide 1: Astronaut Cat */}
-          <div className="showcase-slide" style={{ flexShrink: 0 }}>
-            <img
-              src="/images/marquee/marquee-slide-1.png"
-              loading="lazy"
-              alt="Astronaut Cat"
-              className="showcase-slide-img"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-          </div>
-
-          {/* Slide 2: AI Brain on Microchip */}
-          <div className="showcase-slide" style={{ flexShrink: 0 }}>
-            <img
-              src="/images/marquee/marquee-slide-2.png"
-              loading="lazy"
-              alt="AI Brain on Microchip"
-              className="showcase-slide-img"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-          </div>
-
-          {/* Slide 3: Space Robot */}
-          <div className="showcase-slide" style={{ flexShrink: 0 }}>
-            <img
-              src="/images/marquee/marquee-slide-3.png"
-              loading="lazy"
-              alt="Space Robot"
-              className="showcase-slide-img"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-          </div>
-
-          {/* Slide 4: Cyberpunk Neon Robot */}
-          <div className="showcase-slide" style={{ flexShrink: 0 }}>
-            <img
-              src="/images/marquee/marquee-slide-4.png"
-              loading="lazy"
-              alt="Cyberpunk Neon Robot"
-              className="showcase-slide-img"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-          </div>
-
-          {/* Slide 5: Programming Workspace */}
-          <div className="showcase-slide" style={{ flexShrink: 0 }}>
-            <img
-              src="/images/marquee/marquee-slide-5.png"
-              loading="lazy"
-              alt="Programming Workspace"
-              className="showcase-slide-img"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-          </div>
+          {MARQUEE_VIDEOS.map((item, idx) => (
+            <div key={idx} className="showcase-slide" style={{ flexShrink: 0 }}>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="showcase-slide-img"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  display: "block",
+                }}
+              >
+                <source
+                  src={`/home/labib-fohayer/Videos/${item.file}`}
+                  type="video/mp4"
+                />
+                <source
+                  src={`/videos/marquee/${item.file}`}
+                  type="video/mp4"
+                />
+                <source
+                  src={`/videos/marquee/${item.clean}`}
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+          ))}
         </div>
       </div>
     </section>
