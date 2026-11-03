@@ -43,6 +43,8 @@ export default function SliderShowcase() {
     let scrollTriggerInstance: any = null;
     let resizeHandler: any = null;
     let timeoutId: NodeJS.Timeout | null = null;
+    let videoObserver: IntersectionObserver | null = null;
+    let visibilityHandler: any = null;
 
     const setupMarquee = () => {
       const gsap = (window as any).gsap;
@@ -91,14 +93,12 @@ export default function SliderShowcase() {
       // Remove any existing clones to prevent duplicates on re-init
       track.querySelectorAll(".is-marquee-clone").forEach((c) => c.remove());
 
-      // Create enough sets so that one full set wrap is always outside the screen both ways
-      // Need at least 5 sets so track has plenty of buffer on both left and right
-      const setsNeeded = Math.max(
-        5,
-        Math.ceil(
-          (window.innerWidth * 3.5) /
-            (initialSlides[0].offsetWidth * numInitial || 1000)
-        ) + 2
+      // Smart clone sets: 2 sets (14 slides) for typical screens, 3 sets (21 slides) for ultrawide
+      const oneSetWidth =
+        (initialSlides[0].offsetWidth || 500) * numInitial || 3500;
+      const setsNeeded = Math.min(
+        3,
+        Math.max(2, Math.ceil((window.innerWidth * 1.5) / oneSetWidth) + 1)
       );
 
       for (let s = 1; s < setsNeeded; s++) {
@@ -114,13 +114,48 @@ export default function SliderShowcase() {
         });
       }
 
-      // Ensure all videos play continuously with maximum performance
-      track.querySelectorAll("video").forEach((vid) => {
-        vid.muted = true;
-        vid.setAttribute("playsinline", "");
-        vid.setAttribute("preload", "auto");
-        vid.play().catch(() => {});
-      });
+      // Virtualized video decoding: ONLY videos visible on screen (plus small buffer) decode & play!
+      if (typeof IntersectionObserver !== "undefined") {
+        videoObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const vid = entry.target as HTMLVideoElement;
+              if (entry.isIntersecting) {
+                if (vid.paused) {
+                  vid.play().catch(() => {});
+                }
+              } else {
+                if (!vid.paused) {
+                  vid.pause();
+                }
+              }
+            });
+          },
+          { root: null, rootMargin: "300px", threshold: 0.01 }
+        );
+
+        track.querySelectorAll("video").forEach((vid) => {
+          vid.muted = true;
+          vid.setAttribute("playsinline", "");
+          vid.setAttribute("preload", "metadata");
+          videoObserver?.observe(vid);
+        });
+      } else {
+        track.querySelectorAll("video").forEach((vid) => {
+          vid.muted = true;
+          vid.setAttribute("playsinline", "");
+          vid.play().catch(() => {});
+        });
+      }
+
+      visibilityHandler = () => {
+        if (document.hidden) {
+          track.querySelectorAll("video").forEach((vid) => {
+            if (!vid.paused) vid.pause();
+          });
+        }
+      };
+      document.addEventListener("visibilitychange", visibilityHandler);
 
       const allSlides = Array.from(
         track.querySelectorAll(".showcase-slide")
@@ -175,7 +210,7 @@ export default function SliderShowcase() {
           slideHalfWidth = (initialSlides[0].offsetWidth || 300) / 2;
         }
         if (setWidth > 0 && currentX === -2000) {
-          currentX = -2 * setWidth;
+          currentX = -setWidth;
         }
       }
 
@@ -210,7 +245,7 @@ export default function SliderShowcase() {
       let scrollVelocityBoost = 0;
 
       if (setWidth > 0) {
-        currentX = -2 * setWidth;
+        currentX = -setWidth;
       }
 
       const scrollerEl = document.querySelector(".page") || window;
@@ -242,10 +277,10 @@ export default function SliderShowcase() {
 
         // Continuous seamless wrapping for left-to-right motion
         if (setWidth > 0) {
-          while (currentX > -setWidth) {
+          while (currentX > 0) {
             currentX -= setWidth;
           }
-          while (currentX < -2 * setWidth) {
+          while (currentX < -setWidth) {
             currentX += setWidth;
           }
         }
@@ -284,6 +319,12 @@ export default function SliderShowcase() {
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       if (resizeHandler) window.removeEventListener("resize", resizeHandler);
+      if (visibilityHandler) {
+        document.removeEventListener("visibilitychange", visibilityHandler);
+      }
+      if (videoObserver) {
+        videoObserver.disconnect();
+      }
       const gsap = (window as any).gsap;
       if (gsap && tickFn) {
         gsap.ticker.remove(tickFn);
@@ -322,10 +363,11 @@ export default function SliderShowcase() {
           {MARQUEE_VIDEOS.map((item, idx) => (
             <div key={idx} className="showcase-slide" style={{ flexShrink: 0 }}>
               <video
-                autoPlay
-                loop
                 muted
+                loop
                 playsInline
+                preload="metadata"
+                poster={`/videos/marquee/${item.clean.replace(".mp4", "-poster.jpg")}`}
                 className="showcase-slide-img"
                 style={{
                   width: "100%",
@@ -336,7 +378,7 @@ export default function SliderShowcase() {
                 }}
               >
                 <source
-                  src={`/home/labib-fohayer/Videos/${item.file}`}
+                  src={`/videos/marquee/${item.clean}`}
                   type="video/mp4"
                 />
                 <source
@@ -344,7 +386,7 @@ export default function SliderShowcase() {
                   type="video/mp4"
                 />
                 <source
-                  src={`/videos/marquee/${item.clean}`}
+                  src={`/home/labib-fohayer/Videos/${item.file}`}
                   type="video/mp4"
                 />
               </video>
