@@ -51,6 +51,18 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
       router.push("/work");
     }
   };
+
+  const handleResumeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (pathname === "/resume") return;
+    if (typeof (window as any).triggerPageTransition === "function") {
+      (window as any).triggerPageTransition("/resume", () => {
+        router.push("/resume");
+      });
+    } else {
+      router.push("/resume");
+    }
+  };
   const svgRef = useRef<SVGSVGElement>(null);
   const navOverlayRef = useRef<HTMLDivElement>(null);
   const iconTlRef = useRef<gsap.core.Timeline | null>(null);
@@ -346,10 +358,9 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
         {/* Right CTA Buttons: Resume & Let's Talk */}
         <div className="navbar-right">
           <div className="cta-wrap">
-            <a
-              href="/Labib_Fohayer_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/resume"
+              onClick={handleResumeClick}
               className="cta-btn cursor-pointer"
             >
               <span className="cta-text">Resume</span>
@@ -385,7 +396,7 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
                 </div>
               </div>
               <div className="cta-btn-fill-hover" />
-            </a>
+            </Link>
           </div>
           <div className="cta-wrap">
             <button
@@ -511,6 +522,37 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
             className="navbar-link-btn group cursor-pointer"
           >
             <span className="navlink-text">About me</span>
+            <div className="stroke-fill">
+              <div className="stroke-fill-code">
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 75 36"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="overflow-visible w-full h-full"
+                >
+                  <path
+                    d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753"
+                    stroke="#FF5400"
+                    strokeWidth="24"
+                    strokeLinecap="round"
+                    className="draw-svg-path"
+                  />
+                </svg>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="/resume"
+            onClick={(e) => {
+              closeMenu();
+              handleResumeClick(e);
+            }}
+            className="navbar-link-btn group cursor-pointer"
+          >
+            <span className="navlink-text">Resume</span>
             <div className="stroke-fill">
               <div className="stroke-fill-code">
                 <svg
