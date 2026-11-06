@@ -2313,17 +2313,36 @@ window.__two26LoaderDone = true;
           }
         }
 
-        const exploreTarget = e.target.closest(
-          ".project-btn, a[href='/work'].project-btn, a[href*='work'].project-btn",
+        const offTheClockTarget = e.target.closest(
+          "a[href='/off-the-clock'], a[href='/off-the-clock/'], a[href*='off-the-clock']",
         );
-        if (exploreTarget) {
+        if (offTheClockTarget) {
+          if (window.location.pathname.replace(/\/+$/, "") === "/off-the-clock") {
+            e.preventDefault();
+            return;
+          }
+          if (typeof window.triggerPageTransition === "function") {
+            e.preventDefault();
+            window.triggerPageTransition("/off-the-clock", function () {
+              window.location.href = "/off-the-clock";
+            });
+            return;
+          }
+        }
+
+        const exploreTarget = e.target.closest(
+          ".projects-end .project-btn, a[href='/work'].project-btn, a[href*='work'].project-btn",
+        );
+        if (exploreTarget && !exploreTarget.closest("a[href*='off-the-clock']")) {
           if (window.location.pathname.replace(/\/+$/, "") === "/work") {
             e.preventDefault();
             return;
           }
           if (typeof window.triggerPageTransition === "function") {
             e.preventDefault();
-            window.triggerPageTransition("/work");
+            window.triggerPageTransition("/work", function () {
+              window.location.href = "/work";
+            });
             return;
           }
         }
