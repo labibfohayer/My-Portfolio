@@ -82,18 +82,30 @@ export default function PageLoader() {
       });
     });
 
+    const dismissLoader = () => {
+      document.body.style.overflow = originalOverflow;
+      if (loader) {
+        loader.style.display = "none";
+        loader.style.pointerEvents = "none";
+      }
+      (window as any).__two26LoaderDone = true;
+      document.dispatchEvent(new CustomEvent("two26:loaderComplete"));
+      if ((window as any).ScrollTrigger) {
+        (window as any).ScrollTrigger.refresh();
+      }
+    };
+
+    // Safety auto-dismiss fallback in case GSAP timeline is throttled in background tabs
+    const safetyDismiss = setTimeout(() => {
+      dismissLoader();
+    }, 3800);
+
     // Master Timeline
     const masterTl = gsap.timeline({
       delay: 0.15,
       onComplete: () => {
-        document.body.style.overflow = originalOverflow;
-        loader.style.display = "none";
-        loader.style.pointerEvents = "none";
-        (window as any).__two26LoaderDone = true;
-        document.dispatchEvent(new CustomEvent("two26:loaderComplete"));
-        if ((window as any).ScrollTrigger) {
-          (window as any).ScrollTrigger.refresh();
-        }
+        clearTimeout(safetyDismiss);
+        dismissLoader();
       },
     });
 
@@ -210,6 +222,7 @@ export default function PageLoader() {
     }
 
     return () => {
+      clearTimeout(safetyDismiss);
       masterTl.kill();
       document.body.style.overflow = originalOverflow;
     };

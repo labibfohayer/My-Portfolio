@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AboutHero from "@/components/about/AboutHero";
@@ -12,6 +13,18 @@ import "./about.css";
 
 export default function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const handleOffTheClockClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (typeof (window as any).triggerPageTransition === "function") {
+      (window as any).triggerPageTransition("/off-the-clock", () => {
+        router.push("/off-the-clock");
+      });
+    } else {
+      router.push("/off-the-clock");
+    }
+  };
 
   useEffect(() => {
     const handleInit = () => {
@@ -87,6 +100,7 @@ export default function AboutPage() {
             </div>
             <Link
               href="/off-the-clock"
+              onClick={handleOffTheClockClick}
               className="project-btn w-inline-block cursor-pointer"
               style={{
                 width: "auto",

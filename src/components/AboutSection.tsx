@@ -363,7 +363,7 @@ export default function AboutSection() {
           <div className="about-split-container">
             <div className="about-image-col">
               <img
-                src="/images/labib-fohayer.png"
+                src="/images/labib-fohayer-full.png?v=2"
                 alt="Labib Fohayer"
                 className="about-portrait-img"
               />

@@ -1435,9 +1435,9 @@ body {
   }
 
   /* Authentic floating pills visible on mobile (scaled to 0.75em) */
-  .hero-pill.one { font-size: 0.75em !important; display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
-  .hero-pill.two { font-size: 0.75em !important; top: 20% !important; display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
-  .hero-pill.three { font-size: 0.75em !important; display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+  .hero-pill.one { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+  .hero-pill.two { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+  .hero-pill.three { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
   .about-pill,
   .about-pill.first,
   .about-pill.second,
@@ -1474,7 +1474,7 @@ body {
   }
 
   .about-portrait-img {
-    max-height: 26vh !important;
+    max-height: 32vh !important;
     width: auto !important;
   }
 
@@ -1926,25 +1926,47 @@ body {
     font-size: 4em !important;
   }
 
-  /* Floating Pills Mobile Positions */
-  .hero-pill.one {
-    top: 55% !important;
-    left: 7% !important;
-    font-size: 0.75em !important;
+  /* Floating Pills Mobile Positions (Scattered, Zero-Overlap) */
+  .hero-pill.two {
+    top: -30px !important;
+    left: 8px !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: rotate(-5deg) !important;
+    font-size: 0.6em !important;
+    padding: 0.3em 0.8em !important;
     display: flex !important;
     visibility: visible !important;
     opacity: 1 !important;
+    z-index: 3 !important;
   }
 
-  .hero-pill.two {
-    z-index: 3 !important;
-    justify-content: center !important;
-    align-items: center !important;
-    top: 24% !important;
-    font-size: 0.75em !important;
+  .hero-pill.three {
+    top: -26px !important;
+    right: 8px !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: rotate(4deg) !important;
+    font-size: 0.6em !important;
+    padding: 0.3em 0.8em !important;
     display: flex !important;
     visibility: visible !important;
     opacity: 1 !important;
+    z-index: 3 !important;
+  }
+
+  .hero-pill.one {
+    bottom: -28px !important;
+    left: 8px !important;
+    top: auto !important;
+    right: auto !important;
+    transform: rotate(-4deg) !important;
+    font-size: 0.6em !important;
+    padding: 0.3em 0.8em !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 3 !important;
   }
 
   .hero-pill-text {

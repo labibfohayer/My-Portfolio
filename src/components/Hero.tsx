@@ -265,7 +265,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
     } else {
       document.addEventListener("two26:loaderComplete", playHero, { once: true });
       if ((window as any).__two26LoaderDone) playHero();
-      setTimeout(playHero, 6000);
+      setTimeout(playHero, 4000);
     }
 
     return () => {
@@ -280,17 +280,137 @@ export default function Hero({ onOpenContact }: HeroProps) {
         <style
           dangerouslySetInnerHTML={{
             __html: `
-              /* Prevent FOUC: Elements start invisible until GSAP initializes */
+              /* Prevent FOUC: Elements start invisible until GSAP initializes, with automatic safety fallback */
+              @keyframes heroFoucReveal {
+                to {
+                  opacity: 1;
+                }
+              }
+
               .section-hero .hero-text h1,
               .section-hero .hero-text .heading,
               .section-hero [data-hero-heading],
               .section-hero h1 {
                 opacity: 0;
+                animation: heroFoucReveal 0.05s ease forwards;
+                animation-delay: 1.2s;
               }
 
               .section-hero .hero-pill {
                 opacity: 0;
                 will-change: transform, opacity;
+              }
+
+              /* Hero Pills Scattered Organic Layout (Strict Zero-Overlap Policy) */
+              .section-hero .hero-pill.two {
+                top: -26% !important;
+                left: -5% !important;
+                right: auto !important;
+                bottom: auto !important;
+                transform: rotate(-7deg) !important;
+              }
+
+              .section-hero .hero-pill.three {
+                top: 14% !important;
+                right: -10% !important;
+                left: auto !important;
+                bottom: auto !important;
+                transform: rotate(6deg) !important;
+              }
+
+              .section-hero .hero-pill.one {
+                bottom: -28% !important;
+                left: -3% !important;
+                top: auto !important;
+                right: auto !important;
+                transform: rotate(-5deg) !important;
+              }
+
+              @media screen and (max-width: 991px) and (min-width: 768px) {
+                .section-hero .hero-pill.two {
+                  top: -5% !important;
+                  left: -3% !important;
+                  right: auto !important;
+                  bottom: auto !important;
+                  transform: rotate(-5deg) !important;
+                  font-size: 0.75em !important;
+                }
+                .section-hero .hero-pill.three {
+                  top: 16% !important;
+                  right: -10% !important;
+                  left: auto !important;
+                  bottom: auto !important;
+                  transform: rotate(6deg) !important;
+                  font-size: 0.75em !important;
+                }
+                .section-hero .hero-pill.one {
+                  bottom: -22% !important;
+                  left: 0% !important;
+                  top: auto !important;
+                  right: auto !important;
+                  transform: rotate(-5deg) !important;
+                  font-size: 0.75em !important;
+                }
+              }
+
+              @media screen and (max-width: 767px) {
+                .section-hero .hero-pill.two {
+                  top: -34px !important;
+                  left: 12px !important;
+                  right: auto !important;
+                  bottom: auto !important;
+                  transform: rotate(-5deg) !important;
+                  font-size: 0.65em !important;
+                  padding: 0.35em 0.85em !important;
+                }
+                .section-hero .hero-pill.three {
+                  top: -30px !important;
+                  right: 12px !important;
+                  left: auto !important;
+                  bottom: auto !important;
+                  transform: rotate(5deg) !important;
+                  font-size: 0.65em !important;
+                  padding: 0.35em 0.85em !important;
+                }
+                .section-hero .hero-pill.one {
+                  bottom: -32px !important;
+                  left: 14px !important;
+                  top: auto !important;
+                  right: auto !important;
+                  transform: rotate(-4deg) !important;
+                  font-size: 0.65em !important;
+                  padding: 0.35em 0.85em !important;
+                }
+              }
+
+              @media screen and (max-width: 479px) {
+                .section-hero .hero-pill.two {
+                  top: -30px !important;
+                  left: 8px !important;
+                  right: auto !important;
+                  bottom: auto !important;
+                  transform: rotate(-5deg) !important;
+                  font-size: 0.6em !important;
+                  padding: 0.3em 0.8em !important;
+                }
+                .section-hero .hero-pill.three {
+                  top: -26px !important;
+                  right: 8px !important;
+                  left: auto !important;
+                  bottom: auto !important;
+                  transform: rotate(4deg) !important;
+                  font-size: 0.6em !important;
+                  padding: 0.3em 0.8em !important;
+                }
+                .section-hero .hero-pill.one {
+                  bottom: -28px !important;
+                  left: 8px !important;
+                  top: auto !important;
+                  right: auto !important;
+                  transform: rotate(-4deg) !important;
+                  font-size: 0.6em !important;
+                  padding: 0.3em 0.8em !important;
+                }
               }
 
               /* Pill text mask: clips inner text for slide-up reveal */
@@ -364,8 +484,8 @@ export default function Hero({ onOpenContact }: HeroProps) {
         {/* Characters Walking Placards Animation Loop Video */}
         <div className="hero-video-loop">
           <div
-            data-poster-url="/cdn-assets/hero-walking-labib-poster.jpg"
-            data-video-urls="/cdn-assets/hero-walking-labib.mp4,/cdn-assets/hero-walking-labib.webm"
+            data-poster-url="/cdn-assets/hero-walking-labib-poster.jpg?v=2.0"
+            data-video-urls="/cdn-assets/hero-walking-labib.mp4?v=2.0,/cdn-assets/hero-walking-labib.webm?v=2.0"
             data-autoplay="true"
             data-loop="true"
             data-wf-ignore="true"
@@ -378,7 +498,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
               loop
               style={{
                 backgroundImage:
-                  'url("/cdn-assets/hero-walking-labib-poster.jpg")',
+                  'url("/cdn-assets/hero-walking-labib-poster.jpg?v=2.0")',
               }}
               muted
               playsInline
@@ -386,11 +506,11 @@ export default function Hero({ onOpenContact }: HeroProps) {
               data-object-fit="cover"
             >
               <source
-                src="/cdn-assets/hero-walking-labib.mp4"
+                src="/cdn-assets/hero-walking-labib.mp4?v=2.0"
                 data-wf-ignore="true"
               />
               <source
-                src="/cdn-assets/hero-walking-labib.webm"
+                src="/cdn-assets/hero-walking-labib.webm?v=2.0"
                 data-wf-ignore="true"
               />
             </video>

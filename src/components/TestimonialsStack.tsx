@@ -17,23 +17,6 @@ interface Testimonial {
 const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      "Working with Labib has been one of the smoothest collaborations I've had",
-    name: "Sadiya Akter Suraiya",
-    position: "CEO, Ponyopuri",
-    avatar: "/images/sadiya-akter-suraiya.jpg",
-    review:
-      "He is sharp, always responsive, and has a real talent for turning ideas into powerful websites. No matter the challenge: tight deadlines, complex coding requirements, or tricky automations, he always shows up with perfect solutions. Highly recommend working with him!",
-  },
-  {
-    quote: "Labib truly brought our digital vision to life",
-    name: "Mawlana Omar Faruk",
-    position: "Principle, Al Modina Madrasa",
-    avatar: "/images/mawlana-omar-faruk.jpg",
-    review:
-      "Labib is an amazing professional with an incredible amount of coding and automation talent. He took our ideas, understood them completely, and built a seamless web experience that went beyond anything we imagined. We feel incredibly lucky to have worked with him. Cannot recommend him highly enough!",
-  },
-  {
-    quote:
       "Working with Labib is like brainstorming ideas with a brilliant tech partner",
     name: "Sharif Mohammad Nasrullah",
     displayName: (
@@ -50,6 +33,23 @@ const TESTIMONIALS: Testimonial[] = [
     avatar: "/images/sharif-mohammad-nasrullah.jpg",
     review:
       "Always insightful and highly constructive. It hardly feels stressful, because his development process is so smooth and transparent. That's what you get when you hire an expert who knows both design and smart automation.",
+  },
+  {
+    quote: "Labib truly brought our digital vision to life",
+    name: "Mawlana Omar Faruk",
+    position: "Principle, Al Modina Madrasa",
+    avatar: "/images/mawlana-omar-faruk.jpg",
+    review:
+      "Labib is an amazing professional with an incredible amount of coding and automation talent. He took our ideas, understood them completely, and built a seamless web experience that went beyond anything we imagined. We feel incredibly lucky to have worked with him. Cannot recommend him highly enough!",
+  },
+  {
+    quote:
+      "Working with Labib has been one of the smoothest collaborations I've had",
+    name: "Sadiya Akter Suraiya",
+    position: "CEO, Ponyopuri",
+    avatar: "/images/sadiya-akter-suraiya.jpg",
+    review:
+      "He is sharp, always responsive, and has a real talent for turning ideas into powerful websites. No matter the challenge: tight deadlines, complex coding requirements, or tricky automations, he always shows up with perfect solutions. Highly recommend working with him!",
   },
   {
     quote: "Multiple web projects and counting",

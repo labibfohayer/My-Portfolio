@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AboutMoodboard from "@/components/about/AboutMoodboard";
@@ -8,6 +9,19 @@ import Link from "next/link";
 import "../about/about.css";
 
 export default function OffTheClockPage() {
+  const router = useRouter();
+
+  const handleBackToAboutClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (typeof (window as any).triggerPageTransition === "function") {
+      (window as any).triggerPageTransition("/about", () => {
+        router.push("/about");
+      });
+    } else {
+      router.push("/about");
+    }
+  };
+
   useEffect(() => {
     const handleInit = () => {
       if (typeof (window as any).initLenis === "function") {
@@ -58,6 +72,7 @@ export default function OffTheClockPage() {
           >
             <Link
               href="/about"
+              onClick={handleBackToAboutClick}
               className="navbar-link-btn group cursor-pointer"
               style={{
                 display: "inline-flex",

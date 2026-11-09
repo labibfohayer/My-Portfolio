@@ -1,115 +1,226 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { initCTAButtons } from "@/lib/buttonAnimations";
 
 export default function ResumePage() {
+  const router = useRouter();
+  const pageRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // Disable external smooth scroll on full-screen PDF viewer page
-    if ((window as any).lenis) {
-      try {
-        (window as any).lenis.stop();
-      } catch (e) {}
-    }
-    return () => {
-      if ((window as any).lenis) {
-        try {
-          (window as any).lenis.start();
-        } catch (e) {}
+    const handleInit = () => {
+      if (typeof (window as any).initLenis === "function") {
+        (window as any).initLenis();
       }
+      if ((window as any).lenis) {
+        (window as any).lenis.resize();
+      }
+      if ((window as any).ScrollTrigger) {
+        (window as any).ScrollTrigger.refresh();
+      }
+    };
+
+    handleInit();
+    const t = setTimeout(handleInit, 300);
+
+    const cleanupCTA = initCTAButtons(pageRef.current);
+
+    return () => {
+      clearTimeout(t);
+      if (cleanupCTA) cleanupCTA();
     };
   }, []);
 
+  const handleBackHome = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (typeof (window as any).triggerPageTransition === "function") {
+      (window as any).triggerPageTransition("/", () => {
+        router.push("/");
+      });
+    } else {
+      router.push("/");
+    }
+  };
+
   return (
     <>
-      {/* Strict Page-Specific Reset for Distraction-Free Full-Screen PDF */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          html, body {
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow: hidden !important;
-            height: 100vh !important;
-            width: 100vw !important;
-            background-color: #f5f5f5 !important;
-          }
-          .resume-floating-download {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            z-index: 9999;
-            background-color: #000000;
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.875rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-            transition: all 0.25s ease;
-            font-family: var(--font-secondary, sans-serif);
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-          }
-          .resume-floating-download:hover {
-            background-color: #ff5400 !important;
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 6px 20px rgba(255, 84, 0, 0.35) !important;
-          }
-          .resume-floating-download:active {
-            transform: translateY(0) scale(0.98);
-          }
-          @media (max-width: 768px) {
-            .resume-floating-download {
-              top: 15px;
-              right: 15px;
-              padding: 8px 16px;
-              font-size: 0.8125rem;
-            }
-          }
-        `,
-      }} />
-
-      {/* Floating Download PDF Button */}
-      <a
-        href="/Labib_Fohayer_Resume.pdf"
-        download="Labib_Fohayer_Resume.pdf"
-        className="resume-floating-download"
-        aria-label="Download PDF"
+      <Navbar />
+      <div
+        ref={pageRef}
+        className="page lenis selection:bg-[#ff5400] selection:text-white relative bg-[#fae3e2] min-h-screen text-[#1a1a1a]"
       >
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <main
+          className="main"
+          style={{
+            paddingTop: "7.5rem",
+            paddingBottom: "5rem",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        <span>Download PDF</span>
-      </a>
+          {/* Header & Actions Container */}
+          <div
+            style={{
+              maxWidth: "58rem",
+              margin: "0 auto",
+              width: "100%",
+              padding: "0 1.5rem",
+              marginBottom: "2rem",
+            }}
+          >
+            {/* Back to Home Link */}
+            <div style={{ marginBottom: "1.25rem" }}>
+              <Link
+                href="/"
+                onClick={handleBackHome}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  textDecoration: "none",
+                  fontSize: "0.9375rem",
+                  fontWeight: 600,
+                  color: "#1a1a1a",
+                  transition: "color 0.2s ease",
+                }}
+                className="hover:text-[#ff5400] cursor-pointer"
+              >
+                <span>← Back to Home</span>
+              </Link>
+            </div>
 
-      {/* 100% Full-Screen Distraction-Free PDF Viewer */}
-      <iframe
-        src="/Labib_Fohayer_Resume.pdf#toolbar=1&navpanes=0&scrollbar=1"
-        title="Labib Fohayer Curriculum Vitae"
-        style={{
-          width: "100vw",
-          height: "100vh",
-          border: "none",
-          display: "block",
-          margin: 0,
-          padding: 0,
-          backgroundColor: "#f5f5f5",
-        }}
-      />
+            {/* Title & Download Action Bar */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+                flexWrap: "wrap",
+                gap: "1.5rem",
+                borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+                paddingBottom: "1.5rem",
+              }}
+            >
+              <div>
+                <h1
+                  style={{
+                    fontFamily: "var(--font-primary, 'MDNichrome', Arial, sans-serif)",
+                    fontSize: "clamp(2rem, 5vw, 3.25rem)",
+                    fontWeight: 800,
+                    lineHeight: "1.05",
+                    color: "#1a1a1a",
+                    margin: "0 0 0.5rem 0",
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  Curriculum Vitae
+                </h1>
+                <p
+                  style={{
+                    fontFamily: "var(--font-secondary, 'NeueMontreal', sans-serif)",
+                    fontSize: "1rem",
+                    color: "#555555",
+                    margin: 0,
+                    fontWeight: 500,
+                  }}
+                >
+                  Full-Stack Developer • AI Automation Engineer • Reverse Engineer
+                </p>
+              </div>
+
+              {/* On-brand Download PDF Button */}
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <a
+                  href="/Labib_Fohayer_Resume.pdf?v=3.0"
+                  download="Labib_Fohayer_Resume.pdf"
+                  className="cta-btn cursor-pointer"
+                  style={{ minWidth: "9.5em", height: "2.5em" }}
+                >
+                  <span className="cta-text" style={{ fontSize: "0.85em" }}>
+                    Download PDF
+                  </span>
+                  <div className="cta-btn-arrow" style={{ width: "2.1em", height: "2.1em" }}>
+                    <div className="svg-arrow-cta">
+                      <svg
+                        width="11"
+                        height="11"
+                        viewBox="0 0 10 10"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 1V7M5 7L2.2 4.2M5 7L7.8 4.2M1.5 8.8H8.5"
+                          stroke="#FFFFFF"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="cta-btn-fill-hover" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Seamless Vertical CV Container - Zero Internal Scrollbar */}
+          <div
+            style={{
+              maxWidth: "54rem", // ~864px
+              margin: "0 auto",
+              width: "100%",
+              padding: "0 1.5rem",
+            }}
+          >
+            <div
+              style={{
+                width: "100%",
+                maxWidth: "850px",
+                margin: "0 auto",
+                backgroundColor: "#ffffff",
+                borderRadius: "1rem",
+                boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.15)",
+                overflow: "hidden",
+                border: "none",
+              }}
+            >
+              {/* Mobile View: High-res crisp graphic image for natural mobile touch scroll */}
+              <div className="block md:hidden w-full">
+                <img
+                  src="/images/resume-preview.png?v=3.0"
+                  alt="Labib Fohayer - Curriculum Vitae"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "block",
+                  }}
+                />
+              </div>
+
+              {/* Desktop View: Fully expanded A4 height iframe - NO nested scrollbar */}
+              <div className="hidden md:block w-full">
+                <iframe
+                  src="/Labib_Fohayer_Resume.pdf?v=3.0#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                  title="Labib Fohayer Curriculum Vitae"
+                  scrolling="no"
+                  style={{
+                    width: "100%",
+                    height: "1175px",
+                    border: "none",
+                    display: "block",
+                    overflow: "hidden",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     </>
   );
 }
