@@ -24,7 +24,7 @@ interface ProjectItem {
 const PROJECTS: ProjectItem[] = [
   {
     id: "webpulse-bot",
-    name: "Webpulse Bot",
+    name: "Webpulse Automation",
     detail: "AI Chatbot & Automation",
     href: "https://webpulseautomation.pages.dev/",
     logo: "/projects/webpulse-bot-logo.jpg",
