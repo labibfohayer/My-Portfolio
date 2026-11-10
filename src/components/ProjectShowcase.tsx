@@ -25,7 +25,7 @@ const PROJECTS: ProjectItem[] = [
   {
     id: "webpulse-bot",
     name: "Webpulse Automation",
-    detail: "AI Chatbot & Automation",
+    detail: "OFFICIAL AGENCY WEBSITE",
     href: "https://webpulseautomation.pages.dev/",
     logo: "/projects/webpulse-bot-logo.jpg",
     mainImg: "/projects/webpulse-bot-main.jpg",
