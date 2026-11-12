@@ -83,11 +83,22 @@ def process_html_file(filepath):
 
     content = re.sub(r'<link\b[^>]*\brel=["\']preload["\'][^>]*>', update_preload_href, content, flags=re.IGNORECASE)
 
-    # 5. Media & PDF assets (only in src or href, never in download attribute)
+    # 5. Media & PDF assets (only in src, href, data attributes, before any hash fragment)
     for asset in MEDIA_ASSETS:
-        pattern = re.compile(rf'((?:src|href)=["\'][^"\']*?{re.escape(asset)})(?!\?v=[0-9.]+|&v=[0-9.]+)')
-        content = pattern.sub(rf'\1?v=2.0', content)
-    content = re.sub(r'download=["\']([^"\']+?)\?v=[0-9.]+["\']', r'download="\1"', content)
+        def update_asset(m):
+            attr = m.group(1)
+            url = m.group(2)
+            quote = m.group(3)
+            if 'v=' in url:
+                return m.group(0)
+            if '#' in url:
+                base, fragment = url.split('#', 1)
+                sep = '&' if '?' in base else '?'
+                return f'{attr}{base}{sep}v=2.0#{fragment}{quote}'
+            else:
+                sep = '&' if '?' in url else '?'
+                return f'{attr}{url}{sep}v=2.0{quote}'
+        content = re.sub(rf'(src=["\']|href=["\']|data=["\'])([^"\']*{re.escape(asset)}[^"\']*?)(["\'])', update_asset, content)
 
     if content != original:
         with open(filepath, 'w', encoding='utf-8') as f:
