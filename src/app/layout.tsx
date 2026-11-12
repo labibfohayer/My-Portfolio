@@ -16,18 +16,10 @@ export const metadata: Metadata = {
     siteName: "Labib Fohayer",
     images: [
       {
-        url: "https://labibfohayer.pages.dev/images/og-preview.jpg?v=2",
-        secureUrl: "https://labibfohayer.pages.dev/images/og-preview.jpg?v=2",
-        width: 1200,
-        height: 630,
-        type: "image/jpeg",
-        alt: "Labib Fohayer | Web Designer & AI Automation Engineer",
-      },
-      {
-        url: "https://labibfohayer.pages.dev/images/og-preview.png?v=2",
-        secureUrl: "https://labibfohayer.pages.dev/images/og-preview.png?v=2",
-        width: 1200,
-        height: 630,
+        url: "https://labibfohayer.pages.dev/images/labib-fohayer-full.png?v=2",
+        secureUrl: "https://labibfohayer.pages.dev/images/labib-fohayer-full.png?v=2",
+        width: 682,
+        height: 1024,
         type: "image/png",
         alt: "Labib Fohayer | Web Designer & AI Automation Engineer",
       },
@@ -39,7 +31,7 @@ export const metadata: Metadata = {
     title: "Labib Fohayer | Web Designer & AI Automation Engineer",
     description:
       "Portfolio of Labib Fohayer. Blending creative web design with intelligent AI automation to build scalable business systems.",
-    images: ["https://labibfohayer.pages.dev/images/og-preview.jpg?v=2"],
+    images: ["https://labibfohayer.pages.dev/images/labib-fohayer-full.png?v=2"],
   },
   icons: {
     icon: [
@@ -74,12 +66,13 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="image_src" href="https://labibfohayer.pages.dev/images/og-preview.jpg?v=2" />
-        <meta property="og:image" content="https://labibfohayer.pages.dev/images/og-preview.jpg?v=2" />
-        <meta property="og:image:secure_url" content="https://labibfohayer.pages.dev/images/og-preview.jpg?v=2" />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <link rel="image_src" href="https://labibfohayer.pages.dev/images/labib-fohayer-full.png?v=2" />
+        <meta property="og:image" content="https://labibfohayer.pages.dev/images/labib-fohayer-full.png?v=2" />
+        <meta property="og:image:secure_url" content="https://labibfohayer.pages.dev/images/labib-fohayer-full.png?v=2" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="682" />
+        <meta property="og:image:height" content="1024" />
+        <meta name="twitter:image" content="https://labibfohayer.pages.dev/images/labib-fohayer-full.png?v=2" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -91,7 +84,7 @@ export default function RootLayout({
               url: "https://labibfohayer.pages.dev",
               description:
                 "Portfolio of Labib Fohayer. Blending creative web design with intelligent AI automation to build scalable business systems.",
-              image: "https://labibfohayer.pages.dev/images/og-preview.jpg?v=2",
+              image: "https://labibfohayer.pages.dev/images/labib-fohayer-full.png?v=2",
             }),
           }}
         />
