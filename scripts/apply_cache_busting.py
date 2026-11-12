@@ -83,22 +83,13 @@ def process_html_file(filepath):
 
     content = re.sub(r'<link\b[^>]*\brel=["\']preload["\'][^>]*>', update_preload_href, content, flags=re.IGNORECASE)
 
-    # 5. Media & PDF assets (only in src, href, data attributes, before any hash fragment)
+    # 5. Media & PDF assets
     for asset in MEDIA_ASSETS:
-        def update_asset(m):
-            attr = m.group(1)
-            url = m.group(2)
-            quote = m.group(3)
-            if 'v=' in url:
-                return m.group(0)
-            if '#' in url:
-                base, fragment = url.split('#', 1)
-                sep = '&' if '?' in base else '?'
-                return f'{attr}{base}{sep}v=2.0#{fragment}{quote}'
-            else:
-                sep = '&' if '?' in url else '?'
-                return f'{attr}{url}{sep}v=2.0{quote}'
-        content = re.sub(rf'(src=["\']|href=["\']|data=["\'])([^"\']*{re.escape(asset)}[^"\']*?)(["\'])', update_asset, content)
+        pattern = re.compile(rf'({re.escape(asset)})(?!\?v=2\.0|&v=2\.0)')
+        content = pattern.sub(rf'\1?v=2.0', content)
+
+    # Ensure download attribute has clean filename without ?v= query string
+    content = re.sub(r'download="([^"?#]+)\?v=[^"]*"', r'download="\1"', content)
 
     if content != original:
         with open(filepath, 'w', encoding='utf-8') as f:
