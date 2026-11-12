@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { initCTAButtons } from "@/lib/buttonAnimations";
+import { initCTAButtons, initNavbarBtns } from "@/lib/buttonAnimations";
 
 export default function ResumePage() {
   const router = useRouter();
@@ -26,10 +26,12 @@ export default function ResumePage() {
     handleInit();
     const t = setTimeout(handleInit, 300);
 
+    const cleanupNavBtns = initNavbarBtns(pageRef.current);
     const cleanupCTA = initCTAButtons(pageRef.current);
 
     return () => {
       clearTimeout(t);
+      if (cleanupNavBtns) cleanupNavBtns();
       if (cleanupCTA) cleanupCTA();
     };
   }, []);
@@ -76,19 +78,33 @@ export default function ResumePage() {
               <Link
                 href="/"
                 onClick={handleBackHome}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  textDecoration: "none",
-                  fontSize: "0.9375rem",
-                  fontWeight: 600,
-                  color: "#1a1a1a",
-                  transition: "color 0.2s ease",
-                }}
-                className="hover:text-[#ff5400] cursor-pointer"
+                className="navbar-link-btn group cursor-pointer"
               >
-                <span>← Back to Home</span>
+                <span className="navlink-text flex items-center gap-1.5">
+                  <span className="inline-block transform -translate-y-[0.5px]">←</span>
+                  <span>Back to Home</span>
+                </span>
+                <div className="stroke-fill">
+                  <div className="stroke-fill-code">
+                    <svg
+                      width="100%"
+                      height="100%"
+                      viewBox="0 0 75 36"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="overflow-visible w-full h-full"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        d="M0 21.5571C0 21.5571 6.56744 2.8501 15.4762 4.44988C25.7691 6.2982 5.66141 21.3471 12.5002 29.1915C22.9246 41.1486 29.3907 -7.93025 42.4603 1.12139C53.3211 8.6432 27.1823 26.7575 37.6982 34.7461C50.754 44.6641 58.0718 -7.92618 67.2619 5.59531C72.4564 13.2381 57.9637 30.3713 67.2619 30.3713C70.8333 30.3713 75 19.753 75 19.753"
+                        stroke="#FF5400"
+                        strokeWidth="24"
+                        strokeLinecap="round"
+                        className="draw-svg-path"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </Link>
             </div>
 
