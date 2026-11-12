@@ -151,7 +151,7 @@ export default function ResumePage() {
               {/* On-brand Download PDF Button */}
               <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                 <a
-                  href="/Labib_Fohayer_Resume.pdf?v=3.0"
+                  href="/Labib_Fohayer_Resume.pdf?v=4.0"
                   download="Labib_Fohayer_Resume.pdf"
                   className="cta-btn cursor-pointer"
                   style={{ minWidth: "9.5em", height: "2.5em" }}
@@ -208,7 +208,7 @@ export default function ResumePage() {
               {/* Mobile View: High-res crisp graphic image for natural mobile touch scroll */}
               <div className="block md:hidden w-full">
                 <img
-                  src="/images/resume-preview.png?v=3.0"
+                  src="/images/resume-preview.png?v=4.0"
                   alt="Labib Fohayer - Curriculum Vitae"
                   style={{
                     width: "100%",
@@ -221,7 +221,7 @@ export default function ResumePage() {
               {/* Desktop View: Fully expanded A4 height iframe - NO nested scrollbar */}
               <div className="hidden md:block w-full">
                 <iframe
-                  src="/Labib_Fohayer_Resume.pdf?v=3.0#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                  src="/Labib_Fohayer_Resume.pdf?v=4.0#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
                   title="Labib Fohayer Curriculum Vitae"
                   scrolling="no"
                   style={{

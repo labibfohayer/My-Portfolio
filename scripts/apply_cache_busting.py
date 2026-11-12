@@ -83,10 +83,11 @@ def process_html_file(filepath):
 
     content = re.sub(r'<link\b[^>]*\brel=["\']preload["\'][^>]*>', update_preload_href, content, flags=re.IGNORECASE)
 
-    # 5. Media & PDF assets
+    # 5. Media & PDF assets (only in src or href, never in download attribute)
     for asset in MEDIA_ASSETS:
-        pattern = re.compile(rf'({re.escape(asset)})(?!\?v=2\.0|&v=2\.0)')
+        pattern = re.compile(rf'((?:src|href)=["\'][^"\']*?{re.escape(asset)})(?!\?v=[0-9.]+|&v=[0-9.]+)')
         content = pattern.sub(rf'\1?v=2.0', content)
+    content = re.sub(r'download=["\']([^"\']+?)\?v=[0-9.]+["\']', r'download="\1"', content)
 
     if content != original:
         with open(filepath, 'w', encoding='utf-8') as f:
