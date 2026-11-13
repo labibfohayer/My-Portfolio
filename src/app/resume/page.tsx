@@ -209,6 +209,7 @@ export default function ResumePage() {
               <div className="block md:hidden w-full">
                 <img
                   src="/images/resume-preview.png"
+                  loading="lazy"
                   alt="Labib Fohayer - Curriculum Vitae"
                   style={{
                     width: "100%",
@@ -222,6 +223,7 @@ export default function ResumePage() {
               <div className="hidden md:block w-full">
                 <iframe
                   src="/Labib_Fohayer_Resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                  loading="lazy"
                   title="Labib Fohayer Curriculum Vitae"
                   scrolling="no"
                   style={{

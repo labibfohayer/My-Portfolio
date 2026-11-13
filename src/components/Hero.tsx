@@ -21,8 +21,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
 
     if (typeof window === "undefined") return;
 
-    // 120 FPS hardware acceleration
-    gsap.ticker.fps(120);
+    // Native 60-144 FPS adaptive ticker synchronization
     gsap.ticker.lagSmoothing(500, 16);
 
     const DrawSVG = (window as any).DrawSVGPlugin;

@@ -570,7 +570,7 @@ export default function ProjectShowcase() {
                         {/* Hover image */}
                         <img
                           src={project.hoverImg}
-                          loading="eager"
+                          loading="lazy"
                           alt={project.alt || project.name}
                           className="project-img-hover"
                           data-object-fit={project.objectFit || "cover"}
@@ -630,7 +630,7 @@ export default function ProjectShowcase() {
                         {/* Main Cover image */}
                         <img
                           src={project.mainImg}
-                          loading="eager"
+                          loading={index < 2 ? "eager" : "lazy"}
                           alt={project.alt || project.name}
                           className="project-img"
                           data-object-fit={project.objectFit || "cover"}

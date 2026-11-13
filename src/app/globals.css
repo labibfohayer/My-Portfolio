@@ -2618,5 +2618,33 @@ html.page-transitioning .page-transition-overlay {
   backface-visibility: hidden;
 }
 
+/* ==========================================================================
+   Home & Global GPU Acceleration Layer (Zero-Stutter 60FPS Optimization)
+   ========================================================================== */
+.hero-video-bg,
+.hero-video-loop,
+.hero-video-bg video,
+.hero-video-wrapper,
+.hero-pill,
+.about-pill,
+.hero-pill-inner,
+.hero-pill-item,
+.page-transition-overlay,
+.page-transition-overlay .svg-tcontact,
+.testimonial-card,
+.testimonial-item,
+.sidebar-tick,
+.service-block,
+.service-item,
+.cat-svg,
+.cat-hero-img,
+.showcase-track,
+.showcase-slide {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 
 

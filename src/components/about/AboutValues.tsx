@@ -217,14 +217,19 @@ export default function AboutValues() {
       triggers.push(textTl);
     });
 
+    let resizeRaf: number | null = null;
     const onResize = () => {
-      applyStickyPositions();
-      ScrollTrigger.refresh();
+      if (resizeRaf !== null) cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(() => {
+        applyStickyPositions();
+        ScrollTrigger.refresh();
+      });
     };
     window.addEventListener("resize", onResize);
 
     return () => {
       window.removeEventListener("resize", onResize);
+      if (resizeRaf !== null) cancelAnimationFrame(resizeRaf);
       triggers.forEach((st) => st.kill());
       spacer.remove();
     };

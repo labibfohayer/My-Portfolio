@@ -80,8 +80,7 @@ export default function FAQAccordion() {
     const container = containerRef.current;
     if (!container) return;
 
-    // 120 FPS hardware acceleration configuration
-    gsap.ticker.fps(120);
+    // Native 60-144 FPS adaptive ticker synchronization
     gsap.ticker.lagSmoothing(500, 16);
 
     const items = Array.from(
@@ -349,14 +348,18 @@ export default function FAQAccordion() {
       }
     }
 
-    // 4. Resize listener to update active open width across breakpoints
+    // 4. Resize listener to update active open width across breakpoints (rAF throttled)
+    let resizeRafId: number | null = null;
     const onResize = () => {
-      if (activeItem) {
-        const qBlock = activeItem.querySelector<HTMLElement>(".question-block");
-        if (qBlock) {
-          gsap.set(qBlock, { width: getOpenWidth(), force3D: true });
+      if (resizeRafId !== null) cancelAnimationFrame(resizeRafId);
+      resizeRafId = requestAnimationFrame(() => {
+        if (activeItem) {
+          const qBlock = activeItem.querySelector<HTMLElement>(".question-block");
+          if (qBlock) {
+            gsap.set(qBlock, { width: getOpenWidth(), force3D: true });
+          }
         }
-      }
+      });
     };
     window.addEventListener("resize", onResize);
 
@@ -385,6 +388,7 @@ export default function FAQAccordion() {
 
     return () => {
       window.removeEventListener("resize", onResize);
+      if (resizeRafId !== null) cancelAnimationFrame(resizeRafId);
       cleanupListeners.forEach((cleanup) => cleanup());
     };
   }, []);

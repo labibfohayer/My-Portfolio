@@ -156,10 +156,12 @@ export default function TestimonialsStack() {
       for (let i = 0; i < totalCards; i++) {
         const tick = document.createElement("div");
         tick.className = "sidebar-tick";
+        tick.style.width = "34px";
         tick.style.height = "2px";
         tick.style.borderRadius = "2px";
         tick.style.backgroundColor = "#FFFFFF";
-        tick.style.transformOrigin = "right center";
+        tick.style.transformOrigin = "center center";
+        tick.style.willChange = "transform, opacity";
         sidebar.appendChild(tick);
         sidebarTicks.push(tick);
       }
@@ -172,21 +174,23 @@ export default function TestimonialsStack() {
 
       sidebarTicks.forEach((tick, idx) => {
         const isActive = idx === activeIdx;
-        const targetWidth = isActive ? 34 : 14;
+        const targetScaleX = isActive ? 1 : 14 / 34;
         const targetOpacity = isActive ? 1 : 0.35;
 
         if (animate) {
           gsap.to(tick, {
-            width: targetWidth,
+            scaleX: targetScaleX,
             opacity: targetOpacity,
             duration: 0.35,
             ease: "power2.out",
             overwrite: "auto",
+            force3D: true,
           });
         } else {
           gsap.set(tick, {
-            width: targetWidth,
+            scaleX: targetScaleX,
             opacity: targetOpacity,
+            force3D: true,
           });
         }
       });

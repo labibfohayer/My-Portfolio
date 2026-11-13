@@ -44,6 +44,8 @@ export default function SliderShowcase() {
     let resizeHandler: any = null;
     let timeoutId: NodeJS.Timeout | null = null;
     let videoObserver: IntersectionObserver | null = null;
+    let sectionObserver: IntersectionObserver | null = null;
+    let resizeRaf: number | null = null;
     let visibilityHandler: any = null;
 
     const setupMarquee = () => {
@@ -232,8 +234,27 @@ export default function SliderShowcase() {
         }
       });
 
-      resizeHandler = measureAll;
+      resizeHandler = () => {
+        if (resizeRaf !== null) cancelAnimationFrame(resizeRaf);
+        resizeRaf = requestAnimationFrame(() => {
+          measureAll();
+        });
+      };
       window.addEventListener("resize", resizeHandler);
+
+      // Viewport-aware visibility observer: saves CPU by pausing slide computations when offscreen
+      let isSectionVisible = true;
+      if (typeof IntersectionObserver !== "undefined" && sectionRef.current) {
+        sectionObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              isSectionVisible = entry.isIntersecting;
+            });
+          },
+          { rootMargin: "200px" }
+        );
+        sectionObserver.observe(sectionRef.current);
+      }
 
       // Speed Level 3 = 1.60x (+60% / 2.400 px/frame)
       const speedMultiplier = 1.6;
@@ -269,6 +290,7 @@ export default function SliderShowcase() {
       }
 
       tickFn = () => {
+        if (!isSectionVisible) return;
         currentDirection += (targetDirection - currentDirection) * 0.06;
         scrollVelocityBoost *= 0.92;
 
@@ -319,8 +341,12 @@ export default function SliderShowcase() {
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       if (resizeHandler) window.removeEventListener("resize", resizeHandler);
+      if (resizeRaf !== null) cancelAnimationFrame(resizeRaf);
       if (visibilityHandler) {
         document.removeEventListener("visibilitychange", visibilityHandler);
+      }
+      if (sectionObserver) {
+        sectionObserver.disconnect();
       }
       if (videoObserver) {
         videoObserver.disconnect();

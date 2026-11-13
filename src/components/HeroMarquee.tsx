@@ -20,8 +20,7 @@ export default function HeroMarquee() {
     const ScrollTrigger = (window as any).ScrollTrigger;
     if (!gsap) return;
 
-    // 120 FPS hardware acceleration
-    gsap.ticker.fps(120);
+    // Native 60-144 FPS adaptive ticker synchronization
     gsap.ticker.lagSmoothing(500, 16);
 
     const DrawSVG = (window as any).DrawSVGPlugin;
@@ -75,7 +74,22 @@ export default function HeroMarquee() {
 
     // 3. ScrollTrigger / Reveal: Draw Ribbon + Reveal Text simultaneously from Right to Left
     let revealTween: any = null;
+    let marqueeVisibilityTrigger: any = null;
     const scrollerEl = document.querySelector(".page") || window;
+
+    // Viewport-aware marquee pausing: save CPU/GPU by pausing off-screen
+    if (ScrollTrigger && container) {
+      marqueeVisibilityTrigger = ScrollTrigger.create({
+        trigger: container,
+        scroller: scrollerEl,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => marqueeTween.resume(),
+        onLeave: () => marqueeTween.pause(),
+        onEnterBack: () => marqueeTween.resume(),
+        onLeaveBack: () => marqueeTween.pause(),
+      });
+    }
 
     if (hasDrawSVG) {
       revealTween = gsap.to([bgPath, maskPath], {
@@ -120,6 +134,7 @@ export default function HeroMarquee() {
     return () => {
       marqueeTween.kill();
       if (revealTween) revealTween.kill();
+      if (marqueeVisibilityTrigger) marqueeVisibilityTrigger.kill();
     };
   }, []);
 
