@@ -14,7 +14,7 @@ interface TeamMember {
 
 const TEAM_MEMBERS: TeamMember[] = [
   {
-    id: "full-stack-engineer",
+    id: "web-engineer",
     name: "Web & AI Engineer",
     heading: "WEB & AI ENGINEER",
     image: "/images/about/labib-fohayer-outdoor.jpg",
