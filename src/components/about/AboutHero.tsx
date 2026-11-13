@@ -15,11 +15,11 @@ interface TeamMember {
 const TEAM_MEMBERS: TeamMember[] = [
   {
     id: "full-stack-engineer",
-    name: "Full-Stack & AI Engineer",
-    heading: "FULL-STACK & AI ENGINEER",
+    name: "Web & AI Engineer",
+    heading: "WEB & AI ENGINEER",
     image: "/images/about/labib-fohayer-outdoor.jpg",
     paragraphs: [
-      "A dedicated engineer with deep expertise in modern web technologies, including React, Tailwind CSS, and robust full-stack architectures. I write clean, efficient code that powers high-performance digital products.",
+      "A dedicated engineer with deep expertise in modern web technologies, including React, Tailwind CSS, and robust web architectures. I write clean, efficient code that powers high-performance digital products.",
       "My true edge lies in AI integration. By deploying intelligent chatbots and custom n8n workflows, I automate complex business processes, turning manual tasks into streamlined, time-saving systems.",
     ],
   },
@@ -808,7 +808,7 @@ export default function AboutHero() {
                       From E-commerce Founder to Tech Innovator.
                     </h2>
                     <p className="about-story-para">
-                      My entry into the digital landscape began with founding and scaling my e-commerce brand, Ponyopuri. Navigating the complexities of business operations revealed the transformative potential of automation and modern web architectures. Driven to engineer smarter solutions, I mastered frontend development, full-stack systems, and AI automation at the As-Sunnah Skill Development Institute, Bangladesh&mdash;a pivotal shift that fundamentally redefined my approach to building digital enterprises.
+                      My entry into the digital landscape began with founding and scaling my e-commerce brand, Ponyopuri. Navigating the complexities of business operations revealed the transformative potential of automation and modern web architectures. Driven to engineer smarter solutions, I mastered frontend development, web systems, and AI automation at the As-Sunnah Skill Development Institute, Bangladesh&mdash;a pivotal shift that fundamentally redefined my approach to building digital enterprises.
                     </p>
                   </div>
                 </div>
@@ -820,7 +820,7 @@ export default function AboutHero() {
                       Founder &amp; CEO of Webpulse Automation.
                     </h2>
                     <p className="about-story-para">
-                      As the Founder and CEO of Webpulse Automation, I go beyond building beautiful interfaces&mdash;I architect comprehensive digital ecosystems. Utilizing React, Tailwind, and full-stack technologies, I deliver scalable web solutions. Furthermore, I integrate intelligent AI chatbots and custom n8n workflows designed to optimize operations and drive business growth. My mission is straightforward: to empower your business to work smarter through the strategic application of technology.
+                      As the Founder and CEO of Webpulse Automation, I go beyond building beautiful interfaces&mdash;I architect comprehensive digital ecosystems. Utilizing React, Tailwind, and web technologies, I deliver scalable web solutions. Furthermore, I integrate intelligent AI chatbots and custom n8n workflows designed to optimize operations and drive business growth. My mission is straightforward: to empower your business to work smarter through the strategic application of technology.
                     </p>
                   </div>
                   <div className="about-story-svg-wrap">

@@ -15,7 +15,7 @@ const FAQS: FAQItem[] = [
     id: 1,
     question: "What kind of projects do you take on?",
     answer:
-      "Web design, full-stack development, and AI automation. Basically, if it lives on a screen and needs to look good while doing smart things, I build it. If it involves fixing your printer or hacking your ex's Facebook account, please call someone else!",
+      "Web design, web development, and AI automation. Basically, if it lives on a screen and needs to look good while doing smart things, I build it. If it involves fixing your printer or hacking your ex's Facebook account, please call someone else!",
   },
   {
     id: 2,

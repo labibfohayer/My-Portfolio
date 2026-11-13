@@ -65,7 +65,7 @@ const TESTIMONIALS: Testimonial[] = [
     position: "CEO, Urbanize",
     avatar: "/images/mh-atif.jpg",
     review:
-      "Working with Labib on our full-stack website was a great experience from start to finish. He is incredibly skilled and thoughtful. He brought workflow automation ideas we wouldn’t have thought of ourselves, saving us countless hours. You can tell he cares deeply about the code quality and the client's success.",
+      "Working with Labib on our web application was a great experience from start to finish. He is incredibly skilled and thoughtful. He brought workflow automation ideas we wouldn’t have thought of ourselves, saving us countless hours. You can tell he cares deeply about the code quality and the client's success.",
   },
 ];
 

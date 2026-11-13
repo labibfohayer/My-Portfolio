@@ -1,6 +1,6 @@
 # Labib Fohayer - Developer Portfolio and Digital Showcase
 
-A modern, high-performance personal portfolio website showcasing full-stack web applications, workflow automation engines, and interactive web experiences engineered by Labib Fohayer. Deployed via GitHub Pages at [labibfohayer.github.io](https://labibfohayer.github.io).
+A modern, high-performance personal portfolio website showcasing web applications, workflow automation engines, and interactive web experiences engineered by Labib Fohayer. Deployed via GitHub Pages at [labibfohayer.github.io](https://labibfohayer.github.io).
 
 ---
 

@@ -27,7 +27,7 @@ const SERVICES: ServiceItem[] = [
   },
   {
     numberClass: "three",
-    word1: "Full-Stack",
+    word1: "Web",
     word2: "Development",
     lottieSrc: "/cdn-assets/6aaad679fdb9d914f7f52079_Web design.json",
     description: "I build complete digital experiences that look great and run flawlessly.",

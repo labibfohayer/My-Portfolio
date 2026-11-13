@@ -144,7 +144,7 @@ export default function ResumePage() {
                     fontWeight: 500,
                   }}
                 >
-                  Full-Stack Developer • AI Automation Engineer • Reverse Engineer
+                  Web Developer • AI Automation Engineer • Reverse Engineer
                 </p>
               </div>
 

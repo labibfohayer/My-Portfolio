@@ -8,13 +8,13 @@ const VALUES_DATA = [
     number: "MY WORK PHILOSOPHY 01",
     heading: "WORK SMARTER, NOT HARDER",
     paragraph:
-      "A digital presence must transcend aesthetics to drive tangible results. By integrating robust full-stack architectures with intelligent AI automations, I engineer scalable systems designed to optimize your operations and time.",
+      "A digital presence must transcend aesthetics to drive tangible results. By integrating robust web architectures with intelligent AI automations, I engineer scalable systems designed to optimize your operations and time.",
   },
   {
     number: "MY WORK PHILOSOPHY 02",
     heading: "CODE THAT ACTUALLY PERFORMS",
     paragraph:
-      "Visual brilliance is ineffective without backend efficiency. I engineer high-performance digital products, prioritizing rapid load times, seamless user experiences, and scalable database architectures utilizing modern full-stack technologies.",
+      "Visual brilliance is ineffective without backend efficiency. I engineer high-performance digital products, prioritizing rapid load times, seamless user experiences, and scalable database architectures utilizing modern web technologies.",
   },
   {
     number: "MY WORK PHILOSOPHY 03",

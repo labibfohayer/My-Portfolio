@@ -10,7 +10,7 @@ const CAPABILITIES = [
   "React",
   "Tailwind CSS",
   "Responsive Design",
-  "Full-Stack Systems",
+  "Web Systems",
   "MongoDB",
   "API Integration",
   "Database Management",
