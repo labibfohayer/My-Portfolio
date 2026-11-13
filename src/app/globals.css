@@ -1197,11 +1197,78 @@ body {
 /* ========================================================= */
 /* STRICT MOBILE-ONLY RESPONSIVE RULES (ZERO DESKTOP IMPACT)  */
 /* ========================================================= */
-@media screen and (max-width: 767px) {
-  /* Prevent horizontal scrolling on mobile viewports */
-  html, body {
+@media screen and (max-width: 768px) {
+  /* Prevent horizontal scrolling & element overflow across all mobile screens */
+  html,
+  body,
+  .page,
+  .main,
+  #lenis-root,
+  [data-scroll-container],
+  .section-hero,
+  .section-hero-wrapper,
+  .section-about,
+  .section-about-wrapper,
+  .about-split-container,
+  .section-projects,
+  .section-projects-wrapper,
+  .projects-list,
+  .projects-vertical-wrapper,
+  .projects-end,
+  .section-services,
+  .section-services-wrapper,
+  .section-testimonials,
+  .section-testimonials-wrapper,
+  .section-faq,
+  .section-faq-wrapper,
+  .footer,
+  .footer-overlay-bg,
+  .section-work-hero,
+  .section-work-hero-wrapper,
+  .section-about-hero,
+  .section-about-hero-wrapper {
     overflow-x: hidden !important;
     max-width: 100vw !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Universal Mobile Fluid Dimensions (Override hardcoded min-width from webflow.css) */
+  .project-img,
+  .project-img-hover,
+  .project-card .project-img,
+  .project-card .project-img-hover {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .projects-end {
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Grid & Flex Layout Normalization (Instruction 4) */
+  .w-layout-grid,
+  .more-works-list {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+
+  .footer-bottom,
+  .footer-top,
+  .footer-top-right,
+  .section-work-hero-wrapper,
+  .section-hero-wrapper,
+  .projects-end-inner-wrapper,
+  .about-hero-btm,
+  .about-team-btm {
+    flex-wrap: wrap !important;
+    box-sizing: border-box !important;
   }
 
   .header {
@@ -1493,21 +1560,21 @@ body {
 
 
 
-  /* Projects Section Mobile (2-Column Grid Restoration) */
+  /* Projects Section Mobile (Single-Column Grid per User Instruction 4) */
   .section-projects-wrapper {
     overflow-x: hidden !important;
     width: 100% !important;
     max-width: 100vw !important;
-    padding-left: clamp(10px, 3vw, 20px) !important;
-    padding-right: clamp(10px, 3vw, 20px) !important;
+    padding-left: clamp(12px, 3.5vw, 24px) !important;
+    padding-right: clamp(12px, 3.5vw, 24px) !important;
     box-sizing: border-box !important;
   }
 
   .projects-list {
     display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    column-gap: clamp(8px, 2.5vw, 16px) !important;
-    row-gap: clamp(16px, 4vw, 28px) !important;
+    grid-template-columns: 1fr !important;
+    column-gap: 0 !important;
+    row-gap: clamp(20px, 5vw, 36px) !important;
     width: 100% !important;
     padding: 0 !important;
     box-sizing: border-box !important;
@@ -1530,14 +1597,14 @@ body {
     min-width: 0 !important;
     height: auto !important;
     min-height: 0 !important;
-    gap: 0.5em !important;
+    gap: 0.65em !important;
   }
 
   .project-card-img-wrapper {
     position: relative !important;
     width: 100% !important;
-    aspect-ratio: 1 / 1.75 !important;
-    border-radius: clamp(10px, 2.5vw, 16px) !important;
+    aspect-ratio: 4 / 3 !important;
+    border-radius: clamp(12px, 3vw, 18px) !important;
     overflow: hidden !important;
     display: flex !important;
     align-items: center !important;
@@ -1570,15 +1637,15 @@ body {
     width: 100% !important;
     min-width: 0 !important;
     min-height: 0 !important;
-    padding: 0.25em 0 0 0 !important;
-    gap: 0.35em !important;
+    padding: 0.35em 0 0 0 !important;
+    gap: 0.65em !important;
   }
 
   .project-logo {
-    width: clamp(22px, 5.5vw, 28px) !important;
-    height: clamp(22px, 5.5vw, 28px) !important;
-    min-width: clamp(22px, 5.5vw, 28px) !important;
-    min-height: clamp(22px, 5.5vw, 28px) !important;
+    width: clamp(28px, 6.5vw, 36px) !important;
+    height: clamp(28px, 6.5vw, 36px) !important;
+    min-width: clamp(28px, 6.5vw, 36px) !important;
+    min-height: clamp(28px, 6.5vw, 36px) !important;
     border-radius: 50% !important;
     margin: 0 !important;
     overflow: hidden !important;
@@ -1613,8 +1680,8 @@ body {
   }
 
   .project-name-text {
-    font-size: clamp(0.72em, 2.7vw, 0.9em) !important;
-    line-height: 1.15 !important;
+    font-size: clamp(0.95em, 3.6vw, 1.25em) !important;
+    line-height: 1.2 !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
     color: var(--brand-black) !important;
@@ -1627,8 +1694,8 @@ body {
   }
 
   .project-detail-text {
-    font-size: clamp(0.48em, 1.8vw, 0.58em) !important;
-    line-height: 1.15 !important;
+    font-size: clamp(0.65em, 2.4vw, 0.8em) !important;
+    line-height: 1.2 !important;
     color: var(--brand-primary) !important;
     text-transform: uppercase !important;
     font-weight: 500 !important;
@@ -1642,16 +1709,16 @@ body {
   }
 
   .projects-arrow {
-    width: clamp(20px, 4.8vw, 24px) !important;
-    height: clamp(20px, 4.8vw, 24px) !important;
-    min-width: clamp(20px, 4.8vw, 24px) !important;
-    min-height: clamp(20px, 4.8vw, 24px) !important;
+    width: clamp(26px, 6vw, 32px) !important;
+    height: clamp(26px, 6vw, 32px) !important;
+    min-width: clamp(26px, 6vw, 32px) !important;
+    min-height: clamp(26px, 6vw, 32px) !important;
     border-radius: 50% !important;
     background-color: var(--brand-primary) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: clamp(3px, 1vw, 5px) !important;
+    padding: clamp(5px, 1.2vw, 7px) !important;
     flex-shrink: 0 !important;
     margin: 0 !important;
   }
@@ -1803,19 +1870,32 @@ body {
   }
 
   /* Testimonials Mobile */
+  .section-testimonials,
+  .section-testimonials-wrapper {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+
   .testimonial-item {
-    min-width: 40em !important;
-    max-width: 40em !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 2.5em) !important;
+    width: 100% !important;
     font-size: 0.6em !important;
+    box-sizing: border-box !important;
   }
 
   .testimonial-card-para {
-    max-width: 15em !important;
+    max-width: 100% !important;
   }
 
   /* FAQ Mobile */
+  .section-faq,
   .section-faq-wrapper {
     flex-direction: column !important;
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
   }
 
   .faq-left {
@@ -1832,15 +1912,21 @@ body {
   }
 
   .cat-svg {
+    max-width: 90vw !important;
     width: 34em !important;
+    height: auto !important;
   }
 
   .question-block {
     width: 75% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .answer-block {
     width: 80% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   /* Footer Mobile */
@@ -2047,12 +2133,14 @@ body {
   }
 
   .testimonial-item {
-    min-width: 34em !important;
-    max-width: 34em !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 2em) !important;
+    width: 100% !important;
     font-size: 0.55em !important;
     top: 50% !important;
     bottom: auto !important;
     transform: translate(-50%, -50%) !important;
+    box-sizing: border-box !important;
   }
 
   /* FAQ */
@@ -2078,7 +2166,9 @@ body {
   }
 
   .cat-svg {
+    max-width: 90vw !important;
     width: 24em !important;
+    height: auto !important;
   }
 
   /* Footer */

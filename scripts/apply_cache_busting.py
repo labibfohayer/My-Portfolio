@@ -27,6 +27,16 @@ def process_html_file(filepath):
 
     original = content
 
+    # 0. Viewport meta tag: Standardize cross-device mobile scale (single canonical tag)
+    content = re.sub(r'<meta\s+name=["\']viewport["\'][^>]*>\s*', '', content, flags=re.IGNORECASE)
+    content = re.sub(
+        r'(<head[^>]*>)',
+        r'\1\n  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">',
+        content,
+        count=1,
+        flags=re.IGNORECASE
+    )
+
     # 1. Meta tags: Ensure they exist right after <head>
     content = re.sub(r'<meta\s+http-equiv=["\']Cache-Control["\'][^>]*>\s*', '', content, flags=re.IGNORECASE)
     content = re.sub(r'<meta\s+http-equiv=["\']Pragma["\'][^>]*>\s*', '', content, flags=re.IGNORECASE)
