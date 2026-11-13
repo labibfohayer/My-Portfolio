@@ -84,9 +84,13 @@ def process_html_file(filepath):
     content = re.sub(r'<link\b[^>]*\brel=["\']preload["\'][^>]*>', update_preload_href, content, flags=re.IGNORECASE)
 
     # 5. Media & PDF assets
-    for asset in MEDIA_ASSETS:
+    for asset in ['hero-walking-labib.mp4', 'hero-walking-labib.webm', 'hero-walking-labib-poster.jpg']:
         pattern = re.compile(rf'({re.escape(asset)})(?!\?v=2\.0|&v=2\.0)')
         content = pattern.sub(rf'\1?v=2.0', content)
+
+    for asset in ['Labib_Fohayer_Resume.pdf', 'resume-preview.png']:
+        pattern = re.compile(rf'({re.escape(asset)})(?:\?v=[^"\'#\s&]*)?')
+        content = pattern.sub(rf'\1?v=3.0', content)
 
     # Ensure download attribute has clean filename without ?v= query string
     content = re.sub(r'download="([^"?#]+)\?v=[^"]*"', r'download="\1"', content)
