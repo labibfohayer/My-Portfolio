@@ -5851,6 +5851,15 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           window.initCTAButtons(resumeGrid);
         }
       }
+      document.querySelectorAll(".resume-iframe, iframe[src*='Resume.pdf'], iframe[src*='resume.pdf']").forEach(function(el) {
+        el.style.borderRadius = "12px";
+        el.style.overflow = "hidden";
+        el.style.pointerEvents = "none";
+        if (el.parentElement) {
+          el.parentElement.style.borderRadius = "12px";
+          el.parentElement.style.overflow = "hidden";
+        }
+      });
 
       // Re-initialize Lenis cleanly for the resume route
       if (typeof window.initLenis === "function") {

@@ -77,3 +77,73 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
+
+/* =========================================================================
+   RESUME PDF WRAPPER & IFRAME CONTROLS (100% STRICT ZERO-SCROLL-HIJACK)
+   ========================================================================= */
+
+.resume-2col-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 3rem !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+.resume-col {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.resume-col-header {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 1rem !important;
+  flex-wrap: wrap !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+}
+
+.resume-card-box,
+.resume-col .hidden.md\:block,
+div[class*="hidden md:block"],
+.resume-card-box > div {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.resume-iframe,
+iframe.resume-iframe,
+iframe[src*="Resume.pdf"],
+iframe[src*="resume.pdf"] {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  display: block !important;
+}
+
+@media screen and (max-width: 900px) {
+  .resume-2col-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3.5rem !important;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .resume-2col-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.75rem !important;
+  }
+}
