@@ -3011,12 +3011,11 @@ window.__two26LoaderDone = true;
         console.warn("Carousel cleanup error:", err);
       } finally {
         activeCarousel = null;
+        window.activeCarousel = null;
       }
     }
-    var roguePool = document.getElementById("carouselVideoPool");
-    if (roguePool && roguePool.parentNode) {
-      roguePool.parentNode.removeChild(roguePool);
-    }
+    var oldCanvas = document.querySelectorAll("#three-carousel-container canvas, .section-slider-wrapper canvas");
+    oldCanvas.forEach(function(c) { if (c.parentNode) c.parentNode.removeChild(c); });
     var rogueWrapper = document.querySelector(".section-slider-wrapper, #three-carousel-container");
     if (rogueWrapper && !activeCarousel) {
       delete rogueWrapper.dataset.carouselInited;
@@ -3135,22 +3134,12 @@ window.__two26LoaderDone = true;
       "}"
     ].join("\n");
 
-    var pool = document.getElementById("carouselVideoPool");
-    if (!pool) {
-      pool = document.createElement("div");
-      pool.id = "carouselVideoPool";
-      pool.className = "carousel-video-pool";
-      pool.style.cssText = "position:fixed!important;top:-99999px!important;left:-99999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;visibility:hidden!important;overflow:hidden!important;z-index:-99999!important;";
-      container.appendChild(pool);
-    } else {
-      pool.style.cssText = "position:fixed!important;top:-99999px!important;left:-99999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;visibility:hidden!important;overflow:hidden!important;z-index:-99999!important;";
+    var domVideos = Array.from(container.querySelectorAll(".showcase-slide video"));
+    if (domVideos.length === 0) {
+      domVideos = Array.from(document.querySelectorAll(".carousel-section video, .section-slider-showcase video"));
     }
 
-    var videoTextures = [];
-    videoData.forEach(function(vd) {
-      var vid = document.createElement("video");
-      vid.src = vd.video;
-      vid.poster = vd.poster;
+    domVideos.forEach(function(vid) {
       vid.muted = true;
       vid.loop = true;
       vid.playsInline = true;
@@ -3159,14 +3148,45 @@ window.__two26LoaderDone = true;
       vid.setAttribute("muted", "");
       vid.setAttribute("loop", "");
       vid.autoplay = true;
-      vid.preload = "auto";
-      vid.style.cssText = "position:absolute!important;top:-99999px!important;left:-99999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;visibility:hidden!important;";
-      pool.appendChild(vid);
-      vid.play().catch(function() {});
+      var p = vid.play();
+      if (p !== undefined) p.catch(function() {});
+    });
+
+    var onUserInteraction = function() {
+      domVideos.forEach(function(vid) {
+        if (vid.paused) {
+          var p = vid.play();
+          if (p !== undefined) p.catch(function() {});
+        }
+      });
+    };
+    window.addEventListener("pointerdown", onUserInteraction, { once: true });
+    window.addEventListener("touchstart", onUserInteraction, { once: true });
+
+    var videoTextures = [];
+    videoData.forEach(function(vd, idx) {
+      var vid = domVideos[idx] || domVideos[idx % domVideos.length];
+      if (!vid) {
+        vid = document.createElement("video");
+        vid.src = vd.video;
+        vid.poster = vd.poster;
+        vid.muted = true;
+        vid.loop = true;
+        vid.playsInline = true;
+        vid.setAttribute("playsinline", "");
+        vid.setAttribute("muted", "");
+        vid.setAttribute("loop", "");
+        vid.autoplay = true;
+        vid.preload = "auto";
+        container.appendChild(vid);
+      }
+      var p = vid.play();
+      if (p !== undefined) p.catch(function() {});
 
       var vTex = new THREE.VideoTexture(vid);
       vTex.minFilter = THREE.LinearFilter;
       vTex.magFilter = THREE.LinearFilter;
+      vTex.generateMipmaps = false;
       if (THREE.SRGBColorSpace) vTex.colorSpace = THREE.SRGBColorSpace;
       videoTextures.push({ video: vid, texture: vTex });
     });
@@ -3183,7 +3203,8 @@ window.__two26LoaderDone = true;
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     if (THREE.SRGBColorSpace) renderer.outputColorSpace = THREE.SRGBColorSpace;
-    container.innerHTML = "";
+    var oldCanvas = container.querySelector("canvas");
+    if (oldCanvas) oldCanvas.remove();
     container.appendChild(renderer.domElement);
 
     var carousel = new THREE.Group();
@@ -3273,16 +3294,21 @@ window.__two26LoaderDone = true;
       });
 
       var checkVideo = function() {
-        if (vObj.video.readyState >= 2) {
-          uniforms.uMap.value = vObj.texture;
-          uniforms.uHasMap.value = 1.0;
-          cardMat.needsUpdate = true;
-        } else {
-          vObj.video.addEventListener("playing", function() {
+        var attachVideo = function() {
+          if (vObj.video && vObj.video.readyState >= 2) {
             uniforms.uMap.value = vObj.texture;
             uniforms.uHasMap.value = 1.0;
+            vObj.texture.needsUpdate = true;
             cardMat.needsUpdate = true;
-          }, { once: true });
+            return true;
+          }
+          return false;
+        };
+        if (!attachVideo()) {
+          vObj.video.addEventListener("playing", attachVideo, { once: true });
+          vObj.video.addEventListener("timeupdate", attachVideo, { once: true });
+          vObj.video.addEventListener("loadeddata", attachVideo, { once: true });
+          vObj.video.addEventListener("canplay", attachVideo, { once: true });
         }
       };
       checkVideo();
@@ -3348,6 +3374,12 @@ window.__two26LoaderDone = true;
       var dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
+      videoTextures.forEach(function(vObj) {
+        if (vObj.video && vObj.video.readyState >= 2 && !vObj.video.paused) {
+          vObj.texture.needsUpdate = true;
+        }
+      });
+
       var baseSpin = isMobile ? -0.075 : -0.04;
       if (!state.isDragging) {
         state.spinVelocity += (baseSpin - state.spinVelocity) * Math.min(dt * 3.2, 1);
@@ -3392,7 +3424,7 @@ window.__two26LoaderDone = true;
       renderer: renderer,
       scene: scene,
       camera: camera,
-      pool: pool,
+      pool: null,
       videoTextures: videoTextures,
       onPointerDown: onPointerDown,
       onPointerMove: onPointerMove,
@@ -3400,6 +3432,7 @@ window.__two26LoaderDone = true;
       onResize: onResize,
       animFrameId: null
     };
+    window.activeCarousel = activeCarousel;
     activeCarousel.animFrameId = requestAnimationFrame(animate);
   }
 

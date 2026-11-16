@@ -1,0 +1,11 @@
+/* 3D Carousel Video Object-Fit Styles */
+.showcase-slide-img,
+.showcase-slide video,
+.carousel-section video,
+.section-slider-showcase video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+}
