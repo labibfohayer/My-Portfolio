@@ -2777,7 +2777,7 @@ window.__two26LoaderDone = true;
       // Responsive scroll distance calculation
       const getPinDistance = () => {
         const width = window.innerWidth;
-        if (width < 480) return 1150; // Mobile (< 480px): 1100-1200px
+        if (width <= 768) return Math.max(Math.round(window.innerHeight * 3.5), 2800); // Mobile (<= 768px): 350% viewport scrub for thorough reading
         if (width < 992) return 1550; // Tablet (< 992px): 1500-1600px
         return 2200; // Desktop: 2200px
       };
@@ -3210,7 +3210,7 @@ window.__two26LoaderDone = true;
 
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(24, width / height, 0.1, 100);
-    camera.position.set(0, 0, isMobile ? 11.5 : 8.6);
+    camera.position.set(0, 0, isMobile ? 11.2 : 8.6);
 
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(width, height);
@@ -3224,7 +3224,7 @@ window.__two26LoaderDone = true;
     scene.add(carousel);
 
     var g = 4.3;
-    var scaleFactor = isMobile ? 0.72 : 1.0;
+    var scaleFactor = isMobile ? 0.65 : 1.0;
     carousel.scale.setScalar(scaleFactor);
 
     var tiltRad = THREE.MathUtils.degToRad(-13);
@@ -3432,10 +3432,10 @@ window.__two26LoaderDone = true;
       var h = container.clientHeight || 680;
       var mob = w < 768;
       camera.aspect = w / h;
-      camera.position.z = mob ? 11.5 : 8.6;
+      camera.position.z = mob ? 11.2 : 8.6;
       camera.updateProjectionMatrix();
-      carousel.scale.setScalar(mob ? 0.72 : 1.0);
-      carousel.position.y = g * (mob ? 0.72 : 1.0) * Math.sin(tiltRad);
+      carousel.scale.setScalar(mob ? 0.65 : 1.0);
+      carousel.position.y = g * (mob ? 0.65 : 1.0) * Math.sin(tiltRad);
       state.dragInfluence = mob ? 0.0065 : 0.0035;
       renderer.setSize(w, h);
     };
@@ -4811,6 +4811,64 @@ window.__two26LoaderDone = true;
     }
   })();
 
+/* === SCRIPT 20B: MOBILE WORK PHILOSOPHY CARD STACKING === */
+(function () {
+  function initMobilePhilosophyCards() {
+    if (typeof window === "undefined" || window.innerWidth > 768) return;
+    if (typeof gsap === "undefined") return;
+
+    var section = document.querySelector(".section-values");
+    if (!section) return;
+
+    var cards = Array.from(section.querySelectorAll(".value-card"));
+    if (!cards || cards.length === 0) return;
+
+    var scrollerEl = document.querySelector(".page") || window;
+    var baseTop = 75;
+    var stepOffset = 24;
+
+    cards.forEach(function(card, idx) {
+      var stickyTop = baseTop + idx * stepOffset;
+      card.style.position = "sticky";
+      card.style.top = stickyTop + "px";
+      card.style.zIndex = String(10 + idx * 10);
+      gsap.set(card, {
+        transformOrigin: "top center",
+        willChange: "transform"
+      });
+
+      if (typeof ScrollTrigger !== "undefined" && idx < cards.length - 1) {
+        var nextCard = cards[idx + 1];
+        ScrollTrigger.create({
+          trigger: nextCard,
+          scroller: scrollerEl,
+          start: "top 75%",
+          end: "top " + (baseTop + (idx + 1) * stepOffset) + "px",
+          scrub: true,
+          invalidateOnRefresh: true,
+          onUpdate: function(self) {
+            var scaleVal = 1 - (self.progress * 0.05);
+            var yOffset = self.progress * 6;
+            gsap.set(card, {
+              scale: scaleVal,
+              y: yOffset,
+              transformOrigin: "top center"
+            });
+          }
+        });
+      }
+    });
+  }
+
+  window.initMobilePhilosophyCards = initMobilePhilosophyCards;
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMobilePhilosophyCards);
+  } else {
+    initMobilePhilosophyCards();
+  }
+})();
+
 /* === SCRIPT 21 === */
 (function () {
     function initFaqAccordion() {
@@ -5934,6 +5992,10 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           } catch(e) {}
         }
       }, 50);
+    }
+
+    if (typeof window.initMobilePhilosophyCards === "function") {
+      window.initMobilePhilosophyCards();
     }
 
     currentPath = newPath;

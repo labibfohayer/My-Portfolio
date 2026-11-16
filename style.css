@@ -147,3 +147,197 @@ iframe[src*="resume.pdf"] {
     gap: 2.75rem !important;
   }
 }
+
+/* =========================================================================
+   STRICT MOBILE-ONLY OPTIMIZATIONS (SCREENS <= 768PX)
+   ========================================================================= */
+@media screen and (max-width: 768px) {
+  /* 1. 3D CAROUSEL MOBILE VIEWPORT & CARDS (ITEM 3) */
+  .carousel-viewport,
+  .section-slider-wrapper,
+  #three-carousel-container {
+    height: 480px !important;
+    min-height: 480px !important;
+    max-height: 520px !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    position: relative !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .carousel-card {
+    width: 220px !important;
+    height: 290px !important;
+    max-width: 80vw !important;
+  }
+
+  /* 2. "MY WORK PHILOSOPHY" CARD STACKING (ITEM 2) */
+  .section-values,
+  .section-values-wrapper {
+    overflow: visible !important;
+    width: 100% !important;
+  }
+
+  .value-card {
+    position: sticky !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    padding-bottom: 2.75rem !important;
+    margin-bottom: 1.5rem !important;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08) !important;
+    will-change: transform !important;
+    transform-origin: top center !important;
+  }
+
+  /* 3. "THESE ARE OUR THINGS" SERVICES MOBILE SCALED & VERTICAL STACK (ITEM 4) */
+  .section-services,
+  .section-services-wrapper,
+  .section-services-body {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .services-layers {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4.5rem !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 2rem 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .service-layer {
+    font-size: 1.15em !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+    margin: 0 auto !important;
+  }
+
+  .service-block {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .service-block.one,
+  .service-block.two,
+  .service-block.three,
+  .service-block.four,
+  .service-block.five,
+  .service-block.six,
+  .service-block.seven {
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 auto !important;
+  }
+
+  .service-text {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+  }
+
+  .service-svg {
+    width: 42px !important;
+    height: 42px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .service-block-para-wrapper {
+    display: block !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    flex-basis: 100% !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 0.6rem auto 0 auto !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 9999px !important;
+    box-sizing: border-box !important;
+  }
+
+  .service-block-para {
+    font-size: 0.82rem !important;
+    line-height: 1.35 !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
+
+  .section-testimonials {
+    margin-top: 3rem !important;
+  }
+
+  /* 4. FOOTER / "HAVE A PROJECT IN MIND" NAME CUT-OFF FIX (ITEM 5) */
+  .footer,
+  .footer-wrapper,
+  .footer-btm {
+    overflow: visible !important;
+    padding-bottom: 3.5rem !important;
+  }
+
+  .footer-logo-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 0.5rem 2.5rem 0.5rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .footer-svg-logo {
+    width: 100% !important;
+    max-width: 94vw !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .footer-svg-logo svg {
+    width: 100% !important;
+    max-width: 92vw !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .footer-name,
+  .footer-logo-text,
+  [class*="footer-name"],
+  [class*="footer-logo"] {
+    font-size: 15vw !important;
+    line-height: 1 !important;
+    overflow: visible !important;
+  }
+}
