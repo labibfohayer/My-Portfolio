@@ -5417,9 +5417,9 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           gestureOrientation: "vertical",
           smoothWheel: true,
           infinite: false,
-          lerp: 0.05,
-          wheelMultiplier: 1.0,
-          touchMultiplier: 1.2,
+          lerp: 0.06,
+          wheelMultiplier: 1.65,
+          touchMultiplier: 2.0,
           syncTouch: false, // Prevents pull-back & touch fighting
           autoRaf: false,
         });
@@ -5526,10 +5526,10 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
         gestureOrientation: "vertical",
         smoothWheel: true,
         infinite: false,
-        lerp: 0.05,
-        wheelMultiplier: 1.0,
-        touchMultiplier: isTouch ? 1.0 : 1.8,
-        touchInertiaMultiplier: isTouch ? 18 : 35,
+        lerp: 0.06,
+        wheelMultiplier: 1.65,
+        touchMultiplier: isTouch ? 1.5 : 2.0,
+        touchInertiaMultiplier: isTouch ? 20 : 35,
         syncTouch: false, // Prevents trackpad pull-back & touch fighting
         syncTouchLerp: isTouch ? 0.09 : 0.25,
         touchInertiaExponent: 2,
