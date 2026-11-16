@@ -2938,7 +2938,7 @@ window.__two26LoaderDone = true;
     window.initAboutPinned = initAboutPinned;
   })();
 
-/* === SCRIPT 15: INTERACTIVE 3D CYLINDRICAL CAROUSEL (120 FPS OPTIMIZED) === */
+/* === SCRIPT 15: INTERACTIVE 3D CYLINDRICAL CAROUSEL (120 FPS ULTRA-PERFORMANCE DRUM) === */
 (function () {
   function initShowcase3DCarousel() {
     const allWrappers = Array.from(
@@ -2967,71 +2967,82 @@ window.__two26LoaderDone = true;
         wrapper.querySelector("[class*='showcase-slider']");
       if (!track) return;
 
-      // Clean up any marquee clone nodes
       track.querySelectorAll(".is-marquee-clone").forEach((el) => el.remove());
 
-      const slides = Array.from(track.querySelectorAll(".showcase-slide"));
+      let slides = Array.from(track.querySelectorAll(".showcase-slide"));
+      if (slides.length === 0) return;
+
+      if (slides.length < 14) {
+        const initialSlides = [...slides];
+        initialSlides.forEach((s) => {
+          const clone = s.cloneNode(true);
+          track.appendChild(clone);
+        });
+        slides = Array.from(track.querySelectorAll(".showcase-slide"));
+      }
+
       const totalItems = slides.length;
-      if (totalItems === 0) return;
+      const angleStep = 360 / totalItems;
 
-      const angleStep = 360 / totalItems; // 51.4286 deg for 7 items
-
-      // Responsive geometry variables
-      let cardWidth = 320;
-      let cardHeight = 400;
-      let gap = 32;
-      let radius = 365;
-      let perspective = 1100;
-      let stageHeight = 520;
+      let itemWidth = 240;
+      let itemHeight = 310;
+      let gap = 26;
+      let radius = 583;
+      let perspective = 2000;
+      let stageHeight = 440;
 
       function updateGeometry() {
         const winW = window.innerWidth;
         if (winW >= 1200) {
-          cardWidth = 320;
-          cardHeight = 400;
-          gap = 32;
-          perspective = 1100;
-          stageHeight = 520;
-        } else if (winW >= 992) {
-          cardWidth = 280;
-          cardHeight = 360;
+          itemWidth = 240;
+          itemHeight = 310;
           gap = 26;
-          perspective = 1000;
-          stageHeight = 460;
+          perspective = 2000;
+          stageHeight = 440;
+        } else if (winW >= 992) {
+          itemWidth = 210;
+          itemHeight = 280;
+          gap = 22;
+          perspective = 1800;
+          stageHeight = 400;
         } else if (winW >= 768) {
-          cardWidth = 240;
-          cardHeight = 320;
+          itemWidth = 190;
+          itemHeight = 250;
           gap = 20;
-          perspective = 900;
-          stageHeight = 420;
+          perspective = 1600;
+          stageHeight = 370;
         } else if (winW >= 480) {
-          cardWidth = 200;
-          cardHeight = 270;
+          itemWidth = 150;
+          itemHeight = 200;
           gap = 16;
-          perspective = 780;
-          stageHeight = 360;
+          perspective = 1300;
+          stageHeight = 310;
         } else {
-          cardWidth = Math.min(180, Math.floor(winW * 0.48));
-          cardHeight = Math.round(cardWidth * 1.35);
+          itemWidth = 135;
+          itemHeight = 180;
           gap = 14;
-          perspective = 680;
-          stageHeight = cardHeight + 80;
+          perspective = 1100;
+          stageHeight = 270;
         }
 
-        // Polygon apothem formula: R = (W + gap) / (2 * tan(PI / N))
-        const tanHalf = Math.tan(Math.PI / totalItems);
-        radius = Math.round((cardWidth + gap) / (2 * tanHalf));
+        const effectiveWidth = itemWidth + gap;
+        radius = Math.round((effectiveWidth / 2) / Math.tan(Math.PI / totalItems));
 
-        // Section & wrapper layout
         const section = wrapper.closest(".section-slider-showcase") || wrapper;
-        section.style.overflow = "hidden";
-        section.style.position = "relative";
         section.style.width = "100%";
+        section.style.maxWidth = "100%";
+        section.style.position = "relative";
+        section.style.overflow = "hidden";
+        section.style.padding = winW < 768 ? "2rem 0" : "3rem 0";
+        section.style.display = "flex";
+        section.style.justifyContent = "center";
+        section.style.alignItems = "center";
 
+        wrapper.style.width = "100%";
+        wrapper.style.maxWidth = "100%";
+        wrapper.style.height = stageHeight + "px";
         wrapper.style.overflow = "hidden";
         wrapper.style.position = "relative";
-        wrapper.style.width = "100%";
-        wrapper.style.height = stageHeight + "px";
         wrapper.style.display = "flex";
         wrapper.style.justifyContent = "center";
         wrapper.style.alignItems = "center";
@@ -3044,32 +3055,30 @@ window.__two26LoaderDone = true;
         wrapper.style.touchAction = "pan-y";
         wrapper.style.cursor = "grab";
 
-        // Track layout (GPU accelerated 120 FPS)
         track.style.position = "relative";
-        track.style.width = cardWidth + "px";
-        track.style.height = cardHeight + "px";
+        track.style.width = itemWidth + "px";
+        track.style.height = itemHeight + "px";
         track.style.transformStyle = "preserve-3d";
         track.style.webkitTransformStyle = "preserve-3d";
         track.style.willChange = "transform";
         track.style.display = "block";
         track.style.margin = "0 auto";
 
-        // Slide geometry positioning
         slides.forEach((slide, i) => {
           const cardAngle = i * angleStep;
           slide.style.position = "absolute";
           slide.style.left = "0";
           slide.style.top = "0";
-          slide.style.width = cardWidth + "px";
-          slide.style.height = cardHeight + "px";
-          slide.style.borderRadius = winW < 768 ? "16px" : "20px";
+          slide.style.width = itemWidth + "px";
+          slide.style.height = itemHeight + "px";
+          slide.style.borderRadius = winW < 768 ? "14px" : "20px";
           slide.style.overflow = "hidden";
           slide.style.backfaceVisibility = "hidden";
           slide.style.webkitBackfaceVisibility = "hidden";
           slide.style.transformStyle = "preserve-3d";
           slide.style.webkitTransformStyle = "preserve-3d";
-          slide.style.boxShadow = "0 20px 45px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.1)";
-          slide.style.border = "1px solid rgba(255, 255, 255, 0.15)";
+          slide.style.boxShadow = "0 20px 45px rgba(0, 0, 0, 0.28), 0 4px 12px rgba(0, 0, 0, 0.12)";
+          slide.style.border = "1px solid rgba(255, 255, 255, 0.18)";
           slide.style.willChange = "transform, filter";
           slide.style.transform = `rotateY(${cardAngle}deg) translateZ(${radius}px)`;
           slide.dataset.cardAngle = cardAngle;
@@ -3093,13 +3102,11 @@ window.__two26LoaderDone = true;
       updateGeometry();
       window.addEventListener("resize", updateGeometry);
 
-      // Play videos
       slides.forEach((slide) => {
         const video = slide.querySelector("video");
         if (video) video.play().catch(() => {});
       });
 
-      // Pause/resume videos on tab visibility
       function onVisibility() {
         slides.forEach((slide) => {
           const video = slide.querySelector("video");
@@ -3114,7 +3121,6 @@ window.__two26LoaderDone = true;
       }
       document.addEventListener("visibilitychange", onVisibility);
 
-      // Physics & Rotation State (120 FPS Sub-Frame Kinetics)
       let currentRotation = 0;
       let velocity = 0;
       let isDragging = false;
@@ -3122,10 +3128,9 @@ window.__two26LoaderDone = true;
       let dragDistance = 0;
       let lastX = 0;
       let lastTime = 0;
-      let autoSpeed = 0.20; // Smooth steady idle rotation
-      let targetAutoSpeed = 0.20;
+      let autoSpeed = 0.18;
+      let targetAutoSpeed = 0.18;
 
-      // Pointer Drag Event Handlers
       function onPointerDown(e) {
         if (e.button !== undefined && e.button !== 0) return;
         isDragging = true;
@@ -3186,7 +3191,6 @@ window.__two26LoaderDone = true;
       wrapper.addEventListener("pointerup", onPointerUp, { passive: true });
       wrapper.addEventListener("pointercancel", onPointerUp, { passive: true });
 
-      // Separate drag from click
       wrapper.addEventListener(
         "click",
         (e) => {
@@ -3199,28 +3203,25 @@ window.__two26LoaderDone = true;
         true
       );
 
-      // Graceful slow down on hover
       wrapper.addEventListener("mouseenter", () => {
-        targetAutoSpeed = 0.04;
+        targetAutoSpeed = 0.03;
       });
       wrapper.addEventListener("mouseleave", () => {
-        targetAutoSpeed = 0.20;
+        targetAutoSpeed = 0.18;
       });
 
-      // 120 FPS Sub-Frame Accurate Render Loop
       let lastFrameTime = performance.now();
 
       function tick(now) {
         const timeNow = now || performance.now();
         const dtSec = Math.min((timeNow - lastFrameTime) / 1000, 0.1);
         lastFrameTime = timeNow;
-        // Normalize against 60fps base: frameScale = 1.0 at 60fps, 0.5 at 120fps
         const frameScale = Math.max(0.2, Math.min(3.0, dtSec * 60));
 
         autoSpeed += (targetAutoSpeed - autoSpeed) * (1 - Math.pow(0.94, frameScale));
 
         if (isDragging) {
-          // Direct tracking during pointer drag
+          // Direct tracking
         } else {
           if (Math.abs(velocity) > 0.015) {
             currentRotation += velocity * frameScale;
@@ -3233,8 +3234,7 @@ window.__two26LoaderDone = true;
 
         currentRotation = (currentRotation % 360 + 360) % 360;
 
-        const backOffset = Math.round(radius * 0.25);
-        track.style.transform = `translate3d(0, 0, -${backOffset}px) rotateY(${currentRotation.toFixed(3)}deg)`;
+        track.style.transform = `translate3d(0, 0, -${radius}px) rotateY(${currentRotation.toFixed(3)}deg)`;
 
         slides.forEach((slide, idx) => {
           const cardAngle = idx * angleStep;
@@ -3244,11 +3244,11 @@ window.__two26LoaderDone = true;
           const absDiff = Math.abs(diff);
           if (absDiff < 90) {
             const factor = absDiff / 90;
-            const brightness = 1 - factor * 0.25;
+            const brightness = 1 - factor * 0.22;
             slide.style.filter = `brightness(${brightness.toFixed(3)})`;
             slide.style.zIndex = Math.round(100 - absDiff);
           } else {
-            slide.style.filter = "brightness(0.75)";
+            slide.style.filter = "brightness(0.78)";
             slide.style.zIndex = 1;
           }
         });
