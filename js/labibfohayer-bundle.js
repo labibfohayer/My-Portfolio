@@ -2966,35 +2966,13 @@ window.__two26LoaderDone = true;
 
     var videoData = [
       { poster: '/videos/marquee/video-1-poster.jpg', video: '/videos/marquee/video-1.mp4' },
-      { poster: '/videos/marquee/video-2-poster.jpg', video: '/videos/marquee/video-2.mp4' },
-      { poster: '/videos/marquee/video-3-poster.jpg', video: '/videos/marquee/video-3.mp4' },
-      { poster: '/videos/marquee/video-4-poster.jpg', video: '/videos/marquee/video-4.mp4' },
-      { poster: '/videos/marquee/video-5-poster.jpg', video: '/videos/marquee/video-5.mp4' },
       { poster: '/videos/marquee/video-6-poster.jpg', video: '/videos/marquee/video-6.mp4' },
-      { poster: '/videos/marquee/video-7-poster.jpg', video: '/videos/marquee/video-7.mp4' }
+      { poster: '/videos/marquee/video-4-poster.jpg', video: '/videos/marquee/video-4.mp4' },
+      { poster: '/videos/marquee/video-2-poster.jpg', video: '/videos/marquee/video-2.mp4' },
+      { poster: '/videos/marquee/video-5-poster.jpg', video: '/videos/marquee/video-5.mp4' },
+      { poster: '/videos/marquee/video-7-poster.jpg', video: '/videos/marquee/video-7.mp4' },
+      { poster: '/videos/marquee/video-3-poster.jpg', video: '/videos/marquee/video-3.mp4' }
     ];
-
-    // Read actual slides from React track if present
-    var oldTrack = container.querySelector(".showcase-slider");
-    if (oldTrack) {
-      var slideEls = oldTrack.querySelectorAll(".showcase-slide");
-      if (slideEls && slideEls.length > 0) {
-        var found = [];
-        slideEls.forEach(function(s) {
-          if (s.classList.contains("is-marquee-clone")) return;
-          var v = s.querySelector("video");
-          var poster = v ? v.getAttribute("poster") || v.poster : "";
-          var source = v ? (v.querySelector("source") ? v.querySelector("source").getAttribute("src") : v.getAttribute("src") || v.src) : "";
-          if (poster || source) {
-            found.push({ poster: poster, video: source });
-          }
-        });
-        if (found.length > 0) {
-          videoData = found;
-        }
-      }
-      oldTrack.style.display = "none";
-    }
 
     var items = [].concat(videoData, videoData);
 
@@ -3047,7 +3025,7 @@ window.__two26LoaderDone = true;
       "  float maskAlpha = 1.0 - smoothstep(-aa, aa, d);",
       "  float alpha = maskAlpha * uOpacity;",
       "  if (alpha <= 0.001) discard;",
-      "  gl_FragColor = vec4(linearToSRGB(col), alpha);",
+      "  gl_FragColor = vec4(col, alpha);",
       "}"
     ].join("\n");
 
@@ -3059,7 +3037,6 @@ window.__two26LoaderDone = true;
       "uniform vec2 uShadowSize;",
       "uniform float uRadius;",
       "uniform float uOpacity;",
-      "uniform float uOffset;",
       "varying vec2 vUv;",
       "float sdRoundedBox(vec2 p, vec2 b, float r) {",
       "  vec2 q = abs(p) - b + vec2(r);",
@@ -3067,14 +3044,14 @@ window.__two26LoaderDone = true;
       "}",
       "void main() {",
       "  vec2 p = (vUv - 0.5) * uShadowSize;",
-      "  vec2 shadowP = p - vec2(0.0, -0.06);",
+      "  vec2 shadowP = p - vec2(0.0, -0.05);",
       "  float d = sdRoundedBox(shadowP, uCardSize * 0.5, uRadius);",
-      "  float s1 = exp(-max(d, 0.0) * 18.0) * 0.22;",
-      "  float s2 = exp(-max(d, 0.0) * 6.5) * 0.15;",
-      "  float s3 = exp(-max(d, 0.0) * 2.5) * 0.08;",
-      "  float shadowAlpha = (s1 * 0.18 + s2 * 0.10 + s3 * 0.05) * uOpacity;",
+      "  float s1 = exp(-max(d, 0.0) * 18.0) * 0.20;",
+      "  float s2 = exp(-max(d, 0.0) * 6.5) * 0.12;",
+      "  float s3 = exp(-max(d, 0.0) * 2.5) * 0.06;",
+      "  float shadowAlpha = (s1 * 0.12 + s2 * 0.06 + s3 * 0.02) * uOpacity;",
       "  if (shadowAlpha <= 0.001) discard;",
-      "  gl_FragColor = vec4(vec3(0.2, 0.15, 0.1), shadowAlpha);",
+      "  gl_FragColor = vec4(vec3(0.0), shadowAlpha);",
       "}"
     ].join("\n");
 
@@ -3116,7 +3093,7 @@ window.__two26LoaderDone = true;
 
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(24, width / height, 0.1, 100);
-    camera.position.set(0, 0, isMobile ? 12.0 : 9.5);
+    camera.position.set(0, 0, isMobile ? 11.5 : 8.6);
 
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(width, height);
@@ -3140,9 +3117,9 @@ window.__two26LoaderDone = true;
     textureLoader.crossOrigin = "anonymous";
 
     var N = items.length;
-    var M = 1.36;
-    var U = 1.82;
-    var I = 0.09;
+    var M = 1.30;
+    var U = 1.66;
+    var I = 0.10;
     var P = 0.12;
     var O = M + 0.35;
     var E = U + 0.35;
@@ -3181,7 +3158,7 @@ window.__two26LoaderDone = true;
         fragmentShader: fragmentShader,
         uniforms: uniforms,
         transparent: true,
-        side: THREE.DoubleSide
+        side: THREE.FrontSide
       });
 
       var shadowUniforms = {
@@ -3276,12 +3253,6 @@ window.__two26LoaderDone = true;
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
 
-    container.addEventListener("wheel", function(e) {
-      e.preventDefault();
-      var delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      state.spinVelocity += delta * 0.0015;
-    }, { passive: false });
-
     var thresholdCos = Math.cos(Math.PI / 3);
     var lastTime = performance.now();
 
@@ -3293,7 +3264,7 @@ window.__two26LoaderDone = true;
 
       var baseSpin = isMobile ? -0.075 : -0.04;
       if (!state.isDragging) {
-        state.spinVelocity += (baseSpin - state.spinVelocity) * Math.min(dt * 2, 1);
+        state.spinVelocity += (baseSpin - state.spinVelocity) * Math.min(dt * 3.2, 1);
         state.rotation += state.spinVelocity * dt;
       }
       carousel.rotation.y = state.rotation;
@@ -3321,7 +3292,7 @@ window.__two26LoaderDone = true;
       var h = container.clientHeight || 680;
       var mob = w < 768;
       camera.aspect = w / h;
-      camera.position.z = mob ? 12.0 : 9.5;
+      camera.position.z = mob ? 11.5 : 8.6;
       camera.updateProjectionMatrix();
       carousel.scale.setScalar(mob ? 0.72 : 1.0);
       carousel.position.y = g * (mob ? 0.72 : 1.0) * Math.sin(tiltRad);
