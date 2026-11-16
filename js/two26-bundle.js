@@ -2870,6 +2870,7 @@ window.__two26LoaderDone = true;
 /* === SCRIPT 15 === */
 (function () {
     function initShowcaseMarquee() {
+      return; // Disabled: Replaced by 3D Cylindrical Carousel
       if (typeof gsap === "undefined") return;
 
       if (typeof ScrollTrigger !== "undefined") {

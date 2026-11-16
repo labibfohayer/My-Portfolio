@@ -277,56 +277,39 @@
   #three-carousel-container:active {
     cursor: grabbing !important;
   }
-  .showcase-slider {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    opacity: 0.0001 !important;
-    pointer-events: none !important;
+  .showcase-slider,
+  .section-slider-wrapper .showcase-slider,
+  #video-marquee-cache {
+    position: fixed !important;
+    top: -99999px !important;
+    left: -99999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
     overflow: hidden !important;
-    z-index: -1 !important;
+    pointer-events: none !important;
+    z-index: -99999 !important;
+    border: none !important;
+    box-shadow: none !important;
   }
-  .card-inner,
+  .showcase-slide,
   .showcase-slide .card-inner,
-  .showcase-slide {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
-    border-radius: 16px !important;
-    -webkit-border-radius: 16px !important;
-    transform: translateZ(0) !important;
-    -webkit-mask-image: -webkit-radial-gradient(white, black) !important;
-    box-sizing: border-box !important;
+  .card-inner {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
   }
-  .showcase-slide {
-    position: absolute !important;
-    width: 340px !important;
-    height: 480px !important;
-    overflow: hidden !important;
-    border-radius: 16px !important;
-    -webkit-border-radius: 16px !important;
-  }
-  video.showcase-slide-img,
-  .showcase-slide video,
-  .card-inner video,
-  .carousel-section video,
-  .section-slider-showcase video {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
+  .section-slider-wrapper > video,
+  .carousel-section > video,
+  .section-slider-showcase > video,
+  #three-carousel-container > video {
+    position: fixed !important;
+    top: -99999px !important;
+    left: -99999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
     pointer-events: none !important;
-    border-radius: inherit !important;
-    -webkit-border-radius: inherit !important;
-    display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
   }
   #three-carousel-container canvas,
   .section-slider-wrapper canvas {
@@ -344,7 +327,7 @@
 </style>
 <section class="carousel-section section-slider-showcase">
   <div class="section-slider-wrapper" id="three-carousel-container">
-    <div class="showcase-slider">
+    <div class="showcase-slider" style="position: fixed !important; top: -99999px !important; left: -99999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; overflow: hidden !important; pointer-events: none !important; z-index: -99999 !important;">
       <div class="showcase-slide">
         <div class="card-inner">
           <video autoplay="" loop="" muted="" playsinline="" preload="auto" poster="/videos/marquee/video-1-poster.jpg" class="showcase-slide-img" style="width: 100% !important; height: 100% !important; object-fit: cover !important; position: absolute !important; top: 0 !important; left: 0 !important; pointer-events: none !important;">

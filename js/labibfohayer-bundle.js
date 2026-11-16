@@ -3163,6 +3163,12 @@ window.__two26LoaderDone = true;
     window.addEventListener("pointerdown", onUserInteraction, { once: true });
     window.addEventListener("touchstart", onUserInteraction, { once: true });
 
+    Array.from(container.children).forEach(function(child) {
+      if (child.tagName === "VIDEO") {
+        child.remove();
+      }
+    });
+
     var videoTextures = [];
     videoData.forEach(function(vd, idx) {
       var vid = domVideos[idx] || domVideos[idx % domVideos.length];
@@ -3178,7 +3184,14 @@ window.__two26LoaderDone = true;
         vid.setAttribute("loop", "");
         vid.autoplay = true;
         vid.preload = "auto";
-        container.appendChild(vid);
+        var hiddenCarrier = document.getElementById("video-marquee-cache");
+        if (!hiddenCarrier) {
+          hiddenCarrier = document.createElement("div");
+          hiddenCarrier.id = "video-marquee-cache";
+          hiddenCarrier.style.cssText = "position:fixed!important;top:-99999px!important;left:-99999px!important;width:1px!important;height:1px!important;opacity:0!important;overflow:hidden!important;pointer-events:none!important;z-index:-99999!important;";
+          document.body.appendChild(hiddenCarrier);
+        }
+        hiddenCarrier.appendChild(vid);
       }
       var p = vid.play();
       if (p !== undefined) p.catch(function() {});
