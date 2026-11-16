@@ -1,11 +1,66 @@
-/* 3D Carousel Video Object-Fit Styles */
-.showcase-slide-img,
+/* =========================================================================
+   STRICT 3D CAROUSEL VIDEO & CARD CONTAINMENT (100% STRICT CSS)
+   ========================================================================= */
+
+/* Parent card wrapper: overflow hidden & border-radius */
+.card-inner,
+.showcase-slide .card-inner,
+.showcase-slide {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  -webkit-border-radius: 16px !important;
+  transform: translateZ(0) !important;
+  -webkit-mask-image: -webkit-radial-gradient(white, black) !important;
+  box-sizing: border-box !important;
+}
+
+.showcase-slide {
+  position: absolute !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  -webkit-border-radius: 16px !important;
+}
+
+/* User's Exact Specified Video Styling */
+video.showcase-slide-img,
 .showcase-slide video,
+.card-inner video,
 .carousel-section video,
 .section-slider-showcase video {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
   object-position: center !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  -webkit-border-radius: inherit !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* DOM Video Carrier Slider - keep active for WebGL video frames while sitting behind canvas */
+.showcase-slider {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0.0001 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  z-index: -1 !important;
+}
+
+#three-carousel-container canvas,
+.section-slider-wrapper canvas {
+  position: relative !important;
+  z-index: 2 !important;
   display: block !important;
 }
