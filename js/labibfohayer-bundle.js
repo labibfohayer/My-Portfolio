@@ -5525,6 +5525,9 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
         });
 
         window.lenis = lenis;
+      if (typeof lenis.start === "function") {
+        lenis.start();
+      }
 
         function raf(time) {
           lenis.raf(time);
@@ -5568,8 +5571,13 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
         window.lenis &&
         window.lenis.dimensions &&
         window.lenis.dimensions.wrapper === wrapper &&
-        document.body.contains(wrapper)
+        (window.lenis.content === content || (window.lenis.dimensions && window.lenis.dimensions.content === content)) &&
+        document.body.contains(wrapper) &&
+        document.body.contains(content)
       ) {
+        if (typeof window.lenis.start === "function") {
+          window.lenis.start();
+        }
         window.lenis.resize();
         if (typeof ScrollTrigger !== "undefined") {
           ScrollTrigger.refresh();
@@ -5637,6 +5645,9 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
       });
 
       window.lenis = lenis;
+      if (typeof lenis.start === "function") {
+        lenis.start();
+      }
 
       var imgs = wrapper.querySelectorAll("img");
       imgs.forEach(function (img) {
@@ -5749,6 +5760,7 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
 
   function handleRouteTransition(isNavChange) {
     var newPath = getPath();
+    var isRouteChange = (newPath !== currentPath);
     var isHome = (newPath === '/');
     var isResume = (newPath.indexOf('/resume') === 0);
 
@@ -5783,13 +5795,52 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           window.initCTAButtons(resumeGrid);
         }
       }
-      if (window.lenis && typeof window.lenis.resize === "function") {
-        window.lenis.resize();
+
+      // Re-initialize Lenis cleanly for the resume route
+      if (typeof window.initLenis === "function") {
+        window.initLenis();
+      }
+      if (window.lenis) {
+        try {
+          if (typeof window.lenis.start === "function") {
+            window.lenis.start();
+          }
+          if (isRouteChange && typeof window.lenis.scrollTo === "function") {
+            window.lenis.scrollTo(0, { immediate: true });
+          }
+          if (typeof window.lenis.resize === "function") {
+            window.lenis.resize();
+          }
+        } catch(e) {}
       }
       window.dispatchEvent(new Event("resize"));
       if (window.ScrollTrigger) {
-        window.ScrollTrigger.refresh();
+        try {
+          window.ScrollTrigger.refresh();
+        } catch(e) {}
       }
+
+      setTimeout(function() {
+        if (typeof window.initLenis === "function") {
+          window.initLenis();
+        }
+        if (window.lenis) {
+          try {
+            if (typeof window.lenis.start === "function") {
+              window.lenis.start();
+            }
+            if (typeof window.lenis.resize === "function") {
+              window.lenis.resize();
+            }
+          } catch(e) {}
+        }
+        window.dispatchEvent(new Event("resize"));
+        if (window.ScrollTrigger) {
+          try {
+            window.ScrollTrigger.refresh();
+          } catch(e) {}
+        }
+      }, 60);
     }
 
     // 3. If entering Homepage
@@ -5798,12 +5849,24 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
         if (typeof window.init3DCylindricalCarousel === "function") {
           window.init3DCylindricalCarousel();
         }
-        if (window.lenis && typeof window.lenis.resize === "function") {
-          window.lenis.resize();
+        if (typeof window.initLenis === "function") {
+          window.initLenis();
+        }
+        if (window.lenis) {
+          try {
+            if (typeof window.lenis.start === "function") {
+              window.lenis.start();
+            }
+            if (typeof window.lenis.resize === "function") {
+              window.lenis.resize();
+            }
+          } catch(e) {}
         }
         window.dispatchEvent(new Event("resize"));
         if (window.ScrollTrigger) {
-          window.ScrollTrigger.refresh();
+          try {
+            window.ScrollTrigger.refresh();
+          } catch(e) {}
         }
       }, 50);
     }
@@ -5840,10 +5903,16 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
         debounceTimer = setTimeout(function() { handleRouteTransition(true); }, 30);
       } else {
         for (var i = 0; i < mutations.length; i++) {
-          if (mutations[i].addedNodes && mutations[i].addedNodes.length > 0) {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(function() { handleRouteTransition(false); }, 40);
-            break;
+          var added = mutations[i].addedNodes;
+          if (added && added.length > 0) {
+            for (var j = 0; j < added.length; j++) {
+              var n = added[j];
+              if (n.nodeType === 1 && (n.tagName === "MAIN" || (n.classList && n.classList.contains("main")) || (n.querySelector && n.querySelector("main")))) {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(function() { handleRouteTransition(true); }, 40);
+                return;
+              }
+            }
           }
         }
       }
