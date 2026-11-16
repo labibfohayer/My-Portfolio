@@ -2952,15 +2952,94 @@ window.__two26LoaderDone = true;
     document.head.appendChild(script);
   }
 
+  var activeCarousel = null;
+
+  function destroy3DCylindricalCarousel() {
+    if (activeCarousel) {
+      try {
+        if (activeCarousel.animFrameId) {
+          cancelAnimationFrame(activeCarousel.animFrameId);
+          activeCarousel.animFrameId = null;
+        }
+        if (activeCarousel.container && activeCarousel.onPointerDown) {
+          activeCarousel.container.removeEventListener("pointerdown", activeCarousel.onPointerDown);
+        }
+        if (activeCarousel.onPointerMove) {
+          window.removeEventListener("pointermove", activeCarousel.onPointerMove);
+        }
+        if (activeCarousel.onPointerUp) {
+          window.removeEventListener("pointerup", activeCarousel.onPointerUp);
+        }
+        if (activeCarousel.onResize) {
+          window.removeEventListener("resize", activeCarousel.onResize);
+        }
+        if (activeCarousel.videoTextures) {
+          activeCarousel.videoTextures.forEach(function(vObj) {
+            try {
+              if (vObj.video) {
+                vObj.video.pause();
+                vObj.video.src = "";
+                vObj.video.load();
+                if (vObj.video.parentNode) {
+                  vObj.video.parentNode.removeChild(vObj.video);
+                }
+              }
+              if (vObj.texture) {
+                vObj.texture.dispose();
+              }
+            } catch(e) {}
+          });
+        }
+        if (activeCarousel.pool && activeCarousel.pool.parentNode) {
+          activeCarousel.pool.parentNode.removeChild(activeCarousel.pool);
+        }
+        if (activeCarousel.renderer) {
+          try {
+            if (activeCarousel.renderer.domElement && activeCarousel.renderer.domElement.parentNode) {
+              activeCarousel.renderer.domElement.parentNode.removeChild(activeCarousel.renderer.domElement);
+            }
+            activeCarousel.renderer.dispose();
+            if (activeCarousel.renderer.forceContextLoss) {
+              activeCarousel.renderer.forceContextLoss();
+            }
+          } catch(e) {}
+        }
+        if (activeCarousel.container) {
+          delete activeCarousel.container.dataset.carouselInited;
+        }
+      } catch(err) {
+        console.warn("Carousel cleanup error:", err);
+      } finally {
+        activeCarousel = null;
+      }
+    }
+    var roguePool = document.getElementById("carouselVideoPool");
+    if (roguePool && roguePool.parentNode) {
+      roguePool.parentNode.removeChild(roguePool);
+    }
+    var rogueWrapper = document.querySelector(".section-slider-wrapper, #three-carousel-container");
+    if (rogueWrapper && !activeCarousel) {
+      delete rogueWrapper.dataset.carouselInited;
+    }
+  }
+
   function init3DCylindricalCarousel() {
+    var p = window.location.pathname.replace(/\/index\.html$/, '');
+    if (p !== '' && p !== '/') {
+      destroy3DCylindricalCarousel();
+      return;
+    }
+
     var container = document.getElementById("three-carousel-container") || document.querySelector(".section-slider-wrapper");
     if (!container) return;
-    if (container.dataset.carouselInited === "true") return;
+    if (container.dataset.carouselInited === "true" && activeCarousel) return;
 
     if (typeof window.THREE === "undefined") {
       ensureThree(init3DCylindricalCarousel);
       return;
     }
+
+    destroy3DCylindricalCarousel();
 
     container.dataset.carouselInited = "true";
 
@@ -3061,7 +3140,10 @@ window.__two26LoaderDone = true;
       pool = document.createElement("div");
       pool.id = "carouselVideoPool";
       pool.className = "carousel-video-pool";
-      document.body.appendChild(pool);
+      pool.style.cssText = "position:fixed!important;top:-99999px!important;left:-99999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;visibility:hidden!important;overflow:hidden!important;z-index:-99999!important;";
+      container.appendChild(pool);
+    } else {
+      pool.style.cssText = "position:fixed!important;top:-99999px!important;left:-99999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;visibility:hidden!important;overflow:hidden!important;z-index:-99999!important;";
     }
 
     var videoTextures = [];
@@ -3078,6 +3160,7 @@ window.__two26LoaderDone = true;
       vid.setAttribute("loop", "");
       vid.autoplay = true;
       vid.preload = "auto";
+      vid.style.cssText = "position:absolute!important;top:-99999px!important;left:-99999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;visibility:hidden!important;";
       pool.appendChild(vid);
       vid.play().catch(function() {});
 
@@ -3259,7 +3342,8 @@ window.__two26LoaderDone = true;
     var lastTime = performance.now();
 
     function animate() {
-      requestAnimationFrame(animate);
+      if (!activeCarousel) return;
+      activeCarousel.animFrameId = requestAnimationFrame(animate);
       var now = performance.now();
       var dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
@@ -3288,9 +3372,8 @@ window.__two26LoaderDone = true;
 
       renderer.render(scene, camera);
     }
-    animate();
 
-    window.addEventListener("resize", function() {
+    var onResize = function() {
       var w = container.clientWidth || window.innerWidth;
       var h = container.clientHeight || 680;
       var mob = w < 768;
@@ -3301,10 +3384,27 @@ window.__two26LoaderDone = true;
       carousel.position.y = g * (mob ? 0.72 : 1.0) * Math.sin(tiltRad);
       state.dragInfluence = mob ? 0.0065 : 0.0035;
       renderer.setSize(w, h);
-    });
+    };
+    window.addEventListener("resize", onResize);
+
+    activeCarousel = {
+      container: container,
+      renderer: renderer,
+      scene: scene,
+      camera: camera,
+      pool: pool,
+      videoTextures: videoTextures,
+      onPointerDown: onPointerDown,
+      onPointerMove: onPointerMove,
+      onPointerUp: onPointerUp,
+      onResize: onResize,
+      animFrameId: null
+    };
+    activeCarousel.animFrameId = requestAnimationFrame(animate);
   }
 
   window.init3DCylindricalCarousel = init3DCylindricalCarousel;
+  window.destroy3DCylindricalCarousel = destroy3DCylindricalCarousel;
   window.initShowcase3DCarousel = init3DCylindricalCarousel;
   window.initShowcaseMarquee = init3DCylindricalCarousel;
 
@@ -5616,29 +5716,136 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
 
 /* === SCRIPT 17: ROUTE TRANSITION & 120 FPS RE-BIND OBSERVER === */
 (function() {
-  function onRouteMount() {
-    var resumeGrid = document.querySelector(".resume-2col-grid");
-    if (resumeGrid) {
-      if (typeof window.initCTAButtons === "function") {
-        window.initCTAButtons(resumeGrid);
-      }
-      window.dispatchEvent(new Event("resize"));
-    }
+  function getPath() {
+    var p = window.location.pathname.replace(/\/index\.html$/, '');
+    if (p === '') p = '/';
+    return p;
   }
 
-  if (typeof MutationObserver !== "undefined") {
-    var timeout = null;
-    var observer = new MutationObserver(function(mutations) {
-      var shouldCheck = false;
-      for (var i = 0; i < mutations.length; i++) {
-        if (mutations[i].addedNodes && mutations[i].addedNodes.length > 0) {
-          shouldCheck = true;
-          break;
+  var currentPath = getPath();
+
+  // Instant pre-emptive cleanup on link click (fires before DOM swap)
+  document.addEventListener("click", function(e) {
+    var link = e.target.closest("a[href]");
+    if (!link) return;
+    var href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:") || link.target === "_blank" || link.hasAttribute("download")) {
+      return;
+    }
+    var targetPath = href.split("?")[0].split("#")[0].replace(/\/index\.html$/, '');
+    if (targetPath === '') targetPath = '/';
+
+    // If navigating away from home or to another page
+    if (targetPath !== '/') {
+      if (typeof window.destroy3DCylindricalCarousel === "function") {
+        window.destroy3DCylindricalCarousel();
+      }
+      var pool = document.getElementById("carouselVideoPool");
+      if (pool && pool.parentNode) {
+        pool.parentNode.removeChild(pool);
+      }
+    }
+  }, true);
+
+  function handleRouteTransition(isNavChange) {
+    var newPath = getPath();
+    var isHome = (newPath === '/');
+    var isResume = (newPath.indexOf('/resume') === 0);
+
+    // 1. If not on homepage: ALWAYS destroy carousel and remove any rogue video pool
+    if (!isHome) {
+      if (typeof window.destroy3DCylindricalCarousel === "function") {
+        window.destroy3DCylindricalCarousel();
+      }
+      var roguePool = document.getElementById("carouselVideoPool");
+      if (roguePool && roguePool.parentNode) {
+        roguePool.parentNode.removeChild(roguePool);
+      }
+      if (window.ScrollTrigger) {
+        window.ScrollTrigger.getAll().forEach(function(st) {
+          if (st.trigger && !document.body.contains(st.trigger)) {
+            st.kill();
+          }
+        });
+      }
+    }
+
+    // 2. If entering Resume page
+    if (isResume) {
+      var poolOnResume = document.getElementById("carouselVideoPool");
+      if (poolOnResume && poolOnResume.parentNode) {
+        poolOnResume.parentNode.removeChild(poolOnResume);
+      }
+      var resumeGrid = document.querySelector(".resume-2col-grid");
+      if (resumeGrid) {
+        resumeGrid.style.display = "grid";
+        if (typeof window.initCTAButtons === "function") {
+          window.initCTAButtons(resumeGrid);
         }
       }
-      if (shouldCheck) {
-        clearTimeout(timeout);
-        timeout = setTimeout(onRouteMount, 40);
+      if (window.lenis && typeof window.lenis.resize === "function") {
+        window.lenis.resize();
+      }
+      window.dispatchEvent(new Event("resize"));
+      if (window.ScrollTrigger) {
+        window.ScrollTrigger.refresh();
+      }
+    }
+
+    // 3. If entering Homepage
+    if (isHome) {
+      setTimeout(function() {
+        if (typeof window.init3DCylindricalCarousel === "function") {
+          window.init3DCylindricalCarousel();
+        }
+        if (window.lenis && typeof window.lenis.resize === "function") {
+          window.lenis.resize();
+        }
+        window.dispatchEvent(new Event("resize"));
+        if (window.ScrollTrigger) {
+          window.ScrollTrigger.refresh();
+        }
+      }, 50);
+    }
+
+    currentPath = newPath;
+  }
+
+  // Intercept history.pushState and history.replaceState
+  var origPushState = history.pushState;
+  history.pushState = function() {
+    var ret = origPushState.apply(this, arguments);
+    setTimeout(function() { handleRouteTransition(true); }, 20);
+    return ret;
+  };
+
+  var origReplaceState = history.replaceState;
+  history.replaceState = function() {
+    var ret = origReplaceState.apply(this, arguments);
+    setTimeout(function() { handleRouteTransition(true); }, 20);
+    return ret;
+  };
+
+  window.addEventListener("popstate", function() {
+    setTimeout(function() { handleRouteTransition(true); }, 20);
+  });
+
+  // MutationObserver to catch client-side routing DOM updates
+  if (typeof MutationObserver !== "undefined") {
+    var debounceTimer = null;
+    var observer = new MutationObserver(function(mutations) {
+      var p = getPath();
+      if (p !== currentPath) {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function() { handleRouteTransition(true); }, 30);
+      } else {
+        for (var i = 0; i < mutations.length; i++) {
+          if (mutations[i].addedNodes && mutations[i].addedNodes.length > 0) {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function() { handleRouteTransition(false); }, 40);
+            break;
+          }
+        }
       }
     });
 
@@ -5651,7 +5858,9 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
     }
   }
 
-  window.addEventListener("popstate", function() {
-    setTimeout(onRouteMount, 50);
-  });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function() { handleRouteTransition(false); });
+  } else {
+    handleRouteTransition(false);
+  }
 })();

@@ -280,14 +280,18 @@
   .showcase-slider {
     display: none !important;
   }
-  .carousel-video-pool {
-    position: absolute !important;
-    top: -9999px !important;
-    left: -9999px !important;
-    width: 1px !important;
-    height: 1px !important;
+  .carousel-video-pool,
+  #carouselVideoPool {
+    position: fixed !important;
+    top: -99999px !important;
+    left: -99999px !important;
+    width: 0 !important;
+    height: 0 !important;
     opacity: 0 !important;
     pointer-events: none !important;
+    visibility: hidden !important;
+    overflow: hidden !important;
+    z-index: -99999 !important;
   }
   @media (max-width: 768px) {
     .section-slider-showcase,
