@@ -5572,3 +5572,46 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
       initLenis();
     }
   })();
+
+
+/* === SCRIPT 17: ROUTE TRANSITION & 120 FPS RE-BIND OBSERVER === */
+(function() {
+  function onRouteMount() {
+    var resumeGrid = document.querySelector(".resume-2col-grid");
+    if (resumeGrid) {
+      if (typeof window.initCTAButtons === "function") {
+        window.initCTAButtons(resumeGrid);
+      }
+      window.dispatchEvent(new Event("resize"));
+    }
+  }
+
+  if (typeof MutationObserver !== "undefined") {
+    var timeout = null;
+    var observer = new MutationObserver(function(mutations) {
+      var shouldCheck = false;
+      for (var i = 0; i < mutations.length; i++) {
+        if (mutations[i].addedNodes && mutations[i].addedNodes.length > 0) {
+          shouldCheck = true;
+          break;
+        }
+      }
+      if (shouldCheck) {
+        clearTimeout(timeout);
+        timeout = setTimeout(onRouteMount, 40);
+      }
+    });
+
+    if (document.body) {
+      observer.observe(document.body, { childList: true, subtree: true });
+    } else {
+      document.addEventListener("DOMContentLoaded", function() {
+        observer.observe(document.body, { childList: true, subtree: true });
+      });
+    }
+  }
+
+  window.addEventListener("popstate", function() {
+    setTimeout(onRouteMount, 50);
+  });
+})();

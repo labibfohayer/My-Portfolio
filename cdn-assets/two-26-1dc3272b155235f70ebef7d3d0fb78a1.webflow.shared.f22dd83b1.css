@@ -7670,3 +7670,79 @@ textarea.w-input, textarea.w-select {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* === RESUME 2-COLUMN GRID & FULL A4 DIMENSIONS (GLOBAL IMMUTABLE) === */
+.resume-2col-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 3rem !important;
+  width: 100% !important;
+  align-items: start !important;
+}
+.resume-col {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+.resume-col-header {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 1rem !important;
+  flex-wrap: wrap !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+}
+.resume-card-box {
+  width: 100% !important;
+  background-color: #ffffff !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.15) !important;
+  overflow: hidden !important;
+  border: none !important;
+  flex: 1 !important;
+  min-height: 1100px !important;
+}
+.resume-iframe {
+  width: 100% !important;
+  height: 1100px !important;
+  min-height: 1100px !important;
+  aspect-ratio: 1 / 1.414 !important;
+  border: none !important;
+  display: block !important;
+}
+@media screen and (min-width: 1400px) {
+  .resume-iframe {
+    height: 1120px !important;
+    min-height: 1120px !important;
+  }
+}
+@media screen and (max-width: 900px) {
+  .resume-2col-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3.5rem !important;
+  }
+  .resume-card-box {
+    min-height: 950px !important;
+  }
+  .resume-iframe {
+    height: 1100px !important;
+    min-height: 950px !important;
+  }
+}
+@media screen and (max-width: 640px) {
+  .resume-2col-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.75rem !important;
+  }
+  .resume-card-box {
+    min-height: 800px !important;
+  }
+  .resume-iframe {
+    height: 900px !important;
+    min-height: 800px !important;
+  }
+}
