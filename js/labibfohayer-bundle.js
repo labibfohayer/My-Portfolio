@@ -3387,9 +3387,18 @@ window.__two26LoaderDone = true;
       var dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
+      var rect = container.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight || 800;
+      if (rect.bottom < -120 || rect.top > vh + 120) {
+        return;
+      }
+
       videoTextures.forEach(function(vObj) {
         if (vObj.video && vObj.video.readyState >= 2 && !vObj.video.paused) {
-          vObj.texture.needsUpdate = true;
+          if (vObj.video.currentTime !== vObj.lastTime) {
+            vObj.lastTime = vObj.video.currentTime;
+            vObj.texture.needsUpdate = true;
+          }
         }
       });
 
@@ -5741,7 +5750,7 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           });
         }
 
-        gsap.ticker.lagSmoothing(0);
+        gsap.ticker.lagSmoothing(500, 33);
         if (window._lenisTicker) {
           gsap.ticker.remove(window._lenisTicker);
         }
@@ -5750,7 +5759,7 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
             window.lenis.raf(time * 1000);
           }
         };
-        gsap.ticker.add(window._lenisTicker);
+        gsap.ticker.add(window._lenisTicker, false, true);
       } else {
         function raf(time) {
           lenis.raf(time);

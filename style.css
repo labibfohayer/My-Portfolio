@@ -48,3 +48,32 @@
   z-index: 2 !important;
   display: block !important;
 }
+
+/* =========================================================================
+   120FPS GPU HARDWARE ACCELERATION & ZERO-JANK COMPOSITING
+   ========================================================================= */
+
+#three-carousel-container,
+.section-slider-wrapper,
+#three-carousel-container canvas,
+.section-slider-wrapper canvas {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.page,
+.main,
+.section-hero,
+.section-about,
+.section-services,
+.section-projects,
+.hero-pill,
+.about-pill,
+.hero-text,
+.cat-work-wrapper {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
