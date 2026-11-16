@@ -2984,65 +2984,66 @@ window.__two26LoaderDone = true;
       const totalItems = slides.length;
       const angleStep = 360 / totalItems;
 
-      let itemWidth = 240;
-      let itemHeight = 310;
-      let gap = 26;
-      let radius = 583;
-      let perspective = 2000;
-      let stageHeight = 440;
+      let itemWidth = 340;
+      let itemHeight = 480;
+      let radius = 1050;
+      let perspective = 1500;
+      let stageHeight = 570;
 
       function updateGeometry() {
         const winW = window.innerWidth;
         if (winW >= 1200) {
-          itemWidth = 240;
-          itemHeight = 310;
-          gap = 26;
-          perspective = 2000;
-          stageHeight = 440;
+          itemWidth = 340;
+          itemHeight = 480;
+          radius = 1050;
+          perspective = 1500;
+          stageHeight = 570;
         } else if (winW >= 992) {
-          itemWidth = 210;
-          itemHeight = 280;
-          gap = 22;
-          perspective = 1800;
-          stageHeight = 400;
+          itemWidth = 290;
+          itemHeight = 410;
+          radius = 900;
+          perspective = 1350;
+          stageHeight = 490;
         } else if (winW >= 768) {
-          itemWidth = 190;
-          itemHeight = 250;
-          gap = 20;
-          perspective = 1600;
-          stageHeight = 370;
+          itemWidth = 240;
+          itemHeight = 340;
+          radius = 750;
+          perspective = 1150;
+          stageHeight = 420;
         } else if (winW >= 480) {
-          itemWidth = 150;
-          itemHeight = 200;
-          gap = 16;
-          perspective = 1300;
-          stageHeight = 310;
+          itemWidth = 190;
+          itemHeight = 270;
+          radius = 580;
+          perspective = 950;
+          stageHeight = 350;
         } else {
-          itemWidth = 135;
-          itemHeight = 180;
-          gap = 14;
-          perspective = 1100;
-          stageHeight = 270;
+          itemWidth = 160;
+          itemHeight = 230;
+          radius = 480;
+          perspective = 800;
+          stageHeight = 300;
         }
 
-        const effectiveWidth = itemWidth + gap;
-        radius = Math.round((effectiveWidth / 2) / Math.tan(Math.PI / totalItems));
-
         const section = wrapper.closest(".section-slider-showcase") || wrapper;
-        section.style.width = "100%";
-        section.style.maxWidth = "100%";
         section.style.position = "relative";
+        section.style.width = "100vw";
+        section.style.maxWidth = "100vw";
+        section.style.left = "50%";
+        section.style.right = "50%";
+        section.style.marginLeft = "-50vw";
+        section.style.marginRight = "-50vw";
         section.style.overflow = "hidden";
-        section.style.padding = winW < 768 ? "2rem 0" : "3rem 0";
+        section.style.padding = winW < 768 ? "1.5rem 0" : "2.5rem 0";
         section.style.display = "flex";
         section.style.justifyContent = "center";
         section.style.alignItems = "center";
+        section.style.boxSizing = "border-box";
 
-        wrapper.style.width = "100%";
-        wrapper.style.maxWidth = "100%";
+        wrapper.style.position = "relative";
+        wrapper.style.width = "100vw";
+        wrapper.style.maxWidth = "100vw";
         wrapper.style.height = stageHeight + "px";
         wrapper.style.overflow = "hidden";
-        wrapper.style.position = "relative";
         wrapper.style.display = "flex";
         wrapper.style.justifyContent = "center";
         wrapper.style.alignItems = "center";
@@ -3234,7 +3235,8 @@ window.__two26LoaderDone = true;
 
         currentRotation = (currentRotation % 360 + 360) % 360;
 
-        track.style.transform = `translate3d(0, 0, -${radius}px) rotateY(${currentRotation.toFixed(3)}deg)`;
+        const trackZ = -Math.round(radius * 0.914);
+        track.style.transform = `translate3d(0, 0, ${trackZ}px) rotateY(${currentRotation.toFixed(3)}deg)`;
 
         slides.forEach((slide, idx) => {
           const cardAngle = idx * angleStep;
