@@ -3017,7 +3017,8 @@ window.__two26LoaderDone = true;
       "  return (uv - 0.5) * scale + 0.5;",
       "}",
       "void main() {",
-      "  vec2 uv = coverUv(vUv, uImageAspect, uSize.x / uSize.y);",
+      "  vec2 cardUv = gl_FrontFacing ? vUv : vec2(1.0 - vUv.x, vUv.y);",
+      "  vec2 uv = coverUv(cardUv, uImageAspect, uSize.x / uSize.y);",
       "  vec3 col = uHasMap > 0.5 ? texture2D(uMap, uv).rgb : uColor;",
       "  vec2 p = (vUv - 0.5) * uSize;",
       "  float d = sdRoundedBox(p, uSize * 0.5, uRadius);",
@@ -3117,12 +3118,12 @@ window.__two26LoaderDone = true;
     textureLoader.crossOrigin = "anonymous";
 
     var N = items.length;
-    var M = 1.30;
-    var U = 1.66;
-    var I = 0.10;
+    var M = 1.58;
+    var U = 1.76;
+    var I = 0.09;
     var P = 0.12;
-    var O = M + 0.35;
-    var E = U + 0.35;
+    var O = M + 0.30;
+    var E = U + 0.30;
 
     var cardGeo = new THREE.PlaneGeometry(M, U, 24, 1);
     var shadowGeo = new THREE.PlaneGeometry(O, E, 24, 1);
@@ -3158,7 +3159,8 @@ window.__two26LoaderDone = true;
         fragmentShader: fragmentShader,
         uniforms: uniforms,
         transparent: true,
-        side: THREE.FrontSide
+        depthWrite: false,
+        side: THREE.DoubleSide
       });
 
       var shadowUniforms = {
@@ -3275,11 +3277,12 @@ window.__two26LoaderDone = true;
         var opacity = 1.0;
         if (cosVal < thresholdCos) {
           var factor = (cosVal + 1.0) / (thresholdCos + 1.0);
-          opacity = Math.max(0.22, factor);
+          opacity = Math.max(0.38, factor);
         }
         plane.userData.material.uniforms.uOpacity.value = opacity;
         if (plane.userData.shadowMaterial) {
-          plane.userData.shadowMaterial.uniforms.uOpacity.value = opacity;
+          var shadowOp = cosVal < 0.0 ? 0.0 : opacity;
+          plane.userData.shadowMaterial.uniforms.uOpacity.value = shadowOp;
         }
       });
 
