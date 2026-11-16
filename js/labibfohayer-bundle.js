@@ -2938,2641 +2938,408 @@ window.__two26LoaderDone = true;
     window.initAboutPinned = initAboutPinned;
   })();
 
-/* === SCRIPT 15: INTERACTIVE 3D CYLINDRICAL CAROUSEL (120 FPS ULTRA-PERFORMANCE DRUM) === */
-(function () {
-  function initShowcase3DCarousel() {
-    const allWrappers = Array.from(
-      document.querySelectorAll(
-        ".section-slider-wrapper, .section-slider-showcase .section-slider-wrapper"
-      )
-    );
-
-    const targetWrappers = allWrappers.length
-      ? Array.from(new Set(allWrappers))
-      : Array.from(
-          document.querySelectorAll(
-            ".section-slider-showcase, [data-section='showcase']"
-          )
-        );
-
-    if (!targetWrappers.length) return;
-
-    targetWrappers.forEach((wrapper) => {
-      if (wrapper.dataset.carousel3dInitialized === "true") return;
-      wrapper.dataset.carousel3dInitialized = "true";
-      wrapper.dataset.marqueeInitialized = "true";
-
-      const track =
-        wrapper.querySelector(".showcase-slider") ||
-        wrapper.querySelector("[class*='showcase-slider']");
-      if (!track) return;
-
-      track.querySelectorAll(".is-marquee-clone").forEach((el) => el.remove());
-
-      let slides = Array.from(track.querySelectorAll(".showcase-slide"));
-      if (slides.length === 0) return;
-
-      if (slides.length < 14) {
-        const initialSlides = [...slides];
-        initialSlides.forEach((s) => {
-          const clone = s.cloneNode(true);
-          track.appendChild(clone);
-        });
-        slides = Array.from(track.querySelectorAll(".showcase-slide"));
-      }
-
-      const totalItems = slides.length;
-      const angleStep = 360 / totalItems;
-
-      let itemWidth = 340;
-      let itemHeight = 480;
-      let radius = 1050;
-      let perspective = 1500;
-      let stageHeight = 570;
-
-      function updateGeometry() {
-        const winW = window.innerWidth;
-        if (winW >= 1200) {
-          itemWidth = 340;
-          itemHeight = 480;
-          radius = 1050;
-          perspective = 1500;
-          stageHeight = 570;
-        } else if (winW >= 992) {
-          itemWidth = 290;
-          itemHeight = 410;
-          radius = 900;
-          perspective = 1350;
-          stageHeight = 490;
-        } else if (winW >= 768) {
-          itemWidth = 240;
-          itemHeight = 340;
-          radius = 750;
-          perspective = 1150;
-          stageHeight = 420;
-        } else if (winW >= 480) {
-          itemWidth = 190;
-          itemHeight = 270;
-          radius = 580;
-          perspective = 950;
-          stageHeight = 350;
-        } else {
-          itemWidth = 160;
-          itemHeight = 230;
-          radius = 480;
-          perspective = 800;
-          stageHeight = 300;
-        }
-
-        const section = wrapper.closest(".section-slider-showcase") || wrapper;
-        section.style.position = "relative";
-        section.style.width = "100vw";
-        section.style.maxWidth = "100vw";
-        section.style.left = "50%";
-        section.style.right = "50%";
-        section.style.marginLeft = "-50vw";
-        section.style.marginRight = "-50vw";
-        section.style.overflow = "hidden";
-        section.style.padding = winW < 768 ? "1.5rem 0" : "2.5rem 0";
-        section.style.display = "flex";
-        section.style.justifyContent = "center";
-        section.style.alignItems = "center";
-        section.style.boxSizing = "border-box";
-
-        wrapper.style.position = "relative";
-        wrapper.style.width = "100vw";
-        wrapper.style.maxWidth = "100vw";
-        wrapper.style.height = stageHeight + "px";
-        wrapper.style.overflow = "hidden";
-        wrapper.style.display = "flex";
-        wrapper.style.justifyContent = "center";
-        wrapper.style.alignItems = "center";
-        wrapper.style.perspective = perspective + "px";
-        wrapper.style.webkitPerspective = perspective + "px";
-        wrapper.style.perspectiveOrigin = "50% 50%";
-        wrapper.style.webkitPerspectiveOrigin = "50% 50%";
-        wrapper.style.userSelect = "none";
-        wrapper.style.webkitUserSelect = "none";
-        wrapper.style.touchAction = "pan-y";
-        wrapper.style.cursor = "grab";
-
-        track.style.position = "relative";
-        track.style.width = itemWidth + "px";
-        track.style.height = itemHeight + "px";
-        track.style.transformStyle = "preserve-3d";
-        track.style.webkitTransformStyle = "preserve-3d";
-        track.style.willChange = "transform";
-        track.style.display = "block";
-        track.style.margin = "0 auto";
-
-        slides.forEach((slide, i) => {
-          const cardAngle = i * angleStep;
-          slide.style.position = "absolute";
-          slide.style.left = "0";
-          slide.style.top = "0";
-          slide.style.width = itemWidth + "px";
-          slide.style.height = itemHeight + "px";
-          slide.style.borderRadius = winW < 768 ? "14px" : "20px";
-          slide.style.overflow = "hidden";
-          slide.style.backfaceVisibility = "hidden";
-          slide.style.webkitBackfaceVisibility = "hidden";
-          slide.style.transformStyle = "preserve-3d";
-          slide.style.webkitTransformStyle = "preserve-3d";
-          slide.style.boxShadow = "0 20px 45px rgba(0, 0, 0, 0.28), 0 4px 12px rgba(0, 0, 0, 0.12)";
-          slide.style.border = "1px solid rgba(255, 255, 255, 0.18)";
-          slide.style.willChange = "transform, filter";
-          slide.style.transform = `rotateY(${cardAngle}deg) translateZ(${radius}px)`;
-          slide.dataset.cardAngle = cardAngle;
-
-          const video = slide.querySelector("video");
-          if (video) {
-            video.muted = true;
-            video.loop = true;
-            video.playsInline = true;
-            video.setAttribute("playsinline", "");
-            video.setAttribute("preload", "metadata");
-            video.style.width = "100%";
-            video.style.height = "100%";
-            video.style.objectFit = "cover";
-            video.style.display = "block";
-            video.style.pointerEvents = "none";
-          }
-        });
-      }
-
-      updateGeometry();
-      window.addEventListener("resize", updateGeometry);
-
-      slides.forEach((slide) => {
-        const video = slide.querySelector("video");
-        if (video) video.play().catch(() => {});
-      });
-
-      function onVisibility() {
-        slides.forEach((slide) => {
-          const video = slide.querySelector("video");
-          if (video) {
-            if (document.hidden) {
-              video.paused || video.pause();
-            } else {
-              video.paused && video.play().catch(() => {});
-            }
-          }
-        });
-      }
-      document.addEventListener("visibilitychange", onVisibility);
-
-      let currentRotation = 0;
-      let velocity = 0;
-      let isDragging = false;
-      let hasDragged = false;
-      let dragDistance = 0;
-      let lastX = 0;
-      let lastTime = 0;
-      let autoSpeed = 0.18;
-      let targetAutoSpeed = 0.18;
-
-      function onPointerDown(e) {
-        if (e.button !== undefined && e.button !== 0) return;
-        isDragging = true;
-        hasDragged = false;
-        dragDistance = 0;
-        lastX = e.clientX;
-        lastTime = performance.now();
-        velocity = 0;
-        wrapper.style.cursor = "grabbing";
-        try {
-          wrapper.setPointerCapture(e.pointerId);
-        } catch (err) {}
-      }
-
-      function onPointerMove(e) {
-        if (!isDragging) return;
-        const currentX = e.clientX;
-        const deltaX = currentX - lastX;
-        const now = performance.now();
-        const dt = now - lastTime;
-
-        dragDistance += Math.abs(deltaX);
-        if (dragDistance > 5) {
-          hasDragged = true;
-        }
-
-        const degPerPx = 360 / (2 * Math.PI * radius * 1.05);
-        currentRotation += deltaX * degPerPx;
-
-        if (dt > 0) {
-          const instVel = (deltaX / dt) * 16.67 * degPerPx;
-          velocity = velocity * 0.35 + instVel * 0.65;
-        }
-
-        lastX = currentX;
-        lastTime = now;
-      }
-
-      function onPointerUp(e) {
-        if (!isDragging) return;
-        isDragging = false;
-        wrapper.style.cursor = "grab";
-        try {
-          wrapper.releasePointerCapture(e.pointerId);
-        } catch (err) {}
-
-        velocity = Math.max(-14, Math.min(14, velocity));
-
-        if (hasDragged) {
-          setTimeout(() => {
-            hasDragged = false;
-          }, 150);
-        }
-      }
-
-      wrapper.addEventListener("pointerdown", onPointerDown, { passive: true });
-      wrapper.addEventListener("pointermove", onPointerMove, { passive: true });
-      wrapper.addEventListener("pointerup", onPointerUp, { passive: true });
-      wrapper.addEventListener("pointercancel", onPointerUp, { passive: true });
-
-      wrapper.addEventListener(
-        "click",
-        (e) => {
-          if (hasDragged || dragDistance > 5) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-          }
-        },
-        true
-      );
-
-      wrapper.addEventListener("mouseenter", () => {
-        targetAutoSpeed = 0.03;
-      });
-      wrapper.addEventListener("mouseleave", () => {
-        targetAutoSpeed = 0.18;
-      });
-
-      let lastFrameTime = performance.now();
-
-      function tick(now) {
-        const timeNow = now || performance.now();
-        const dtSec = Math.min((timeNow - lastFrameTime) / 1000, 0.1);
-        lastFrameTime = timeNow;
-        const frameScale = Math.max(0.2, Math.min(3.0, dtSec * 60));
-
-        autoSpeed += (targetAutoSpeed - autoSpeed) * (1 - Math.pow(0.94, frameScale));
-
-        if (isDragging) {
-          // Direct tracking
-        } else {
-          if (Math.abs(velocity) > 0.015) {
-            currentRotation += velocity * frameScale;
-            velocity *= Math.pow(0.945, frameScale);
-          } else {
-            velocity = 0;
-            currentRotation += autoSpeed * frameScale;
-          }
-        }
-
-        currentRotation = (currentRotation % 360 + 360) % 360;
-
-        const trackZ = -Math.round(radius * 0.914);
-        track.style.transform = `translate3d(0, 0, ${trackZ}px) rotateY(${currentRotation.toFixed(3)}deg)`;
-
-        slides.forEach((slide, idx) => {
-          const cardAngle = idx * angleStep;
-          let diff = ((cardAngle + currentRotation) % 360 + 360) % 360;
-          if (diff > 180) diff -= 360;
-
-          const absDiff = Math.abs(diff);
-          if (absDiff < 90) {
-            const factor = absDiff / 90;
-            const brightness = 1 - factor * 0.22;
-            slide.style.filter = `brightness(${brightness.toFixed(3)})`;
-            slide.style.zIndex = Math.round(100 - absDiff);
-          } else {
-            slide.style.filter = "brightness(0.78)";
-            slide.style.zIndex = 1;
-          }
-        });
-
-        requestAnimationFrame(tick);
-      }
-
-      requestAnimationFrame(tick);
-    });
+/* === SCRIPT 15: 3D CYLINDRICAL CAROUSEL WHEEL (REVERSE ENGINEERED THREE.JS WEBGL ENGINE) === */
+(function() {
+  function ensureThree(callback) {
+    if (typeof window.THREE !== "undefined") {
+      callback();
+      return;
+    }
+    var script = document.createElement("script");
+    script.src = "/js/three.min.js";
+    script.async = true;
+    script.onload = callback;
+    document.head.appendChild(script);
   }
 
-  window.initShowcase3DCarousel = initShowcase3DCarousel;
-  window.initShowcaseMarquee = initShowcase3DCarousel;
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initShowcase3DCarousel);
-  } else {
-    initShowcase3DCarousel();
-  }
-})();
-
-
-/* === SCRIPT 16 === */
-(function () {
-    function initTwo26ProjectsSection() {
-      // 1. Defensive verification for GSAP & ScrollTrigger
-      if (typeof gsap === "undefined") {
-        document
-          .querySelectorAll(
-            ".project-card, .projects-end-para, .projects-pill-first, .projects-pill-second, .projects-pill-third, .projects-pill-fourth, .project-btn",
-          )
-          .forEach((el) => {
-            el.style.opacity = "1";
-            el.style.transform = "none";
-            el.style.clipPath = "none";
-          });
-        return;
-      }
-
-      if (typeof ScrollTrigger !== "undefined") {
-        gsap.registerPlugin(ScrollTrigger);
-      }
-      if (typeof SplitText !== "undefined") {
-        gsap.registerPlugin(SplitText);
-      }
-
-      const section = document.querySelector(
-        ".section-projects, section.projects, [data-section='projects']",
-      );
-      if (!section) return;
-      if (section.dataset.projectsSectionInitialized === "true") return;
-      section.dataset.projectsSectionInitialized = "true";
-
-      const scrollerEl = document.querySelector(".page") || window;
-
-      // -------------------------------------------------------------
-      // 2. Project Cards Clip-Mask Reveal Animation (6 Cards)
-      // - Starts from 15% width & 15% height (inset 42.5% all sides) + 36px radius
-      // - Card starts scaled higher at 1.4 with 3D perspective tilt
-      // - Reveals to 100% width & height (inset 0%) + 0px radius + scale 1 + 0deg tilt
-      // - Duration: 1.25s (power3.out)
-      // - Only animates when entering from top (plays downwards, stays on reverse up)
-      // -------------------------------------------------------------
-      const projectCards = Array.from(
-        section.querySelectorAll(
-          ".projects-list .project-card, .projects-vertical-wrapper .project-card, .project-item .project-card, .project-card",
-        ),
-      );
-
-      projectCards.forEach((card, index) => {
-        // Wrap card in clip mask container
-        let maskWrapper = card.parentElement;
-        if (!maskWrapper.classList.contains("project-card-clip-mask")) {
-          maskWrapper = document.createElement("div");
-          maskWrapper.className = "project-card-clip-mask";
-          card.parentNode.insertBefore(maskWrapper, card);
-          maskWrapper.appendChild(card);
-        }
-
-        // Initial State:
-        // 15% width & 15% height mask (inset 42.5% each side) with 36px border radius
-        gsap.set(maskWrapper, {
-          clipPath: "inset(42.5% 42.5% 42.5% 42.5%)",
-          webkitClipPath: "inset(42.5% 42.5% 42.5% 42.5%)",
-          borderRadius: "36px",
-          overflow: "hidden",
-          willChange: "clip-path, border-radius",
-        });
-
-        // Inner card starts scaled at 1.45 with strong 3D perspective tilt
-        const horizontalTilt = index % 2 === 0 ? -16 : 16;
-        const zTilt = index % 2 === 0 ? -4 : 4;
-        gsap.set(card, {
-          scale: 1.45,
-          rotationX: 25,
-          rotationY: horizontalTilt,
-          rotation: zTilt,
-          transformPerspective: 800,
-          transformOrigin: "center center",
-          willChange: "transform",
-        });
-
-        // ScrollTrigger: only animates when entering from top (downwards scroll)
-        // Stays fully revealed when coming back up from below
-        const cardTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: maskWrapper,
-            scroller: scrollerEl,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-            invalidateOnRefresh: true,
-          },
-        });
-
-        cardTl.to(
-          maskWrapper,
-          {
-            clipPath: "inset(0% 0% 0% 0%)",
-            webkitClipPath: "inset(0% 0% 0% 0%)",
-            borderRadius: "0px",
-            duration: 1.25,
-            ease: "power3.out",
-          },
-          0,
-        );
-
-        cardTl.to(
-          card,
-          {
-            scale: 1,
-            rotationX: 0,
-            rotationY: 0,
-            rotation: 0,
-            duration: 1.25,
-            ease: "power3.out",
-          },
-          0,
-        );
-      });
-
-      // -------------------------------------------------------------
-      // 3. Projects End Section Animation (.projects-end only)
-      // Heading with LINE-BY-LINE slide up reveal + Milestone Pills
-      // -------------------------------------------------------------
-      const projectsEnd = section.querySelector(
-        ".projects-end, .projects-end-inner-wrapper",
-      );
-      if (projectsEnd) {
-        const endPara = projectsEnd.querySelector(
-          ".projects-end-para, p, h2, h3, .heading",
-        );
-        const pills = Array.from(
-          projectsEnd.querySelectorAll(
-            ".projects-pill-first, .projects-pill-second, .projects-pill-third, .projects-pill-fourth, [class*='projects-pill']",
-          ),
-        );
-        const projectBtn = projectsEnd.querySelector(
-          ".project-btn, .cta-btn, a[class*='btn']",
-        );
-
-        if (endPara) {
-          // A. Split Heading Line-by-Line
-          let linesList = [];
-          if (typeof SplitText !== "undefined") {
-            const split = new SplitText(endPara, {
-              type: "lines",
-              linesClass: "project-line",
-            });
-            split.lines.forEach((line) => {
-              const mask = document.createElement("span");
-              mask.className = "project-line-mask";
-              line.parentNode.insertBefore(mask, line);
-              mask.appendChild(line);
-            });
-            linesList = split.lines;
-          } else {
-            const rawText = endPara.textContent.trim();
-            endPara.innerHTML = `<span class="project-line-mask"><span class="project-line">${rawText}</span></span>`;
-            linesList = Array.from(endPara.querySelectorAll(".project-line"));
-          }
-
-          // Initial state
-          gsap.set(endPara, { opacity: 1 });
-          gsap.set(linesList, {
-            y: "115%",
-            opacity: 0,
-          });
-
-          // B. Prepare Pills (Initial State)
-          pills.forEach((pill) => {
-            gsap.set(pill, {
-              opacity: 0,
-              scale: 0.4,
-              y: 20,
-              transformOrigin: "center center",
-            });
-            const pillInner = pill.querySelector("span, [class*='text'], div");
-            if (pillInner) {
-              gsap.set(pillInner, {
-                opacity: 0,
-                y: 15,
-                display: "inline-block",
-              });
-            }
-          });
-
-          // C. Prepare Button (Initial State)
-          if (projectBtn) {
-            gsap.set(projectBtn, {
-              opacity: 0,
-              scale: 0.4,
-              y: 20,
-              transformOrigin: "center center",
-            });
-            const btnText = projectBtn.querySelector(
-              ".cta-text, [class*='text'], span",
-            );
-            if (btnText) {
-              gsap.set(btnText, {
-                opacity: 0,
-                y: 15,
-                display: "inline-block",
-              });
-            }
-          }
-
-          // D. Build Master ScrollTrigger Timeline
-          const masterTl = gsap.timeline({
-            paused: true,
-            scrollTrigger: {
-              trigger: projectsEnd,
-              scroller: scrollerEl,
-              start: "top 80%",
-              toggleActions: "play none none none",
-              invalidateOnRefresh: true,
-              onEnter: () => masterTl.play(),
-            },
-          });
-
-          masterTl.timeScale(0.75); // 75% speed matching hero section
-
-          // Animate Heading Line-by-Line
-          masterTl.to(
-            linesList,
-            {
-              y: "0%",
-              opacity: 1,
-              duration: 0.85,
-              stagger: 0.12,
-              ease: "back.out(1.4)",
-            },
-            0,
-          );
-
-          const totalLinesTime = linesList.length * 0.12 + 0.5;
-
-          // Animate Pills (milestone appearance)
-          pills.forEach((pill, i) => {
-            const pillStart =
-              0.2 + (i / Math.max(1, pills.length)) * totalLinesTime * 0.7;
-            const pillInner = pill.querySelector("span, [class*='text'], div");
-
-            masterTl.to(
-              pill,
-              {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.55,
-                ease: "back.out(2.5)",
-              },
-              pillStart,
-            );
-
-            if (pillInner) {
-              masterTl.to(
-                pillInner,
-                {
-                  opacity: 1,
-                  y: 0,
-                  duration: 0.5,
-                  ease: "back.out(1.6)",
-                },
-                pillStart + 0.15,
-              );
-            }
-          });
-
-          // Animate Button
-          if (projectBtn) {
-            const btnStart = totalLinesTime + 0.15;
-            const btnText = projectBtn.querySelector(
-              ".cta-text, [class*='text'], span",
-            );
-
-            masterTl.to(
-              projectBtn,
-              {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.55,
-                ease: "back.out(2.5)",
-              },
-              btnStart,
-            );
-
-            if (btnText) {
-              masterTl.to(
-                btnText,
-                {
-                  opacity: 1,
-                  y: 0,
-                  duration: 0.5,
-                  ease: "back.out(1.6)",
-                },
-                btnStart + 0.15,
-              );
-            }
-          }
-        }
-      }
-    }
-
-    window.initTwo26ProjectsSection = initTwo26ProjectsSection;
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initTwo26ProjectsSection);
-    } else {
-      initTwo26ProjectsSection();
-    }
-  })();
-
-/* === SCRIPT 17 === */
-(function () {
-    function initProjectCardHover() {
-      if (typeof gsap === "undefined") return;
-
-      if (typeof DrawSVGPlugin !== "undefined") {
-        gsap.registerPlugin(DrawSVGPlugin);
-      }
-      if (typeof SplitText !== "undefined") {
-        gsap.registerPlugin(SplitText);
-      }
-
-      const cards = document.querySelectorAll(".project-card");
-      if (!cards.length) return;
-
-      // Mask SVG path coordinates provided
-      const MASK_PATH_D =
-        "M25.007 729.507C25.007 729.507 136.507 1065.7 290.007 969.007C506.711 832.495 -164.765 175.16 89.5069 44.5066C315.057 -71.3883 462.507 559.507 615.507 515.007C768.507 470.507 615.507 25.0068 615.507 25.0068";
-      const TARGET_STROKE_WIDTH = 1200;
-
-      cards.forEach((card, index) => {
-        const imgWrapper = card.querySelector(".project-card-img-wrapper");
-        if (!imgWrapper) return;
-
-        imgWrapper.style.position = "relative";
-        imgWrapper.style.overflow = "hidden";
-
-        const baseImg = imgWrapper.querySelector(".project-img");
-        const hoverImg = imgWrapper.querySelector(".project-img-hover");
-        const svgContainer = imgWrapper.querySelector(".project-img-svg");
-
-        if (baseImg) {
-          baseImg.style.display = "block";
-          baseImg.style.width = "100%";
-          baseImg.style.height = "100%";
-          if (
-            baseImg.style.objectFit !== "contain" &&
-            baseImg.getAttribute("data-object-fit") !== "contain"
-          ) {
-            baseImg.style.objectFit = "cover";
-          }
-          baseImg.style.objectPosition = "center";
-        }
-
-        // 1. Setup Foreground Brush SVG (.project-img-svg)
-        let foregroundStrokePath = null;
-        if (svgContainer) {
-          svgContainer.style.position = "absolute";
-          svgContainer.style.top = "0";
-          svgContainer.style.left = "0";
-          svgContainer.style.width = "100%";
-          svgContainer.style.height = "100%";
-          svgContainer.style.pointerEvents = "none";
-          svgContainer.style.zIndex = "2";
-
-          const innerSvg = svgContainer.querySelector("svg");
-          if (innerSvg) {
-            innerSvg.style.width = "100%";
-            innerSvg.style.height = "100%";
-            innerSvg.style.display = "block";
-            innerSvg.style.overflow = "visible";
-            if (!innerSvg.getAttribute("viewBox")) {
-              innerSvg.setAttribute("viewBox", "0 0 709 1012");
-            }
-            innerSvg.setAttribute("preserveAspectRatio", "xMidYMid slice");
-          }
-
-          foregroundStrokePath = svgContainer.querySelector("path");
-          if (foregroundStrokePath) {
-            foregroundStrokePath.style.strokeLinecap = "round";
-            foregroundStrokePath.style.strokeLinejoin = "round";
-            foregroundStrokePath.style.willChange =
-              "stroke-dashoffset, stroke-width";
-          }
-        }
-
-        // 2. Setup Dynamic SVG Mask Layer for Hover Image (.project-img-hover)
-        let maskStrokePath = null;
-        if (hoverImg) {
-          // Read image source from Webflow Image element
-          const imgSrc =
-            hoverImg.currentSrc ||
-            hoverImg.getAttribute("src") ||
-            hoverImg.getAttribute("data-src") ||
-            "";
-
-          // Hide original HTML <img> so it only displays inside our hardware-accelerated SVG mask
-          hoverImg.style.display = "none";
-
-          const maskId = `project-mask-${index}`;
-
-          // Create SVG element with Mask & Clipped Image if not already present
-          let maskSvg = imgWrapper.querySelector(".project-card-mask-overlay");
-          if (!maskSvg) {
-            maskSvg = document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "svg",
-            );
-            maskSvg.setAttribute("class", "project-card-mask-overlay");
-            maskSvg.setAttribute("viewBox", "0 0 709 1012");
-            maskSvg.setAttribute("preserveAspectRatio", "xMidYMid slice");
-            maskSvg.style.position = "absolute";
-            maskSvg.style.top = "0";
-            maskSvg.style.left = "0";
-            maskSvg.style.width = "100%";
-            maskSvg.style.height = "100%";
-            maskSvg.style.pointerEvents = "none";
-            maskSvg.style.zIndex = "3";
-            maskSvg.style.overflow = "visible";
-
-            maskSvg.innerHTML = `
-              <defs>
-                <mask id="${maskId}" maskUnits="userSpaceOnUse" x="-200" y="-200" width="1109" height="1412">
-                  <path class="mask-brush-path" d="${MASK_PATH_D}" stroke="#FFFFFF" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                </mask>
-              </defs>
-              <image href="${imgSrc}" xlink:href="${imgSrc}" x="0" y="0" width="709" height="1012" preserveAspectRatio="xMidYMid slice" mask="url(#${maskId})" />
-            `;
-
-            imgWrapper.appendChild(maskSvg);
-          }
-
-          // If hover image was still loading when initialized, update SVG image on load
-          const svgImg = maskSvg.querySelector("image");
-          if (
-            svgImg &&
-            baseImg &&
-            (baseImg.style.objectFit === "contain" ||
-              baseImg.getAttribute("data-object-fit") === "contain")
-          ) {
-            svgImg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-          }
-          if (!hoverImg.complete) {
-            hoverImg.addEventListener("load", () => {
-              const freshSrc =
-                hoverImg.currentSrc ||
-                hoverImg.getAttribute("src") ||
-                hoverImg.src;
-              if (freshSrc && svgImg) {
-                svgImg.setAttribute("href", freshSrc);
-                svgImg.setAttributeNS(
-                  "http://www.w3.org/1999/xlink",
-                  "xlink:href",
-                  freshSrc,
-                );
-              }
-            });
-          }
-
-          maskStrokePath = maskSvg.querySelector(".mask-brush-path");
-          if (maskStrokePath) {
-            maskStrokePath.style.willChange = "stroke-dashoffset, stroke-width";
-          }
-        }
-
-        // 3. Setup Arrow (.projects-arrow)
-        const arrow = card.querySelector(".projects-arrow");
-        const arrowTarget = arrow ? arrow.querySelector("svg") || arrow : null;
-        if (arrowTarget) {
-          gsap.set(arrowTarget, {
-            transformOrigin: "center center",
-            rotation: 0,
-            scale: 1,
-            willChange: "transform",
-          });
-        }
-
-        // 4. Create Sequenced Timeline: Foreground SVG First -> Mask Reveal Second (Top to Bottom)
-        const hasDrawSVG = typeof DrawSVGPlugin !== "undefined";
-
-        // Initial setup for Top-to-Bottom draw (100% 100% is at the top of the path: y:25)
-        if (hasDrawSVG) {
-          if (foregroundStrokePath) {
-            gsap.set(foregroundStrokePath, {
-              drawSVG: "100% 100%",
-              strokeWidth: 0,
-            });
-          }
-          if (maskStrokePath) {
-            gsap.set(maskStrokePath, {
-              drawSVG: "100% 100%",
-              strokeWidth: 0,
-            });
-          }
-        } else {
-          [foregroundStrokePath, maskStrokePath]
-            .filter(Boolean)
-            .forEach((path) => {
-              const length = path.getTotalLength ? path.getTotalLength() : 2500;
-              path.style.strokeDasharray = length;
-              path.style.strokeDashoffset = -length;
-              path.style.strokeWidth = "0px";
-            });
-        }
-
-        const hoverTl = gsap.timeline({
-          paused: true,
-          defaults: { ease: "power1.inOut" },
-        });
-
-        // Step 1: Foreground SVG stroke draws in first from top to bottom (stroke from 0 to 600)
-        if (foregroundStrokePath) {
-          if (hasDrawSVG) {
-            hoverTl.to(
-              foregroundStrokePath,
-              {
-                drawSVG: "0% 100%",
-                strokeWidth: TARGET_STROKE_WIDTH,
-                duration: 0.95,
-              },
-              0,
-            );
-          } else {
-            hoverTl.to(
-              foregroundStrokePath,
-              {
-                strokeDashoffset: 0,
-                strokeWidth: TARGET_STROKE_WIDTH,
-                duration: 0.95,
-              },
-              0,
-            );
-          }
-        }
-
-        // Step 2: Mask stroke draws from top to bottom, expanding to reveal hover image
-        if (maskStrokePath) {
-          if (hasDrawSVG) {
-            hoverTl.to(
-              maskStrokePath,
-              {
-                drawSVG: "0% 100%",
-                strokeWidth: TARGET_STROKE_WIDTH,
-                duration: 1.05,
-              },
-              0.35, // Sequenced start with fluid overlap
-            );
-          } else {
-            hoverTl.to(
-              maskStrokePath,
-              {
-                strokeDashoffset: 0,
-                strokeWidth: TARGET_STROKE_WIDTH,
-                duration: 1.05,
-              },
-              0.35,
-            );
-          }
-        }
-
-        // Step 3: Arrow Rotate to Top -45deg and Spring Back to 0deg with Prominent Elastic Bounce
-        if (arrowTarget) {
-          hoverTl
-            .to(
-              arrowTarget,
-              {
-                rotation: -45,
-                duration: 0.28,
-                ease: "power2.out",
-              },
-              0,
-            )
-            .to(
-              arrowTarget,
-              {
-                rotation: 0,
-                duration: 0.65,
-                ease: "elastic.out(1.15, 0.35)",
-              },
-              0.28,
-            );
-        }
-
-        // 5. Bind Hover Listeners
-        card.addEventListener("mouseenter", () => {
-          hoverTl.timeScale(1).play();
-        });
-
-        card.addEventListener("mouseleave", () => {
-          hoverTl.timeScale(1.3).reverse();
-        });
-      });
-    }
-
-    window.initProjectCardHover = initProjectCardHover;
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initProjectCardHover);
-    } else {
-      initProjectCardHover();
-    }
-  })();
-
-/* === SCRIPT 18 === */
-(function () {
-    function initCTAButtons() {
-      if (typeof gsap === "undefined") return;
-
-      const buttons = document.querySelectorAll(".project-btn");
-
-      buttons.forEach((btn) => {
-        const text = btn.querySelector(".cta-text");
-        const arrow = btn.querySelector(".cta-btn-arrow, .svg-arrow-cta");
-        const fillHover = btn.querySelector(".cta-btn-fill-hover");
-
-        let arrowLoop = null;
-
-        // 1. Mouse Enter: Scale 10x Fill + Looping Arrow Rotation Bounce
-        btn.addEventListener("mouseenter", () => {
-          if (fillHover) {
-            gsap.to(fillHover, {
-              scale: 10,
-              duration: 0.55,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-
-          if (arrow) {
-            gsap.set(arrow, { transformOrigin: "center center" });
-            if (arrowLoop) arrowLoop.kill();
-
-            arrowLoop = gsap.timeline({ repeat: -1, repeatDelay: 0.2 });
-            arrowLoop
-              .to(arrow, {
-                rotation: -25,
-                duration: 0.22,
-                ease: "power2.out",
-              })
-              .to(arrow, {
-                rotation: 0,
-                duration: 0.4,
-                ease: "back.out(2.5)",
-              });
-          }
-        });
-
-        // 2. Magnetic Movement (Jitter-Free: Uses true static origin)
-        btn.addEventListener("mousemove", (e) => {
-          const rect = btn.getBoundingClientRect();
-          const currentX = gsap.getProperty(btn, "x") || 0;
-          const currentY = gsap.getProperty(btn, "y") || 0;
-
-          // True center of button before any transform offset
-          const originCenterX = rect.left - currentX + rect.width / 2;
-          const originCenterY = rect.top - currentY + rect.height / 2;
-
-          const deltaX = e.clientX - originCenterX;
-          const deltaY = e.clientY - originCenterY;
-
-          // Button magnetic translation
-          gsap.to(btn, {
-            x: deltaX * 0.35,
-            y: deltaY * 0.35,
-            duration: 0.3,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-
-          // Inner elements parallax
-          const innerElements = [text, arrow].filter(Boolean);
-          if (innerElements.length) {
-            gsap.to(innerElements, {
-              x: deltaX * 0.15,
-              y: deltaY * 0.15,
-              duration: 0.3,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-        });
-
-        // 3. Mouse Leave: Snap back with spring elasticity & reset
-        btn.addEventListener("mouseleave", () => {
-          if (arrowLoop) {
-            arrowLoop.kill();
-            arrowLoop = null;
-          }
-          if (arrow) {
-            gsap.to(arrow, {
-              rotation: 0,
-              duration: 0.35,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-
-          gsap.to(btn, {
-            x: 0,
-            y: 0,
-            duration: 0.8,
-            ease: "elastic.out(1.1, 0.4)",
-            overwrite: "auto",
-          });
-
-          const innerElements = [text, arrow].filter(Boolean);
-          if (innerElements.length) {
-            gsap.to(innerElements, {
-              x: 0,
-              y: 0,
-              duration: 0.8,
-              ease: "elastic.out(1.1, 0.4)",
-              overwrite: "auto",
-            });
-          }
-
-          if (fillHover) {
-            gsap.to(fillHover, {
-              scale: 1,
-              duration: 0.45,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-        });
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initCTAButtons);
-    } else {
-      initCTAButtons();
-    }
-  })();
-
-/* === SCRIPT 19 === */
-(function () {
-    function initServicesPathAnimation() {
-      if (typeof gsap === "undefined") return;
-
-      if (typeof ScrollTrigger !== "undefined") {
-        gsap.registerPlugin(ScrollTrigger);
-      }
-      if (typeof DrawSVGPlugin !== "undefined") {
-        gsap.registerPlugin(DrawSVGPlugin);
-      }
-
-      const section =
-        document.querySelector(".section-services-body") ||
-        document.querySelector(".services-layers")?.closest("section") ||
-        document.querySelector(".services-layers")?.parentElement;
-
-      if (!section) return;
-
-      const layers = Array.from(
-        section.querySelectorAll(
-          ".services-layers .service-layer, .service-layer",
-        ),
-      );
-
-      // Target Desktop & Mobile SVG Dark Paths
-      const desktopDarkPath = section.querySelector(
-        ".services-path-svg-dark path, .services-path-svg-dark svg path, .service-path-svg-dark path, .service-path-svg-dark svg path, .services-path-svg path, .services-path-svg svg path",
-      );
-      const mobileDarkPath = section.querySelector(
-        ".service-path-mobile-dark path, .service-path-mobile-dark svg path, .services-path-mobile-dark path, .services-path-mobile-dark svg path, .service-path-mobile path, .service-path-mobile svg path, .services-path-mobile path, .services-path-mobile svg path",
-      );
-
-      const allDarkPaths = [desktopDarkPath, mobileDarkPath].filter(Boolean);
-      const scrollerEl = document.querySelector(".page") || window;
-
-      // 1. Setup Dark SVG Path Initial State (Desktop & Mobile)
-      const hasDrawSVG = typeof DrawSVGPlugin !== "undefined";
-      allDarkPaths.forEach((path) => {
-        path.style.strokeLinecap = "round";
-        path.style.strokeLinejoin = "round";
-        if (hasDrawSVG) {
-          gsap.set(path, { drawSVG: "0%" });
-        } else {
-          const len = path.getTotalLength ? path.getTotalLength() : 2500;
-          path.style.strokeDasharray = len;
-          path.style.strokeDashoffset = len;
-        }
-      });
-
-      // 2. Setup Service Blocks Initial State & Measure Natural em Sizing
-      layers.forEach((layer) => {
-        const block = layer.querySelector(".service-block") || layer;
-        const centerSvg = block.querySelector(".service-svg");
-        const paraWrapper = block.querySelector(".service-block-para-wrapper");
-
-        if (centerSvg) {
-          // Read natural computed width (derived from em sizing in Webflow)
-          const naturalWidth =
-            centerSvg.getBoundingClientRect().width ||
-            parseFloat(getComputedStyle(centerSvg).width) ||
-            parseFloat(getComputedStyle(centerSvg).fontSize) * 2.5 ||
-            40;
-
-          centerSvg.dataset.targetWidth = naturalWidth;
-          centerSvg.style.transformOrigin = "center center";
-          centerSvg.style.willChange = "transform, width, opacity";
-          centerSvg.style.flexShrink = "0";
-
-          // Strictly constrain inner img/svg to stay inside container bounds
-          const innerMedia = centerSvg.querySelectorAll(
-            "img, svg, .service-img",
-          );
-          innerMedia.forEach((media) => {
-            media.style.width = "100%";
-            media.style.height = "100%";
-            media.style.maxWidth = "100%";
-            media.style.maxHeight = "100%";
-            media.style.objectFit = "contain";
-            media.style.display = "block";
-          });
-
-          gsap.set(centerSvg, {
-            width: 0,
-            scale: 0,
-            opacity: 0,
-            overflow: "hidden",
-            margin: "0px",
-          });
-        }
-
-        if (paraWrapper) {
-          paraWrapper.style.transformOrigin = "center center";
-          paraWrapper.style.willChange = "transform, opacity";
-          gsap.set(paraWrapper, {
-            scale: 0,
-            rotation: 0,
-            opacity: 0,
-          });
-        }
-      });
-
-      // 3. Create Master Scrubbed Timeline
-      const masterTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          scroller: scrollerEl,
-          start: "top 70%",
-          end: "bottom 70%",
-          scrub: 1.2,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      // A. Dark Path draws 0% to 100% across the full scrub duration (animates both desktop and mobile paths)
-      allDarkPaths.forEach((path) => {
-        if (hasDrawSVG) {
-          masterTl.to(
-            path,
-            {
-              drawSVG: "100%",
-              ease: "none",
-              duration: 1,
-            },
-            0,
-          );
-        } else {
-          masterTl.to(
-            path,
-            {
-              strokeDashoffset: 0,
-              ease: "none",
-              duration: 1,
-            },
-            0,
-          );
-        }
-      });
-
-      // B. Proximity Expansions for each of the 7 Service Layers (Slower & High Bounce)
-      const totalLayers = layers.length;
-      layers.forEach((layer, index) => {
-        const block = layer.querySelector(".service-block") || layer;
-        const centerSvg = block.querySelector(".service-svg");
-        const paraWrapper = block.querySelector(".service-block-para-wrapper");
-
-        // Map layer index evenly along the 0 -> 1 timeline progress
-        const point = totalLayers > 1 ? index / (totalLayers - 1) : 0;
-        const stepDuration = 0.14; // Slower, more deliberate expansion
-        const startTime = Math.max(0, point - 0.04);
-
-        // Center SVG container expands with prominent bounce
-        if (centerSvg) {
-          masterTl.to(
-            centerSvg,
-            {
-              width: () => parseFloat(centerSvg.dataset.targetWidth) || "auto",
-              scale: 1,
-              opacity: 1,
-              duration: stepDuration,
-              ease: "back.out(3.5)",
-            },
-            startTime,
-          );
-        }
-
-        // Paragraph wrapper pops with scale 1, -5deg rotation, and prominent bounce
-        if (paraWrapper) {
-          masterTl.to(
-            paraWrapper,
-            {
-              scale: 1,
-              rotation: -5,
-              opacity: 1,
-              duration: stepDuration,
-              ease: "back.out(3.5)",
-            },
-            startTime + 0.02,
-          );
-        }
-      });
-
-      // Refresh on image/font load
-      window.addEventListener("load", () => {
-        ScrollTrigger.refresh();
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initServicesPathAnimation);
-    } else {
-      initServicesPathAnimation();
-    }
-  })();
-
-/* === SCRIPT 20 === */
-(function () {
-    function initTestimonialsStack() {
-      if (typeof gsap === "undefined") return;
-
-      const bodyBg = document.querySelector(".testimonials-body-bg");
-      if (!bodyBg) return;
-
-      // Query CMS collection items
-      const cardElements = bodyBg.querySelectorAll(".testimonial-item").length
-        ? Array.from(bodyBg.querySelectorAll(".testimonial-item"))
-        : Array.from(bodyBg.querySelectorAll(".testimonial-card"));
-
-      const totalCards = cardElements.length;
-      if (totalCards === 0) return;
-
-      // Clean up any inner card nested transforms so GSAP is the single source of truth
-      cardElements.forEach((card) => {
-        const innerCard = card.querySelector(
-          ".testimonial-card, [class*='testimonial-card']",
-        );
-        if (innerCard && innerCard !== card) {
-          innerCard.style.transform = "none";
-          innerCard.style.position = "relative";
-          innerCard.style.top = "auto";
-          innerCard.style.left = "auto";
-          innerCard.style.margin = "0 auto";
-        }
-      });
-
-      const sidebar = bodyBg.querySelector(".side-bar");
-      const navArrow = bodyBg.querySelector(".nav-arrow");
-
-      let currentIndex = 0;
-      let isAnimating = false;
-
-      // -----------------------------------------------------------------
-      // 1. Organic Aggressive Rotations for Natural Stacked Deck
-      // -----------------------------------------------------------------
-      const anglePalette = [-7.5, 6.8, -5.5, 8.2, -8.5, 6.2, -7.0, 7.8];
-      const cardRotations = cardElements.map((_, i) => {
-        return anglePalette[i % anglePalette.length];
-      });
-
-      // Initial card positions & z-index layer stack
-      function applyCardStackPositions() {
-        cardElements.forEach((card, i) => {
-          const order = (i - currentIndex + totalCards) % totalCards;
-          const zIndex = totalCards - order;
-
-          card.style.zIndex = zIndex;
-          card.style.willChange = "transform";
-          card.style.backfaceVisibility = "hidden";
-
-          // Natural center lock via CSS Grid + pure rotation
-          gsap.set(card, {
-            xPercent: 0,
-            yPercent: 0,
-            x: 0,
-            y: 0,
-            rotation: i === currentIndex ? 0 : cardRotations[i],
-            opacity: 1,
-            scale: 1,
-            force3D: true,
-            transformOrigin: "center center",
-          });
-        });
-      }
-
-      applyCardStackPositions();
-
-      // -----------------------------------------------------------------
-      // 2. Dynamic Sidebar Horizontal Ticks (.side-bar)
-      // -----------------------------------------------------------------
-      let sidebarTicks = [];
-      if (sidebar) {
-        sidebar.innerHTML = "";
-        sidebar.style.display = "flex";
-        sidebar.style.alignItems = "center";
-        sidebar.style.justifyContent = "center";
-        sidebar.style.gap = "1em";
-        sidebar.style.pointerEvents = "none";
-
-        for (let i = 0; i < totalCards; i++) {
-          const tick = document.createElement("div");
-          tick.className = "sidebar-tick";
-          tick.style.height = "2px";
-          tick.style.borderRadius = "2px";
-          tick.style.backgroundColor = "#FFFFFF";
-          tick.style.transformOrigin = "right center";
-          sidebar.appendChild(tick);
-          sidebarTicks.push(tick);
-        }
-
-        updateSidebar(currentIndex, false);
-      }
-
-      function updateSidebar(activeIdx, animate = true) {
-        if (!sidebarTicks.length) return;
-
-        sidebarTicks.forEach((tick, idx) => {
-          const isActive = idx === activeIdx;
-          const targetWidth = isActive ? 34 : 14;
-          const targetOpacity = isActive ? 1 : 0.35;
-
-          if (animate) {
-            gsap.to(tick, {
-              width: targetWidth,
-              opacity: targetOpacity,
-              duration: 0.35,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          } else {
-            gsap.set(tick, {
-              width: targetWidth,
-              opacity: targetOpacity,
-            });
-          }
-        });
-      }
-
-      const isTouch =
-        matchMedia("(pointer: coarse)").matches || window.innerWidth < 992;
-
-      // -----------------------------------------------------------------
-      // 3. Floating Custom Navigation Arrow (.nav-arrow)
-      // -----------------------------------------------------------------
-      if (navArrow) {
-        if (isTouch) {
-          // Hide custom cursor nav-arrow on mobile/tablets
-          navArrow.style.display = "none";
-        } else {
-          // Reset any Webflow layout offsets
-          navArrow.style.position = "absolute";
-          navArrow.style.top = "0px";
-          navArrow.style.left = "0px";
-          navArrow.style.right = "auto";
-          navArrow.style.bottom = "auto";
-          navArrow.style.margin = "0px";
-          navArrow.style.pointerEvents = "none";
-          navArrow.style.zIndex = "999";
-
-          // Initial hidden state
-          gsap.set(navArrow, {
-            scale: 0,
-            opacity: 0,
-            rotation: 0,
-            xPercent: -50,
-            yPercent: -50,
-            transformOrigin: "center center",
-            force3D: true,
-          });
-
-          const setArrowX = gsap.quickTo(navArrow, "x", {
-            duration: 0.15,
-            ease: "power2.out",
-          });
-          const setArrowY = gsap.quickTo(navArrow, "y", {
-            duration: 0.15,
-            ease: "power2.out",
-          });
-
-          let currentArrowDir = 0; // 0 = UP, 180 = DOWN
-
-          bodyBg.addEventListener("mouseenter", (e) => {
-            const rect = bodyBg.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-
-            // Snap immediately to cursor coordinates before scaling up
-            gsap.set(navArrow, { x: mouseX, y: mouseY });
-
-            const isTopHalf = mouseY < rect.height / 2;
-            currentArrowDir = isTopHalf ? 0 : 180;
-            gsap.set(navArrow, { rotation: currentArrowDir });
-
-            gsap.to(navArrow, {
-              scale: 1,
-              opacity: 1,
-              duration: 0.3,
-              ease: "back.out(2)",
-              overwrite: "auto",
-            });
-          });
-
-          bodyBg.addEventListener("mousemove", (e) => {
-            const rect = bodyBg.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-
-            setArrowX(mouseX);
-            setArrowY(mouseY);
-
-            // Top half -> Point UP (0deg), Bottom half -> Point DOWN (180deg)
-            const isTopHalf = mouseY < rect.height / 2;
-            const targetRotation = isTopHalf ? 0 : 180;
-
-            if (currentArrowDir !== targetRotation) {
-              currentArrowDir = targetRotation;
-              gsap.to(navArrow, {
-                rotation: targetRotation,
-                duration: 0.25,
-                ease: "power2.out",
-                overwrite: "auto",
-              });
-            }
-          });
-
-          bodyBg.addEventListener("mouseleave", () => {
-            gsap.to(navArrow, {
-              scale: 0,
-              opacity: 0,
-              duration: 0.2,
-              ease: "power2.in",
-              overwrite: "auto",
-            });
-          });
-        }
-      }
-
-      // -----------------------------------------------------------------
-      // 4. Physical Deck Shuffle: Next (Top -> Bottom) & Prev (Bottom -> Top)
-      // -----------------------------------------------------------------
-      function reorderZIndices() {
-        cardElements.forEach((card, i) => {
-          const order = (i - currentIndex + totalCards) % totalCards;
-          card.style.zIndex = totalCards - order;
-
-          // Background cards reliably maintain their aggressive tilt
-          if (i !== currentIndex) {
-            gsap.to(card, {
-              rotation: cardRotations[i],
-              xPercent: 0,
-              yPercent: 0,
-              duration: 0.35,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-        });
-      }
-
-      function goToNextCard() {
-        if (isAnimating || totalCards <= 1) return;
-        isAnimating = true;
-
-        const outgoingIndex = currentIndex;
-        const outgoingCard = cardElements[outgoingIndex];
-        const nextIndex = (currentIndex + 1) % totalCards;
-        const incomingCard = cardElements[nextIndex];
-
-        // 1. Straighten incoming card as it becomes the active front card
-        gsap.to(incomingCard, {
-          rotation: 0,
-          xPercent: 0,
-          yPercent: 0,
-          duration: 0.35,
-          ease: "power2.out",
-        });
-
-        // 2. Outgoing card flies UP out of the deck with dynamic tilt
-        const tiltOffset = outgoingIndex % 2 === 0 ? 9 : -9;
-        gsap.to(outgoingCard, {
-          yPercent: -140,
-          rotation: cardRotations[outgoingIndex] + tiltOffset,
-          duration: 0.38,
-          ease: "power2.inOut",
-          onComplete: () => {
-            // Once at peak: adjust z-index to bottom of pile
-            currentIndex = nextIndex;
-            reorderZIndices();
-            outgoingCard.style.zIndex = 1;
-
-            // Slide DOWN back into the bottom of the deck
-            gsap.to(outgoingCard, {
-              yPercent: 0,
-              rotation: cardRotations[outgoingIndex],
-              duration: 0.38,
-              ease: "power2.out",
-              onComplete: () => {
-                reorderZIndices();
-                isAnimating = false;
-              },
-            });
-          },
-        });
-
-        // 3. Update dynamic sidebar ticks
-        updateSidebar(nextIndex, true);
-      }
-
-      function goToPrevCard() {
-        if (isAnimating || totalCards <= 1) return;
-        isAnimating = true;
-
-        const prevIndex = (currentIndex - 1 + totalCards) % totalCards;
-        const incomingCard = cardElements[prevIndex];
-        const currentCard = cardElements[currentIndex];
-
-        // Current active card settles back to its background rotation
-        gsap.to(currentCard, {
-          rotation: cardRotations[currentIndex],
-          xPercent: 0,
-          yPercent: 0,
-          duration: 0.35,
-          ease: "power2.out",
-        });
-
-        // 1. Bottom card flies DOWN from behind the deck
-        const tiltOffset = prevIndex % 2 === 0 ? 8 : -8;
-        gsap.to(incomingCard, {
-          yPercent: 120,
-          rotation: cardRotations[prevIndex] + tiltOffset,
-          duration: 0.38,
-          ease: "power2.inOut",
-          onComplete: () => {
-            // At bottom: promote to top z-index and set as active
-            currentIndex = prevIndex;
-            reorderZIndices();
-            incomingCard.style.zIndex = totalCards + 10;
-
-            // Slide UP onto the top of the deck
-            gsap.to(incomingCard, {
-              yPercent: 0,
-              rotation: 0,
-              duration: 0.38,
-              ease: "power2.out",
-              onComplete: () => {
-                reorderZIndices();
-                isAnimating = false;
-              },
-            });
-          },
-        });
-
-        // 3. Update dynamic sidebar ticks
-        updateSidebar(prevIndex, true);
-      }
-
-      // -----------------------------------------------------------------
-      // 5. Touch Swiping & Gesture Interaction
-      // -----------------------------------------------------------------
-      let touchStartY = 0;
-      let touchStartX = 0;
-      let isSwipeAction = false;
-
-      bodyBg.addEventListener(
-        "touchstart",
-        (e) => {
-          if (e.touches.length === 1) {
-            touchStartY = e.touches[0].clientY;
-            touchStartX = e.touches[0].clientX;
-            isSwipeAction = false;
-          }
-        },
-        { passive: true },
-      );
-
-      bodyBg.addEventListener(
-        "touchend",
-        (e) => {
-          if (e.changedTouches.length === 1) {
-            const touchEndY = e.changedTouches[0].clientY;
-            const touchEndX = e.changedTouches[0].clientX;
-            const deltaY = touchEndY - touchStartY;
-            const deltaX = touchEndX - touchStartX;
-
-            // Trigger swipe if vertical displacement is greater than horizontal and > 30px
-            if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 30) {
-              isSwipeAction = true;
-              if (deltaY < 0) {
-                // Swipe UP -> Next Card
-                goToNextCard();
-              } else {
-                // Swipe DOWN -> Prev Card
-                goToPrevCard();
-              }
-            }
-          }
-        },
-        { passive: true },
-      );
-
-      // -----------------------------------------------------------------
-      // 6. Click Handler on .testimonials-body-bg (Desktop & Tap)
-      // -----------------------------------------------------------------
-      bodyBg.addEventListener("click", (e) => {
-        // Prevent trigger if clicking on link/button inside card, or if just swiped
-        if (e.target.closest("a, button") || isSwipeAction) return;
-
-        const rect = bodyBg.getBoundingClientRect();
-        const clickY = e.clientY - rect.top;
-        const isTopHalf = clickY < rect.height / 2;
-
-        if (isTopHalf) {
-          goToNextCard();
-        } else {
-          goToPrevCard();
-        }
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initTestimonialsStack);
-    } else {
-      initTestimonialsStack();
-    }
-  })();
-
-/* === SCRIPT 21 === */
-(function () {
-    function initFaqAccordion() {
-      if (typeof gsap === "undefined") return;
-
-      const items = Array.from(
-        document.querySelectorAll(".faq-item, .faq-block"),
-      );
-      if (!items.length) return;
-
-      // Filter to unique parent container if both .faq-item and .faq-block exist
-      const faqItems = items.filter((item) => {
-        return (
-          item.classList.contains("faq-item") || !item.closest(".faq-item")
-        );
-      });
-
-      let activeItem = null;
-
-      const getOpenWidth = () => (window.innerWidth >= 992 ? "50%" : "75%");
-
-      // 1. Initial State Setup
-      faqItems.forEach((item, index) => {
-        const qBlock = item.querySelector(".question-block");
-        const aBlock = item.querySelector(".faq-block-btm, .faq-answer-block");
-        const logo = item.querySelector(".faq-logo");
-        const answerText = item.querySelector(".faq-answer");
-
-        if (qBlock) {
-          qBlock.style.cursor = "pointer";
-          qBlock.style.willChange = "width, border-width";
-        }
-        if (aBlock) {
-          aBlock.style.transformOrigin = "right bottom";
-          aBlock.style.willChange = "transform, height, opacity";
-        }
-        if (logo) {
-          logo.style.transformOrigin = "center center";
-          logo.style.willChange = "transform";
-        }
-        if (answerText) {
-          answerText.style.willChange = "transform, opacity";
-        }
-
-        if (index === 0) {
-          // First FAQ item opens by default (50% desktop, 75% on < 992px)
-          activeItem = item;
-          item.classList.add("is-open");
-          if (qBlock) {
-            gsap.set(qBlock, {
-              borderWidth: "1px",
-              width: getOpenWidth(),
-            });
-          }
-          if (aBlock) {
-            gsap.set(aBlock, {
-              height: "auto",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              overflow: "visible",
-              scale: 1,
-              opacity: 1,
-              transformOrigin: "right bottom",
-            });
-          }
-          if (logo) gsap.set(logo, { scale: 1 });
-          if (answerText) gsap.set(answerText, { opacity: 1, y: 0 });
-        } else {
-          // All other items closed (100% width on all displays, height 0, scale 0)
-          item.classList.remove("is-open");
-          if (qBlock) {
-            gsap.set(qBlock, { borderWidth: "0px", width: "100%" });
-          }
-          if (aBlock) {
-            gsap.set(aBlock, {
-              height: 0,
-              display: "none",
-              overflow: "hidden",
-              scale: 0,
-              opacity: 0,
-              transformOrigin: "right bottom",
-            });
-          }
-          if (logo) gsap.set(logo, { scale: 0 });
-          if (answerText) gsap.set(answerText, { opacity: 0, y: 20 });
-        }
-      });
-
-      // 2. Open Item Timeline
-      function openItem(item) {
-        const qBlock = item.querySelector(".question-block");
-        const aBlock = item.querySelector(".faq-block-btm, .faq-answer-block");
-        const logo = item.querySelector(".faq-logo");
-        const answerText = item.querySelector(".faq-answer");
-
-        item.classList.add("is-open");
-
-        const openTl = gsap.timeline({
-          defaults: { ease: "power2.out" },
-        });
-
-        // Step A: Question block width to 50% (desktop) / 75% (<992px), border 0px to 1px
-        if (qBlock) {
-          openTl.to(
-            qBlock,
-            {
-              width: getOpenWidth(),
-              borderWidth: "1px",
-              duration: 0.45,
-            },
-            0,
-          );
-        }
-
-        // Step B: Answer block expands height from 0 to auto and scales up 0 -> 1 with flex-end alignment
-        if (aBlock) {
-          gsap.set(aBlock, {
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            overflow: "hidden",
-            opacity: 1,
-          });
-          openTl.fromTo(
-            aBlock,
-            { height: 0, scale: 0 },
-            {
-              height: "auto",
-              scale: 1,
-              duration: 0.5,
-              ease: "back.out(1.6)",
-              onComplete: () => {
-                gsap.set(aBlock, { overflow: "visible" });
-              },
-            },
-            0.05,
-          );
-        }
-
-        // Step C: Logo scales up
-        if (logo) {
-          openTl.to(
-            logo,
-            {
-              scale: 1,
-              duration: 0.45,
-              ease: "back.out(2)",
-            },
-            0.15,
-          );
-        }
-
-        // Step D: Answer text animates in from bottom with opacity after block scales
-        if (answerText) {
-          openTl.to(
-            answerText,
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.4,
-              ease: "power2.out",
-            },
-            0.35,
-          );
-        }
-      }
-
-      // 3. Close Item Timeline
-      function closeItem(item) {
-        const qBlock = item.querySelector(".question-block");
-        const aBlock = item.querySelector(".faq-block-btm, .faq-answer-block");
-        const logo = item.querySelector(".faq-logo");
-        const answerText = item.querySelector(".faq-answer");
-
-        item.classList.remove("is-open");
-
-        const closeTl = gsap.timeline({
-          defaults: { ease: "power2.inOut" },
-        });
-
-        // Step A: Answer text disappears first
-        if (answerText) {
-          closeTl.to(
-            answerText,
-            {
-              opacity: 0,
-              y: 15,
-              duration: 0.22,
-              ease: "power2.in",
-            },
-            0,
-          );
-        }
-
-        // Step B: Logo & Answer block scale down to 0 into bottom-right & collapse height
-        if (logo) {
-          closeTl.to(
-            logo,
-            {
-              scale: 0,
-              duration: 0.25,
-              ease: "power2.in",
-            },
-            0.12,
-          );
-        }
-
-        if (aBlock) {
-          gsap.set(aBlock, { overflow: "hidden" });
-          closeTl.to(
-            aBlock,
-            {
-              scale: 0,
-              height: 0,
-              opacity: 0,
-              duration: 0.4,
-              ease: "power2.inOut",
-              onComplete: () => {
-                gsap.set(aBlock, { display: "none" });
-              },
-            },
-            0.15,
-          );
-        }
-
-        // Step C: Question block expands back to 100% width on all displays, border back to 0px
-        if (qBlock) {
-          closeTl.to(
-            qBlock,
-            {
-              width: "100%",
-              borderWidth: "0px",
-              duration: 0.45,
-              ease: "power2.out",
-            },
-            0.18,
-          );
-        }
-      }
-
-      // 4. Resize listener to update active open width across breakpoints
-      window.addEventListener("resize", () => {
-        if (activeItem) {
-          const qBlock = activeItem.querySelector(".question-block");
-          if (qBlock) {
-            gsap.set(qBlock, { width: getOpenWidth() });
-          }
-        }
-      });
-
-      // 4. Bind Click Triggers (One FAQ always remains open)
-      faqItems.forEach((item) => {
-        const trigger = item.querySelector(".question-block") || item;
-
-        trigger.addEventListener("click", () => {
-          // If already open, do nothing (one FAQ must always remain open)
-          if (item === activeItem) return;
-
-          // Close currently active item
-          if (activeItem) {
-            closeItem(activeItem);
-          }
-
-          // Open clicked item
-          openItem(item);
-          activeItem = item;
-        });
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initFaqAccordion);
-    } else {
-      initFaqAccordion();
-    }
-  })();
-
-/* === SCRIPT 22 === */
-(function () {
-    function initTwo26FooterAnimation() {
-      // 1. Defensive verification for GSAP & ScrollTrigger
-      if (typeof gsap === "undefined") return;
-
-      if (typeof ScrollTrigger !== "undefined") {
-        gsap.registerPlugin(ScrollTrigger);
-      }
-      if (typeof SplitText !== "undefined") {
-        gsap.registerPlugin(SplitText);
-      }
-
-      const path = window.location.pathname.toLowerCase().replace(/\/+$/, "");
-      const isWorkCmsPage =
-        path.startsWith("/work/") ||
-        (path.indexOf("/work/") !== -1 && path !== "/work");
-      const scrollerEl = isWorkCmsPage
-        ? window
-        : document.querySelector(".page") || window;
-
-      // 2. Elements Selection matching Webflow Navigator
-      const footer = document.querySelector(
-        "footer, .footer, .footer-wrapper, [data-section='footer']",
-      );
-      if (!footer) return;
-
-      if (typeof ScrollTrigger !== "undefined") {
-        const oldHeading = ScrollTrigger.getById("footer-heading-reveal");
-        if (oldHeading) oldHeading.kill();
-        const oldLogo = ScrollTrigger.getById("footer-logo-bounce");
-        if (oldLogo) oldLogo.kill();
-
-        ScrollTrigger.getAll().forEach((st) => {
-          if (
-            st.trigger &&
-            (st.trigger === footer ||
-              footer.contains(st.trigger) ||
-              !document.body.contains(st.trigger))
-          ) {
-            st.kill();
-          }
-        });
-      }
-
-      const footerBtm = footer.querySelector(".footer-btm");
-      const footerHeadings = Array.from(
-        footer.querySelectorAll(
-          ".footer-heading, h2.footer-heading, .footer-top-left h2, .footer-top-left .heading",
-        ),
-      );
-
-      // -------------------------------------------------------------
-      // 3. Footer Heading: SplitText by Line with Overflow Clip & Bounce
-      // -------------------------------------------------------------
-      let allHeadingLines = [];
-
-      footerHeadings.forEach((heading) => {
-        let lines = [];
-        const existingLines = heading.querySelectorAll(".footer-heading-line");
-
-        if (existingLines.length > 0) {
-          lines = Array.from(existingLines);
-        } else if (typeof SplitText !== "undefined") {
-          const split = new SplitText(heading, {
-            type: "lines",
-            linesClass: "footer-heading-line",
-          });
-          split.lines.forEach((line) => {
-            const mask = document.createElement("span");
-            mask.className = "footer-heading-line-mask";
-            line.parentNode.insertBefore(mask, line);
-            mask.appendChild(line);
-          });
-          lines = split.lines;
-        } else {
-          const raw = heading.innerHTML.trim();
-          heading.innerHTML = `<span class="footer-heading-line-mask"><span class="footer-heading-line">${raw}</span></span>`;
-          lines = Array.from(heading.querySelectorAll(".footer-heading-line"));
-        }
-
-        gsap.set(lines, {
-          y: "115%",
-          opacity: 0,
-        });
-
-        allHeadingLines = allHeadingLines.concat(lines);
-      });
-
-      if (allHeadingLines.length) {
-        gsap.to(allHeadingLines, {
-          y: "0%",
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "back.out(1.6)",
-          scrollTrigger: {
-            id: "footer-heading-reveal",
-            trigger: footer,
-            scroller: scrollerEl,
-            start: "top 80%",
-            toggleActions: "play none none none",
-            invalidateOnRefresh: true,
-          },
-        });
-      }
-
-      // -------------------------------------------------------------
-      // 4. Wolff Olins Signature Elastic Footer SVG Stretch & Settle
-      // - Starts compressed (scaleY: 0.15) anchored to bottom
-      // - Scrubs up to scaleY: 1.35 as footer scrolls into view with velocity reactivity
-      // - When reaching page bottom, releases into a juicy elastic spring bounce (scaleY: 1)
-      // -------------------------------------------------------------
-      const footerLogo = footer.querySelector(".footer-btm") || footerBtm;
-
-      if (footerLogo) {
-        gsap.killTweensOf(footerLogo);
-        gsap.set(footerLogo, {
-          scaleY: 0.15,
-          transformOrigin: "bottom center",
-          display: "block",
-          willChange: "transform",
-        });
-
-        let hasBounced = false;
-
-        ScrollTrigger.create({
-          id: "footer-logo-bounce",
-          trigger: footer,
-          scroller: scrollerEl,
-          start: "top bottom", // Starts when footer top enters bottom of viewport
-          end: "bottom bottom", // Ends when page is scrolled all the way to bottom
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const vel = Math.abs(self.getVelocity() || 0);
-            const velStretch = Math.min(vel / 1500, 0.25); // Velocity-reactive stretch boost
-
-            if (self.progress >= 0.9) {
-              // Reached bottom region: release into juicy elastic spring bounce (scaleY: 1)
-              if (!hasBounced) {
-                hasBounced = true;
-                gsap.killTweensOf(footerLogo);
-                gsap.to(footerLogo, {
-                  scaleY: 1,
-                  duration: 1.4,
-                  ease: "elastic.out(1.2, 0.35)", // Juicy Wolff Olins spring settle
-                  overwrite: "auto",
-                });
-              }
-            } else {
-              // Scrolling above bottom threshold: reset bounce state so it can re-trigger
-              hasBounced = false;
-
-              // Retract when scrolling UP and stretch when scrolling DOWN
-              const baseTarget =
-                self.direction === 1
-                  ? 0.15 + self.progress * 1.15 + velStretch
-                  : 0.15 + self.progress * 0.95;
-
-              const targetScaleY = Math.max(0.15, Math.min(baseTarget, 1.4));
-
-              gsap.to(footerLogo, {
-                scaleY: targetScaleY,
-                duration: 0.1,
-                ease: "power1.out",
-                overwrite: "auto",
-              });
-            }
-          },
-          onLeave: () => {
-            // Reached absolute end of scroll
-            if (!hasBounced) {
-              hasBounced = true;
-              gsap.killTweensOf(footerLogo);
-              gsap.to(footerLogo, {
-                scaleY: 1,
-                duration: 1.4,
-                ease: "elastic.out(1.2, 0.35)",
-                overwrite: "auto",
-              });
-            }
-          },
-          onLeaveBack: () => {
-            // Reset when scrolling completely above the footer
-            hasBounced = false;
-            gsap.killTweensOf(footerLogo);
-            gsap.to(footerLogo, {
-              scaleY: 0.15,
-              duration: 0.25,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          },
-        });
-      }
-
-      // -------------------------------------------------------------
-      // 5. Kinetic Character Hover Animation on Footer Links & Email (Excludes .footer-link-header)
-      // -------------------------------------------------------------
-      const footerLinks = Array.from(
-        footer.querySelectorAll(
-          ".footer-link, a.footer-link, [class*='footer-link'], a[href^='mailto:'], .social-link a, .social-link",
-        ),
-      ).filter(
-        (link) =>
-          !link.classList.contains("footer-link-header") &&
-          !link.closest(".footer-link-header"),
-      );
-
-      footerLinks.forEach((link) => {
-        // Prevent double splitting
-        if (link.querySelector(".footer-link-char")) return;
-
-        // Split text nodes while preserving any nested elements (e.g. .footer-arrow-svg)
-        Array.from(link.childNodes).forEach((node) => {
-          if (
-            node.nodeType === Node.TEXT_NODE &&
-            node.textContent.trim().length > 0
-          ) {
-            const span = document.createElement("span");
-            span.className = "footer-link-text-wrap";
-            span.style.display = "inline-block";
-
-            const raw = node.textContent;
-            span.innerHTML = raw
-              .split("")
-              .map((c) => {
-                if (c === " ") return "&nbsp;";
-                return `<span class="footer-link-char">${c}</span>`;
-              })
-              .join("");
-
-            node.parentNode.replaceChild(span, node);
-          }
-        });
-
-        const chars = Array.from(link.querySelectorAll(".footer-link-char"));
-        if (!chars.length) return;
-
-        // Initial character state
-        gsap.set(chars, {
-          display: "inline-block",
-          transformOrigin: "center center",
-          scale: 1,
-          rotation: 0,
-          textShadow: "0px 0px 0px rgba(0,0,0,0)",
-        });
-
-        // Hover In: Staggered kinetic pop with random tilt, scale & bold shadow (slower, silky pace)
-        link.addEventListener("mouseenter", () => {
-          chars.forEach((char, idx) => {
-            const randomTilt = gsap.utils.random(-7, 7);
-            const charDelay = idx * 0.035;
-
-            // Phase 1: Letter pop + random tilt + bold outline shadow
-            gsap.to(char, {
-              scale: 1.14,
-              rotation: randomTilt,
-              textShadow:
-                "0.4px 0.4px 0 currentColor, -0.4px -0.4px 0 currentColor, 0.4px -0.4px 0 currentColor, -0.4px 0.4px 0 currentColor",
-              duration: 0.38,
-              delay: charDelay,
-              ease: "back.out(1.8)",
-              overwrite: "auto",
-              onComplete: () => {
-                // Phase 2: Gentle settle back to clean resting state
-                gsap.to(char, {
-                  scale: 1,
-                  rotation: 0,
-                  textShadow: "0px 0px 0px rgba(0,0,0,0)",
-                  duration: 0.5,
-                  ease: "power2.out",
-                  overwrite: "auto",
-                });
-              },
-            });
-          });
-        });
-
-        // Hover Out: Smooth clean return
-        link.addEventListener("mouseleave", () => {
-          gsap.to(chars, {
-            scale: 1,
-            rotation: 0,
-            textShadow: "0px 0px 0px rgba(0,0,0,0)",
-            duration: 0.35,
-            stagger: 0.018,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        });
-      });
-    }
-
-    window.initTwo26FooterAnimation = initTwo26FooterAnimation;
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initTwo26FooterAnimation);
-    } else {
-      initTwo26FooterAnimation();
-    }
-  })();
-
-/* === SCRIPT 23 === */
-(function () {
-    function initCTAButtons() {
-      if (typeof gsap === "undefined") return;
-
-      const buttons = document.querySelectorAll(".cta-btn");
-
-      buttons.forEach((btn) => {
-        const text = btn.querySelector(".cta-text");
-        const arrow = btn.querySelector(".cta-btn-arrow, .svg-arrow-cta");
-        const fillHover = btn.querySelector(".cta-btn-fill-hover");
-
-        let arrowLoop = null;
-
-        // 1. Mouse Enter: Scale 10x Fill + Looping Arrow Rotation Bounce
-        btn.addEventListener("mouseenter", () => {
-          if (fillHover) {
-            gsap.to(fillHover, {
-              scale: 10,
-              duration: 0.55,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-
-          if (arrow) {
-            gsap.set(arrow, { transformOrigin: "center center" });
-            if (arrowLoop) arrowLoop.kill();
-
-            arrowLoop = gsap.timeline({ repeat: -1, repeatDelay: 0.2 });
-            arrowLoop
-              .to(arrow, {
-                rotation: -25,
-                duration: 0.22,
-                ease: "power2.out",
-              })
-              .to(arrow, {
-                rotation: 0,
-                duration: 0.4,
-                ease: "back.out(2.5)",
-              });
-          }
-        });
-
-        // 2. Magnetic Movement (Jitter-Free: Uses true static origin)
-        btn.addEventListener("mousemove", (e) => {
-          const rect = btn.getBoundingClientRect();
-          const currentX = gsap.getProperty(btn, "x") || 0;
-          const currentY = gsap.getProperty(btn, "y") || 0;
-
-          // True center of button before any transform offset
-          const originCenterX = rect.left - currentX + rect.width / 2;
-          const originCenterY = rect.top - currentY + rect.height / 2;
-
-          const deltaX = e.clientX - originCenterX;
-          const deltaY = e.clientY - originCenterY;
-
-          // Button magnetic translation
-          gsap.to(btn, {
-            x: deltaX * 0.35,
-            y: deltaY * 0.35,
-            duration: 0.3,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-
-          // Inner elements parallax
-          const innerElements = [text, arrow].filter(Boolean);
-          if (innerElements.length) {
-            gsap.to(innerElements, {
-              x: deltaX * 0.15,
-              y: deltaY * 0.15,
-              duration: 0.3,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-        });
-
-        // 3. Mouse Leave: Snap back with spring elasticity & reset
-        btn.addEventListener("mouseleave", () => {
-          if (arrowLoop) {
-            arrowLoop.kill();
-            arrowLoop = null;
-          }
-          if (arrow) {
-            gsap.to(arrow, {
-              rotation: 0,
-              duration: 0.35,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-
-          gsap.to(btn, {
-            x: 0,
-            y: 0,
-            duration: 0.8,
-            ease: "elastic.out(1.1, 0.4)",
-            overwrite: "auto",
-          });
-
-          const innerElements = [text, arrow].filter(Boolean);
-          if (innerElements.length) {
-            gsap.to(innerElements, {
-              x: 0,
-              y: 0,
-              duration: 0.8,
-              ease: "elastic.out(1.1, 0.4)",
-              overwrite: "auto",
-            });
-          }
-
-          if (fillHover) {
-            gsap.to(fillHover, {
-              scale: 1,
-              duration: 0.45,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          }
-        });
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initCTAButtons);
-    } else {
-      initCTAButtons();
-    }
-  })();
-
-/* === SCRIPT 24 === */
-gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,CustomEase,CustomBounce);
-
-/* === SCRIPT 25 === */
-(function () {
-    // Detect if we are on a Work CMS project page (/work/[slug])
-    var path = window.location.pathname.toLowerCase().replace(/\/+$/, "");
-    var isWorkCmsPage =
-      path.startsWith("/work/") ||
-      (path.indexOf("/work/") !== -1 && path !== "/work");
-
-    if (isWorkCmsPage) {
-      // 1. Remove the fixed/overflow-hidden styles from body and html
-      var styleTag = document.getElementById("lenis-page-styles");
-      if (styleTag) {
-        styleTag.remove();
-      }
-
-      // 2. Set html, body, and .page to clean natural flow
-      document.documentElement.style.cssText =
-        "position: static !important; overflow-y: auto !important; overflow-x: hidden !important; height: auto !important; width: 100% !important; margin: 0 !important;";
-      document.body.style.cssText =
-        "position: static !important; overflow-y: auto !important; overflow-x: hidden !important; height: auto !important; width: 100% !important; margin: 0 !important;";
-
-      function releaseWrapper() {
-        var wrapper = document.querySelector(".page");
-        if (wrapper) {
-          wrapper.style.cssText =
-            "position: relative !important; overflow: visible !important; height: auto !important; min-height: 100vh !important; width: 100% !important; box-sizing: border-box !important;";
-        }
-      }
-      releaseWrapper();
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", releaseWrapper);
-      }
-
-      // 3. Initialize Lenis on BODY / WINDOW (no .page wrapper constraint)
-      function initWorkLenis() {
-        if (typeof Lenis === "undefined") return;
-        if (window.lenis) return;
-
-        var isTouch = matchMedia("(pointer: coarse)").matches;
-
-        var lenis = new Lenis({
-          orientation: "vertical",
-          gestureOrientation: "vertical",
-          smoothWheel: true,
-          infinite: false,
-          duration: isTouch ? 1.0 : 1.5,
-          wheelMultiplier: 0.85,
-          touchMultiplier: 1.2,
-          syncTouch: false, // Prevents pull-back & touch fighting
-          easing: function (t) {
-            return Math.min(1, 1.001 - Math.pow(2, -10 * t));
-          },
-        });
-
-        window.lenis = lenis;
-
-        function raf(time) {
-          lenis.raf(time);
-          requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-
-        window.addEventListener("load", function () {
-          lenis.resize();
-        });
-        document.querySelectorAll("img").forEach(function (img) {
-          if (!img.complete) {
-            img.addEventListener("load", function () {
-              lenis.resize();
-            });
-          }
-        });
-      }
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initWorkLenis);
-      } else {
-        initWorkLenis();
-      }
-
+  function init3DCylindricalCarousel() {
+    var container = document.getElementById("three-carousel-container") || document.querySelector(".section-slider-wrapper");
+    if (!container) return;
+    if (container.dataset.carouselInited === "true") return;
+
+    if (typeof window.THREE === "undefined") {
+      ensureThree(init3DCylindricalCarousel);
       return;
     }
 
-    // =======================================================
-    // OTHER PAGES (Home, About, Work listing, etc.)
-    // Uses .page wrapper as before with full GSAP integration
-    // =======================================================
-    function initLenis() {
-      if (typeof Lenis === "undefined") return;
+    container.dataset.carouselInited = "true";
 
-      var wrapper = document.querySelector(".page");
-      var content = document.querySelector(".main");
-      if (!wrapper || !content) return;
+    var videoData = [
+      { poster: '/videos/marquee/video-1-poster.jpg', video: '/videos/marquee/video-1.mp4' },
+      { poster: '/videos/marquee/video-2-poster.jpg', video: '/videos/marquee/video-2.mp4' },
+      { poster: '/videos/marquee/video-3-poster.jpg', video: '/videos/marquee/video-3.mp4' },
+      { poster: '/videos/marquee/video-4-poster.jpg', video: '/videos/marquee/video-4.mp4' },
+      { poster: '/videos/marquee/video-5-poster.jpg', video: '/videos/marquee/video-5.mp4' },
+      { poster: '/videos/marquee/video-6-poster.jpg', video: '/videos/marquee/video-6.mp4' },
+      { poster: '/videos/marquee/video-7-poster.jpg', video: '/videos/marquee/video-7.mp4' }
+    ];
 
-      if (
-        window.lenis &&
-        window.lenis.dimensions &&
-        window.lenis.dimensions.wrapper === wrapper &&
-        document.body.contains(wrapper)
-      ) {
-        window.lenis.resize();
-        if (typeof ScrollTrigger !== "undefined") {
-          ScrollTrigger.refresh();
-        }
-        return;
-      }
-
-      if (window.lenis) {
-        try {
-          window.lenis.destroy();
-        } catch (e) {}
-        window.lenis = null;
-      }
-
-      var isTouch = matchMedia("(pointer: coarse)").matches;
-
-      var lastH = window.innerHeight;
-      function updateViewportHeight() {
-        var currentH = window.innerHeight;
-        // On mobile touch devices, prevent ScrollTrigger refreshes during minor URL bar collapses/expansions
-        if (isTouch && Math.abs(currentH - lastH) < 80) {
-          return;
-        }
-        lastH = currentH;
-        var vh = currentH * 0.01;
-        document.documentElement.style.setProperty("--vh", vh + "px");
-        if (wrapper) {
-          wrapper.style.height = currentH + "px";
-        }
-        if (window.lenis) {
-          window.lenis.resize();
-        }
-        if (window.lenis && typeof ScrollTrigger !== "undefined") {
-          ScrollTrigger.refresh();
-        }
-      }
-
-      updateViewportHeight();
-      window.addEventListener("resize", updateViewportHeight);
-      window.addEventListener("orientationchange", function () {
-        lastH = 0;
-        setTimeout(updateViewportHeight, 200);
-      });
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", function () {
-          if (!isTouch) updateViewportHeight();
-        });
-      }
-
-      var lenis = new Lenis({
-        wrapper: wrapper,
-        content: content,
-        orientation: "vertical",
-        gestureOrientation: "vertical",
-        smoothWheel: true,
-        infinite: false,
-        duration: isTouch ? 1.0 : 1.2,
-        wheelMultiplier: 1.0,
-        touchMultiplier: isTouch ? 1.0 : 1.8,
-        touchInertiaMultiplier: isTouch ? 18 : 35,
-        syncTouch: false, // Prevents trackpad pull-back & touch fighting
-        syncTouchLerp: isTouch ? 0.09 : 0.25,
-        touchInertiaExponent: 2,
-        easing: function (t) {
-          return Math.min(1, 1.001 - Math.pow(2, -10 * t));
-        },
-      });
-
-      window.lenis = lenis;
-
-      var imgs = wrapper.querySelectorAll("img");
-      imgs.forEach(function (img) {
-        if (!img.complete) {
-          img.addEventListener("load", function () {
-            if (window.lenis) window.lenis.resize();
-          });
-        }
-      });
-
-      if (typeof gsap !== "undefined") {
-        if (typeof ScrollTrigger !== "undefined") {
-          gsap.registerPlugin(ScrollTrigger);
-
-          lenis.on("scroll", ScrollTrigger.update);
-
-          ScrollTrigger.scrollerProxy(wrapper, {
-            scrollTop: function (value) {
-              if (arguments.length) {
-                lenis.scrollTo(value, { immediate: true });
-              }
-              return lenis.scroll;
-            },
-            getBoundingClientRect: function () {
-              return {
-                top: 0,
-                left: 0,
-                width: wrapper.clientWidth || window.innerWidth,
-                height: wrapper.clientHeight || window.innerHeight,
-              };
-            },
-            pinType: "transform",
-          });
-
-          ScrollTrigger.defaults({ scroller: wrapper });
-          ScrollTrigger.addEventListener("refresh", function () {
-            lenis.resize();
-          });
-
-          ScrollTrigger.refresh();
-          window.addEventListener("load", function () {
-            updateViewportHeight();
-            ScrollTrigger.refresh();
-          });
-        }
-
-        gsap.ticker.lagSmoothing(0);
-        if (window._lenisTicker) {
-          gsap.ticker.remove(window._lenisTicker);
-        }
-        window._lenisTicker = function (time) {
-          if (window.lenis) {
-            window.lenis.raf(time * 1000);
+    // Read actual slides from React track if present
+    var oldTrack = container.querySelector(".showcase-slider");
+    if (oldTrack) {
+      var slideEls = oldTrack.querySelectorAll(".showcase-slide");
+      if (slideEls && slideEls.length > 0) {
+        var found = [];
+        slideEls.forEach(function(s) {
+          if (s.classList.contains("is-marquee-clone")) return;
+          var v = s.querySelector("video");
+          var poster = v ? v.getAttribute("poster") || v.poster : "";
+          var source = v ? (v.querySelector("source") ? v.querySelector("source").getAttribute("src") : v.getAttribute("src") || v.src) : "";
+          if (poster || source) {
+            found.push({ poster: poster, video: source });
           }
-        };
-        gsap.ticker.add(window._lenisTicker);
-      } else {
-        function raf(time) {
-          lenis.raf(time);
-          requestAnimationFrame(raf);
+        });
+        if (found.length > 0) {
+          videoData = found;
         }
-        requestAnimationFrame(raf);
       }
+      oldTrack.style.display = "none";
     }
 
-    window.initLenis = initLenis;
+    var items = [].concat(videoData, videoData);
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initLenis);
-    } else {
-      initLenis();
+    var vertexShader = [
+      "uniform float uBend;",
+      "uniform vec2 uSize;",
+      "varying vec2 vUv;",
+      "void main() {",
+      "  vUv = uv;",
+      "  vec3 p = position;",
+      "  float halfW = uSize.x * 0.5;",
+      "  float distX = clamp(abs(p.x) / halfW, 0.0, 1.0);",
+      "  p.z -= uBend * distX * distX;",
+      "  gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);",
+      "}"
+    ].join("\n");
+
+    var fragmentShader = [
+      "precision highp float;",
+      "uniform sampler2D uMap;",
+      "uniform float uHasMap;",
+      "uniform vec3 uColor;",
+      "uniform vec2 uSize;",
+      "uniform float uRadius;",
+      "uniform float uOpacity;",
+      "uniform float uImageAspect;",
+      "varying vec2 vUv;",
+      "vec3 linearToSRGB(vec3 c) {",
+      "  return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c));",
+      "}",
+      "float sdRoundedBox(vec2 p, vec2 b, float r) {",
+      "  vec2 q = abs(p) - b + vec2(r);",
+      "  return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;",
+      "}",
+      "vec2 coverUv(vec2 uv, float imgAspect, float planeAspect) {",
+      "  vec2 scale = vec2(1.0);",
+      "  if (imgAspect > planeAspect) {",
+      "    scale.x = planeAspect / imgAspect;",
+      "  } else {",
+      "    scale.y = imgAspect / planeAspect;",
+      "  }",
+      "  return (uv - 0.5) * scale + 0.5;",
+      "}",
+      "void main() {",
+      "  vec2 uv = coverUv(vUv, uImageAspect, uSize.x / uSize.y);",
+      "  vec3 col = uHasMap > 0.5 ? texture2D(uMap, uv).rgb : uColor;",
+      "  vec2 p = (vUv - 0.5) * uSize;",
+      "  float d = sdRoundedBox(p, uSize * 0.5, uRadius);",
+      "  float aa = fwidth(d);",
+      "  float maskAlpha = 1.0 - smoothstep(-aa, aa, d);",
+      "  float alpha = maskAlpha * uOpacity;",
+      "  if (alpha <= 0.001) discard;",
+      "  gl_FragColor = vec4(linearToSRGB(col), alpha);",
+      "}"
+    ].join("\n");
+
+    var shadowVertexShader = vertexShader;
+
+    var shadowFragmentShader = [
+      "precision highp float;",
+      "uniform vec2 uCardSize;",
+      "uniform vec2 uShadowSize;",
+      "uniform float uRadius;",
+      "uniform float uOpacity;",
+      "uniform float uOffset;",
+      "varying vec2 vUv;",
+      "float sdRoundedBox(vec2 p, vec2 b, float r) {",
+      "  vec2 q = abs(p) - b + vec2(r);",
+      "  return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;",
+      "}",
+      "void main() {",
+      "  vec2 p = (vUv - 0.5) * uShadowSize;",
+      "  vec2 shadowP = p - vec2(0.0, -0.06);",
+      "  float d = sdRoundedBox(shadowP, uCardSize * 0.5, uRadius);",
+      "  float s1 = exp(-max(d, 0.0) * 18.0) * 0.22;",
+      "  float s2 = exp(-max(d, 0.0) * 6.5) * 0.15;",
+      "  float s3 = exp(-max(d, 0.0) * 2.5) * 0.08;",
+      "  float shadowAlpha = (s1 * 0.18 + s2 * 0.10 + s3 * 0.05) * uOpacity;",
+      "  if (shadowAlpha <= 0.001) discard;",
+      "  gl_FragColor = vec4(vec3(0.2, 0.15, 0.1), shadowAlpha);",
+      "}"
+    ].join("\n");
+
+    var pool = document.getElementById("carouselVideoPool");
+    if (!pool) {
+      pool = document.createElement("div");
+      pool.id = "carouselVideoPool";
+      pool.className = "carousel-video-pool";
+      document.body.appendChild(pool);
     }
-  })();
 
+    var videoTextures = [];
+    videoData.forEach(function(vd) {
+      var vid = document.createElement("video");
+      vid.src = vd.video;
+      vid.poster = vd.poster;
+      vid.muted = true;
+      vid.loop = true;
+      vid.playsInline = true;
+      vid.setAttribute("playsinline", "");
+      vid.setAttribute("webkit-playsinline", "");
+      vid.setAttribute("muted", "");
+      vid.setAttribute("loop", "");
+      vid.autoplay = true;
+      vid.preload = "auto";
+      pool.appendChild(vid);
+      vid.play().catch(function() {});
+
+      var vTex = new THREE.VideoTexture(vid);
+      vTex.minFilter = THREE.LinearFilter;
+      vTex.magFilter = THREE.LinearFilter;
+      if (THREE.SRGBColorSpace) vTex.colorSpace = THREE.SRGBColorSpace;
+      videoTextures.push({ video: vid, texture: vTex });
+    });
+
+    var width = container.clientWidth || window.innerWidth;
+    var height = container.clientHeight || 680;
+    var isMobile = width < 768;
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(24, width / height, 0.1, 100);
+    camera.position.set(0, 0, isMobile ? 12.0 : 9.5);
+
+    var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    if (THREE.SRGBColorSpace) renderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.innerHTML = "";
+    container.appendChild(renderer.domElement);
+
+    var carousel = new THREE.Group();
+    scene.add(carousel);
+
+    var g = 4.3;
+    var scaleFactor = isMobile ? 0.72 : 1.0;
+    carousel.scale.setScalar(scaleFactor);
+
+    var tiltRad = THREE.MathUtils.degToRad(-13);
+    carousel.rotation.x = tiltRad;
+    carousel.position.y = g * scaleFactor * Math.sin(tiltRad);
+
+    var textureLoader = new THREE.TextureLoader();
+    textureLoader.crossOrigin = "anonymous";
+
+    var N = items.length;
+    var M = 1.36;
+    var U = 1.82;
+    var I = 0.09;
+    var P = 0.12;
+    var O = M + 0.35;
+    var E = U + 0.35;
+
+    var cardGeo = new THREE.PlaneGeometry(M, U, 24, 1);
+    var shadowGeo = new THREE.PlaneGeometry(O, E, 24, 1);
+
+    var state = {
+      rotation: 0,
+      spinVelocity: isMobile ? -0.075 : -0.04,
+      dragInfluence: isMobile ? 0.0065 : 0.0035,
+      isDragging: false,
+      lastPointerX: 0,
+      lastPointerTime: 0,
+      planes: []
+    };
+
+    items.forEach(function(item, i) {
+      var angle = (i / N) * Math.PI * 2;
+      var vIdx = i % videoData.length;
+      var vObj = videoTextures[vIdx];
+
+      var uniforms = {
+        uMap: { value: null },
+        uHasMap: { value: 0 },
+        uColor: { value: new THREE.Color(0xf0eee9) },
+        uSize: { value: new THREE.Vector2(M, U) },
+        uRadius: { value: I },
+        uBend: { value: P },
+        uOpacity: { value: 1.0 },
+        uImageAspect: { value: 406 / 720 }
+      };
+
+      var cardMat = new THREE.ShaderMaterial({
+        vertexShader: vertexShader,
+        fragmentShader: fragmentShader,
+        uniforms: uniforms,
+        transparent: true,
+        side: THREE.DoubleSide
+      });
+
+      var shadowUniforms = {
+        uCardSize: { value: new THREE.Vector2(M, U) },
+        uShadowSize: { value: new THREE.Vector2(O, E) },
+        uRadius: { value: I },
+        uBend: { value: P },
+        uOpacity: { value: 1.0 }
+      };
+
+      var shadowMat = new THREE.ShaderMaterial({
+        vertexShader: shadowVertexShader,
+        fragmentShader: shadowFragmentShader,
+        uniforms: shadowUniforms,
+        transparent: true,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
+
+      textureLoader.load(item.poster, function(tex) {
+        if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+        if (!uniforms.uMap.value || uniforms.uMap.value === tex) {
+          uniforms.uMap.value = tex;
+          uniforms.uHasMap.value = 1.0;
+          cardMat.needsUpdate = true;
+        }
+      });
+
+      var checkVideo = function() {
+        if (vObj.video.readyState >= 2) {
+          uniforms.uMap.value = vObj.texture;
+          uniforms.uHasMap.value = 1.0;
+          cardMat.needsUpdate = true;
+        } else {
+          vObj.video.addEventListener("playing", function() {
+            uniforms.uMap.value = vObj.texture;
+            uniforms.uHasMap.value = 1.0;
+            cardMat.needsUpdate = true;
+          }, { once: true });
+        }
+      };
+      checkVideo();
+
+      var cardMesh = new THREE.Mesh(cardGeo, cardMat);
+      cardMesh.renderOrder = 2;
+
+      var shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
+      shadowMesh.position.set(0, -0.08, -0.04);
+      shadowMesh.renderOrder = 1;
+      cardMesh.add(shadowMesh);
+
+      cardMesh.position.set(Math.sin(angle) * g, 0, Math.cos(angle) * g);
+      cardMesh.rotation.y = angle;
+      cardMesh.userData = {
+        baseAngle: angle,
+        item: item,
+        material: cardMat,
+        shadowMaterial: shadowMat
+      };
+
+      carousel.add(cardMesh);
+      state.planes.push(cardMesh);
+    });
+
+    var onPointerDown = function(e) {
+      state.isDragging = true;
+      state.lastPointerX = e.clientX;
+      state.lastPointerTime = performance.now();
+      state.spinVelocity = 0;
+    };
+
+    var onPointerMove = function(e) {
+      if (!state.isDragging) return;
+      var dx = e.clientX - state.lastPointerX;
+      state.lastPointerX = e.clientX;
+      state.rotation += dx * state.dragInfluence;
+      var now = performance.now();
+      var dt = Math.max((now - state.lastPointerTime) / 1000, 0.001);
+      state.lastPointerTime = now;
+      var instVel = (dx * state.dragInfluence) / dt;
+      state.spinVelocity = state.spinVelocity * 0.7 + instVel * 0.3;
+    };
+
+    var onPointerUp = function() {
+      if (!state.isDragging) return;
+      state.isDragging = false;
+      var maxVel = isMobile ? 4.0 : 2.5;
+      state.spinVelocity = Math.max(Math.min(state.spinVelocity, maxVel), -maxVel);
+    };
+
+    container.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+
+    container.addEventListener("wheel", function(e) {
+      e.preventDefault();
+      var delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      state.spinVelocity += delta * 0.0015;
+    }, { passive: false });
+
+    var thresholdCos = Math.cos(Math.PI / 3);
+    var lastTime = performance.now();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      var now = performance.now();
+      var dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+
+      var baseSpin = isMobile ? -0.075 : -0.04;
+      if (!state.isDragging) {
+        state.spinVelocity += (baseSpin - state.spinVelocity) * Math.min(dt * 2, 1);
+        state.rotation += state.spinVelocity * dt;
+      }
+      carousel.rotation.y = state.rotation;
+
+      state.planes.forEach(function(plane) {
+        var rad = plane.userData.baseAngle + state.rotation;
+        var cosVal = Math.cos(rad);
+        var opacity = 1.0;
+        if (cosVal < thresholdCos) {
+          var factor = (cosVal + 1.0) / (thresholdCos + 1.0);
+          opacity = Math.max(0.22, factor);
+        }
+        plane.userData.material.uniforms.uOpacity.value = opacity;
+        if (plane.userData.shadowMaterial) {
+          plane.userData.shadowMaterial.uniforms.uOpacity.value = opacity;
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("resize", function() {
+      var w = container.clientWidth || window.innerWidth;
+      var h = container.clientHeight || 680;
+      var mob = w < 768;
+      camera.aspect = w / h;
+      camera.position.z = mob ? 12.0 : 9.5;
+      camera.updateProjectionMatrix();
+      carousel.scale.setScalar(mob ? 0.72 : 1.0);
+      carousel.position.y = g * (mob ? 0.72 : 1.0) * Math.sin(tiltRad);
+      state.dragInfluence = mob ? 0.0065 : 0.0035;
+      renderer.setSize(w, h);
+    });
+  }
+
+  window.init3DCylindricalCarousel = init3DCylindricalCarousel;
+  window.initShowcase3DCarousel = init3DCylindricalCarousel;
+  window.initShowcaseMarquee = init3DCylindricalCarousel;
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init3DCylindricalCarousel);
+  } else {
+    init3DCylindricalCarousel();
+  }
+})();
 
 /* === SCRIPT 17: ROUTE TRANSITION & 120 FPS RE-BIND OBSERVER === */
 (function() {
