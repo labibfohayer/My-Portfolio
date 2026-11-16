@@ -2938,270 +2938,338 @@ window.__two26LoaderDone = true;
     window.initAboutPinned = initAboutPinned;
   })();
 
-/* === SCRIPT 15 === */
+/* === SCRIPT 15: INTERACTIVE 3D CYLINDRICAL CAROUSEL (120 FPS OPTIMIZED) === */
 (function () {
-    function initShowcaseMarquee() {
-      if (typeof gsap === "undefined") return;
+  function initShowcase3DCarousel() {
+    const allWrappers = Array.from(
+      document.querySelectorAll(
+        ".section-slider-wrapper, .section-slider-showcase .section-slider-wrapper"
+      )
+    );
 
-      if (typeof ScrollTrigger !== "undefined") {
-        gsap.registerPlugin(ScrollTrigger);
-      }
-
-      // 1. Target Unique Slider Wrappers (prevents duplicate loop execution)
-      const allWrappers = Array.from(
-        document.querySelectorAll(
-          ".section-slider-wrapper, .section-slider-showcase .section-slider-wrapper",
-        ),
-      );
-
-      const targetWrappers = allWrappers.length
-        ? Array.from(new Set(allWrappers))
-        : Array.from(
-            document.querySelectorAll(
-              ".section-slider-showcase, [data-section='showcase']",
-            ),
-          );
-
-      if (!targetWrappers.length) return;
-
-      const scrollerEl = document.querySelector(".page") || window;
-
-      targetWrappers.forEach((wrapper) => {
-        // Prevent double initialization
-        if (wrapper.dataset.marqueeInitialized === "true") return;
-        wrapper.dataset.marqueeInitialized = "true";
-
-        const track =
-          wrapper.querySelector(".showcase-slider") ||
-          wrapper.querySelector("[class*='showcase-slider']");
-        if (!track) return;
-
-        const initialSlides = Array.from(
-          track.querySelectorAll(".showcase-slide"),
+    const targetWrappers = allWrappers.length
+      ? Array.from(new Set(allWrappers))
+      : Array.from(
+          document.querySelectorAll(
+            ".section-slider-showcase, [data-section='showcase']"
+          )
         );
-        if (!initialSlides.length) return;
+
+    if (!targetWrappers.length) return;
+
+    targetWrappers.forEach((wrapper) => {
+      if (wrapper.dataset.carousel3dInitialized === "true") return;
+      wrapper.dataset.carousel3dInitialized = "true";
+      wrapper.dataset.marqueeInitialized = "true";
+
+      const track =
+        wrapper.querySelector(".showcase-slider") ||
+        wrapper.querySelector("[class*='showcase-slider']");
+      if (!track) return;
+
+      // Clean up any marquee clone nodes
+      track.querySelectorAll(".is-marquee-clone").forEach((el) => el.remove());
+
+      const slides = Array.from(track.querySelectorAll(".showcase-slide"));
+      const totalItems = slides.length;
+      if (totalItems === 0) return;
+
+      const angleStep = 360 / totalItems; // 51.4286 deg for 7 items
+
+      // Responsive geometry variables
+      let cardWidth = 320;
+      let cardHeight = 400;
+      let gap = 32;
+      let radius = 365;
+      let perspective = 1100;
+      let stageHeight = 520;
+
+      function updateGeometry() {
+        const winW = window.innerWidth;
+        if (winW >= 1200) {
+          cardWidth = 320;
+          cardHeight = 400;
+          gap = 32;
+          perspective = 1100;
+          stageHeight = 520;
+        } else if (winW >= 992) {
+          cardWidth = 280;
+          cardHeight = 360;
+          gap = 26;
+          perspective = 1000;
+          stageHeight = 460;
+        } else if (winW >= 768) {
+          cardWidth = 240;
+          cardHeight = 320;
+          gap = 20;
+          perspective = 900;
+          stageHeight = 420;
+        } else if (winW >= 480) {
+          cardWidth = 200;
+          cardHeight = 270;
+          gap = 16;
+          perspective = 780;
+          stageHeight = 360;
+        } else {
+          cardWidth = Math.min(180, Math.floor(winW * 0.48));
+          cardHeight = Math.round(cardWidth * 1.35);
+          gap = 14;
+          perspective = 680;
+          stageHeight = cardHeight + 80;
+        }
+
+        // Polygon apothem formula: R = (W + gap) / (2 * tan(PI / N))
+        const tanHalf = Math.tan(Math.PI / totalItems);
+        radius = Math.round((cardWidth + gap) / (2 * tanHalf));
+
+        // Section & wrapper layout
+        const section = wrapper.closest(".section-slider-showcase") || wrapper;
+        section.style.overflow = "hidden";
+        section.style.position = "relative";
+        section.style.width = "100%";
 
         wrapper.style.overflow = "hidden";
         wrapper.style.position = "relative";
         wrapper.style.width = "100%";
+        wrapper.style.height = stageHeight + "px";
+        wrapper.style.display = "flex";
+        wrapper.style.justifyContent = "center";
+        wrapper.style.alignItems = "center";
+        wrapper.style.perspective = perspective + "px";
+        wrapper.style.webkitPerspective = perspective + "px";
+        wrapper.style.perspectiveOrigin = "50% 50%";
+        wrapper.style.webkitPerspectiveOrigin = "50% 50%";
+        wrapper.style.userSelect = "none";
+        wrapper.style.webkitUserSelect = "none";
+        wrapper.style.touchAction = "pan-y";
+        wrapper.style.cursor = "grab";
 
-        track.style.display = "flex";
-        track.style.flexDirection = "row";
+        // Track layout (GPU accelerated 120 FPS)
+        track.style.position = "relative";
+        track.style.width = cardWidth + "px";
+        track.style.height = cardHeight + "px";
+        track.style.transformStyle = "preserve-3d";
+        track.style.webkitTransformStyle = "preserve-3d";
         track.style.willChange = "transform";
-        track.style.width = "max-content";
+        track.style.display = "block";
+        track.style.margin = "0 auto";
 
-        // -------------------------------------------------------------
-        // 2. Read Speed Level via Data Attribute (Checks Section, Wrapper & Ancestors)
-        // Level 1 = 1.00x (Default / 1.5px), with +30% per level up to Level 5 (+120% / 3.3px)
-        // -------------------------------------------------------------
-        const speedSource =
-          wrapper.closest("[data-marquee-speed]") ||
-          wrapper.closest("[data-speed]") ||
-          wrapper.closest("[data-speed-level]") ||
-          wrapper.closest(".section-slider-showcase") ||
-          wrapper;
+        // Slide geometry positioning
+        slides.forEach((slide, i) => {
+          const cardAngle = i * angleStep;
+          slide.style.position = "absolute";
+          slide.style.left = "0";
+          slide.style.top = "0";
+          slide.style.width = cardWidth + "px";
+          slide.style.height = cardHeight + "px";
+          slide.style.borderRadius = winW < 768 ? "16px" : "20px";
+          slide.style.overflow = "hidden";
+          slide.style.backfaceVisibility = "hidden";
+          slide.style.webkitBackfaceVisibility = "hidden";
+          slide.style.transformStyle = "preserve-3d";
+          slide.style.webkitTransformStyle = "preserve-3d";
+          slide.style.boxShadow = "0 20px 45px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.1)";
+          slide.style.border = "1px solid rgba(255, 255, 255, 0.15)";
+          slide.style.willChange = "transform, filter";
+          slide.style.transform = `rotateY(${cardAngle}deg) translateZ(${radius}px)`;
+          slide.dataset.cardAngle = cardAngle;
 
-        const rawSpeedAttr =
-          speedSource?.getAttribute("data-marquee-speed") ||
-          speedSource?.getAttribute("data-speed") ||
-          speedSource?.getAttribute("data-speed-level") ||
-          wrapper.getAttribute("data-marquee-speed") ||
-          wrapper.getAttribute("data-speed") ||
-          track.getAttribute("data-marquee-speed");
-
-        let speedLevel = 1;
-        if (rawSpeedAttr) {
-          const parsed = parseFloat(rawSpeedAttr);
-          if (!isNaN(parsed) && parsed > 0) {
-            speedLevel = Math.max(1, Math.min(parsed, 5));
-          }
-        }
-
-        // Base idle speed: Level 1 = 1.50px/frame; +30% per level
-        const speedMultiplier = 1 + (speedLevel - 1) * 0.3;
-        const BASE_SPEED = 1.5 * speedMultiplier;
-
-        // -------------------------------------------------------------
-        // 3. Clone Slides to Ensure Seamless Viewport Coverage (>= 3x Viewport)
-        // -------------------------------------------------------------
-        const numInitial = initialSlides.length;
-
-        // Create enough sets so that one full set wrap is always outside the screen
-        const setsNeeded = Math.max(
-          3,
-          Math.ceil(
-            (window.innerWidth * 3.5) /
-              (initialSlides[0].offsetWidth * numInitial || 1000),
-          ),
-        );
-
-        for (let s = 1; s < setsNeeded; s++) {
-          initialSlides.forEach((slide) => {
-            const clone = slide.cloneNode(true);
-            clone.classList.add("is-marquee-clone");
-            clone.style.flexShrink = "0";
-            clone.style.willChange = "transform";
-            clone.style.transformOrigin = "center center";
-            track.appendChild(clone);
-          });
-        }
-
-        const allSlides = Array.from(track.querySelectorAll(".showcase-slide"));
-
-        // -------------------------------------------------------------
-        // 4. Precision Set-Width Measurement (Accounts for Flex Gap + Margins)
-        // -------------------------------------------------------------
-        let setWidth = 0;
-
-        function measureSetWidth() {
-          if (allSlides.length > numInitial) {
-            const firstSlide = allSlides[0];
-            const firstClone = allSlides[numInitial];
-            if (firstSlide && firstClone) {
-              const exactDistance =
-                firstClone.offsetLeft - firstSlide.offsetLeft;
-              if (exactDistance > 0) {
-                setWidth = exactDistance;
-                return;
-              }
-            }
-          }
-
-          // Fallback measurement: slide widths + computed gap + margins
-          const trackStyle = window.getComputedStyle(track);
-          const gap = parseFloat(trackStyle.columnGap || trackStyle.gap) || 0;
-          let total = 0;
-          initialSlides.forEach((slide) => {
-            const style = window.getComputedStyle(slide);
-            const margin =
-              parseFloat(style.marginLeft || 0) +
-              parseFloat(style.marginRight || 0);
-            total +=
-              (slide.offsetWidth || slide.getBoundingClientRect().width) +
-              margin +
-              gap;
-          });
-          if (total > 0) setWidth = total;
-        }
-
-        measureSetWidth();
-
-        // Re-measure after image load & window load to prevent subpixel rounding drift
-        const slideImages = track.querySelectorAll("img");
-        slideImages.forEach((img) => {
-          if (!img.complete) {
-            img.addEventListener("load", measureSetWidth, { once: true });
+          const video = slide.querySelector("video");
+          if (video) {
+            video.muted = true;
+            video.loop = true;
+            video.playsInline = true;
+            video.setAttribute("playsinline", "");
+            video.setAttribute("preload", "metadata");
+            video.style.width = "100%";
+            video.style.height = "100%";
+            video.style.objectFit = "cover";
+            video.style.display = "block";
+            video.style.pointerEvents = "none";
           }
         });
-        window.addEventListener("load", measureSetWidth);
-        window.addEventListener("resize", measureSetWidth);
+      }
 
-        // -------------------------------------------------------------
-        // 5. Motion Physics & Directional Velocity Control (Left-to-Right 120 FPS)
-        // -------------------------------------------------------------
-        let currentX = setWidth > 0 ? -2 * setWidth : -2000;
-        let targetDirection = 1; // +1 = left-to-right ("bam theke dane")
-        let currentDirection = 1;
-        let scrollVelocityBoost = 0;
+      updateGeometry();
+      window.addEventListener("resize", updateGeometry);
 
-        // Listen for scroll direction and velocity
-        if (typeof ScrollTrigger !== "undefined") {
-          ScrollTrigger.create({
-            trigger: document.body,
-            scroller: scrollerEl,
-            start: "top top",
-            end: "bottom bottom",
-            onUpdate: (self) => {
-              const dir = self.direction === 1 ? 1 : -1;
-              targetDirection = 1;
-
-              const vel = Math.abs(self.getVelocity() || 0);
-              scrollVelocityBoost =
-                Math.min(vel / 200, 12 * speedMultiplier) * dir;
-            },
-          });
-        }
-
-        // -------------------------------------------------------------
-        // 6. 120 FPS Render Loop (Zero Forced Reflows & GPU Transform)
-        // -------------------------------------------------------------
-        let wrapperRectLeft = 0;
-        let wrapperCenter = 0;
-        let halfWidth = 400;
-        let slideOffsets = [];
-        let slideHalfWidth = 150;
-        const currentScales = new Array(allSlides.length).fill(1);
-
-        function updateMeasurements() {
-          const rect = wrapper.getBoundingClientRect();
-          wrapperRectLeft = rect.left;
-          wrapperCenter = rect.left + rect.width / 2;
-          halfWidth = rect.width * 0.45 || 400;
-          slideOffsets = allSlides.map((slide) => slide.offsetLeft);
-          if (initialSlides[0]) {
-            slideHalfWidth = (initialSlides[0].offsetWidth || 300) / 2;
-          }
-          if (setWidth > 0 && currentX === -2000) {
-            currentX = -2 * setWidth;
-          }
-        }
-        updateMeasurements();
-        window.addEventListener("resize", updateMeasurements);
-
-        function tick() {
-          currentDirection += (targetDirection - currentDirection) * 0.06;
-          scrollVelocityBoost *= 0.92;
-
-          const delta = BASE_SPEED * currentDirection + scrollVelocityBoost;
-          currentX += delta;
-
-          // Continuous seamless wrapping for left-to-right
-          if (setWidth > 0) {
-            while (currentX > -setWidth) {
-              currentX -= setWidth;
-            }
-            while (currentX < -2 * setWidth) {
-              currentX += setWidth;
-            }
-          }
-
-          // Apply track position with hardware acceleration (120 FPS)
-          track.style.transform = `translate3d(${currentX.toFixed(2)}px, 0px, 0px)`;
-
-          // Pure arithmetic proximity scale (ZERO forced reflows)
-          const currentScreenX = wrapperRectLeft + currentX;
-
-          for (let i = 0; i < allSlides.length; i++) {
-            const slide = allSlides[i];
-            const slideCenter = currentScreenX + slideOffsets[i] + slideHalfWidth;
-            const distFromCenter = Math.abs(slideCenter - wrapperCenter);
-
-            if (distFromCenter < halfWidth) {
-              const normDist = distFromCenter / halfWidth;
-              const targetScale = 0.95 + 0.05 * normDist;
-              if (Math.abs(currentScales[i] - targetScale) > 0.001) {
-                currentScales[i] = targetScale;
-                slide.style.transform = `scale(${targetScale.toFixed(4)}) translateZ(0)`;
-              }
-            } else if (currentScales[i] !== 1) {
-              currentScales[i] = 1;
-              slide.style.transform = "scale(1) translateZ(0)";
-            }
-          }
-        }
-
-        gsap.ticker.add(tick);
+      // Play videos
+      slides.forEach((slide) => {
+        const video = slide.querySelector("video");
+        if (video) video.play().catch(() => {});
       });
-    }
 
-    window.initShowcaseMarquee = initShowcaseMarquee;
+      // Pause/resume videos on tab visibility
+      function onVisibility() {
+        slides.forEach((slide) => {
+          const video = slide.querySelector("video");
+          if (video) {
+            if (document.hidden) {
+              video.paused || video.pause();
+            } else {
+              video.paused && video.play().catch(() => {});
+            }
+          }
+        });
+      }
+      document.addEventListener("visibilitychange", onVisibility);
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initShowcaseMarquee);
-    } else {
-      initShowcaseMarquee();
-    }
-  })();
+      // Physics & Rotation State (120 FPS Sub-Frame Kinetics)
+      let currentRotation = 0;
+      let velocity = 0;
+      let isDragging = false;
+      let hasDragged = false;
+      let dragDistance = 0;
+      let lastX = 0;
+      let lastTime = 0;
+      let autoSpeed = 0.20; // Smooth steady idle rotation
+      let targetAutoSpeed = 0.20;
+
+      // Pointer Drag Event Handlers
+      function onPointerDown(e) {
+        if (e.button !== undefined && e.button !== 0) return;
+        isDragging = true;
+        hasDragged = false;
+        dragDistance = 0;
+        lastX = e.clientX;
+        lastTime = performance.now();
+        velocity = 0;
+        wrapper.style.cursor = "grabbing";
+        try {
+          wrapper.setPointerCapture(e.pointerId);
+        } catch (err) {}
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const currentX = e.clientX;
+        const deltaX = currentX - lastX;
+        const now = performance.now();
+        const dt = now - lastTime;
+
+        dragDistance += Math.abs(deltaX);
+        if (dragDistance > 5) {
+          hasDragged = true;
+        }
+
+        const degPerPx = 360 / (2 * Math.PI * radius * 1.05);
+        currentRotation += deltaX * degPerPx;
+
+        if (dt > 0) {
+          const instVel = (deltaX / dt) * 16.67 * degPerPx;
+          velocity = velocity * 0.35 + instVel * 0.65;
+        }
+
+        lastX = currentX;
+        lastTime = now;
+      }
+
+      function onPointerUp(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        wrapper.style.cursor = "grab";
+        try {
+          wrapper.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+
+        velocity = Math.max(-14, Math.min(14, velocity));
+
+        if (hasDragged) {
+          setTimeout(() => {
+            hasDragged = false;
+          }, 150);
+        }
+      }
+
+      wrapper.addEventListener("pointerdown", onPointerDown, { passive: true });
+      wrapper.addEventListener("pointermove", onPointerMove, { passive: true });
+      wrapper.addEventListener("pointerup", onPointerUp, { passive: true });
+      wrapper.addEventListener("pointercancel", onPointerUp, { passive: true });
+
+      // Separate drag from click
+      wrapper.addEventListener(
+        "click",
+        (e) => {
+          if (hasDragged || dragDistance > 5) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+          }
+        },
+        true
+      );
+
+      // Graceful slow down on hover
+      wrapper.addEventListener("mouseenter", () => {
+        targetAutoSpeed = 0.04;
+      });
+      wrapper.addEventListener("mouseleave", () => {
+        targetAutoSpeed = 0.20;
+      });
+
+      // 120 FPS Sub-Frame Accurate Render Loop
+      let lastFrameTime = performance.now();
+
+      function tick(now) {
+        const timeNow = now || performance.now();
+        const dtSec = Math.min((timeNow - lastFrameTime) / 1000, 0.1);
+        lastFrameTime = timeNow;
+        // Normalize against 60fps base: frameScale = 1.0 at 60fps, 0.5 at 120fps
+        const frameScale = Math.max(0.2, Math.min(3.0, dtSec * 60));
+
+        autoSpeed += (targetAutoSpeed - autoSpeed) * (1 - Math.pow(0.94, frameScale));
+
+        if (isDragging) {
+          // Direct tracking during pointer drag
+        } else {
+          if (Math.abs(velocity) > 0.015) {
+            currentRotation += velocity * frameScale;
+            velocity *= Math.pow(0.945, frameScale);
+          } else {
+            velocity = 0;
+            currentRotation += autoSpeed * frameScale;
+          }
+        }
+
+        currentRotation = (currentRotation % 360 + 360) % 360;
+
+        const backOffset = Math.round(radius * 0.25);
+        track.style.transform = `translate3d(0, 0, -${backOffset}px) rotateY(${currentRotation.toFixed(3)}deg)`;
+
+        slides.forEach((slide, idx) => {
+          const cardAngle = idx * angleStep;
+          let diff = ((cardAngle + currentRotation) % 360 + 360) % 360;
+          if (diff > 180) diff -= 360;
+
+          const absDiff = Math.abs(diff);
+          if (absDiff < 90) {
+            const factor = absDiff / 90;
+            const brightness = 1 - factor * 0.25;
+            slide.style.filter = `brightness(${brightness.toFixed(3)})`;
+            slide.style.zIndex = Math.round(100 - absDiff);
+          } else {
+            slide.style.filter = "brightness(0.75)";
+            slide.style.zIndex = 1;
+          }
+        });
+
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    });
+  }
+
+  window.initShowcase3DCarousel = initShowcase3DCarousel;
+  window.initShowcaseMarquee = initShowcase3DCarousel;
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initShowcase3DCarousel);
+  } else {
+    initShowcase3DCarousel();
+  }
+})();
+
 
 /* === SCRIPT 16 === */
 (function () {
