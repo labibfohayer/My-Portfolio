@@ -3,6 +3,7 @@
 
 /* === RESUME 2-COLUMN GRID & FULL A4 DIMENSIONS (GLOBAL IMMUTABLE) === */
 
+
 .resume-2col-grid {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
@@ -15,6 +16,8 @@
   min-width: 0 !important;
   display: flex !important;
   flex-direction: column !important;
+  background: transparent !important;
+  border: none !important;
 }
 .resume-col-header {
   display: flex !important;
@@ -28,59 +31,39 @@
 }
 .resume-card-box {
   width: 100% !important;
-  background-color: #ffffff !important;
-  border-radius: 1rem !important;
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.15) !important;
-  overflow: hidden !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   border: none !important;
   flex: 1 !important;
-  min-height: 1280px !important;
-  height: 1280px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
   display: block !important;
 }
 .resume-iframe {
   width: 100% !important;
-  height: 1280px !important;
-  min-height: 1280px !important;
+  aspect-ratio: 1 / 1.424 !important;
+  height: auto !important;
+  min-height: 0 !important;
   border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
   display: block !important;
   overflow: hidden !important;
-}
-@media screen and (min-width: 1400px) {
-  .resume-card-box {
-    height: 1320px !important;
-    min-height: 1320px !important;
-  }
-  .resume-iframe {
-    height: 1320px !important;
-    min-height: 1320px !important;
-  }
 }
 @media screen and (max-width: 900px) {
   .resume-2col-grid {
     grid-template-columns: 1fr !important;
     gap: 3.5rem !important;
   }
-  .resume-card-box {
-    height: calc(100vw * 1.414 + 100px) !important;
-    min-height: calc(100vw * 1.414 + 100px) !important;
-  }
-  .resume-iframe {
-    height: calc(100vw * 1.414 + 100px) !important;
-    min-height: calc(100vw * 1.414 + 100px) !important;
-  }
 }
 @media screen and (max-width: 640px) {
   .resume-2col-grid {
     grid-template-columns: 1fr !important;
     gap: 2.75rem !important;
-  }
-  .resume-card-box {
-    height: calc(100vw * 1.414 + 80px) !important;
-    min-height: calc(100vw * 1.414 + 80px) !important;
-  }
-  .resume-iframe {
-    height: calc(100vw * 1.414 + 80px) !important;
-    min-height: calc(100vw * 1.414 + 80px) !important;
   }
 }
