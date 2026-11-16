@@ -5517,8 +5517,8 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           gestureOrientation: "vertical",
           smoothWheel: true,
           infinite: false,
-          lerp: 0.06,
-          wheelMultiplier: 1.65,
+          lerp: 0.085,
+          wheelMultiplier: 1.8,
           touchMultiplier: 2.0,
           syncTouch: false, // Prevents pull-back & touch fighting
           autoRaf: false,
@@ -5630,12 +5630,13 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
       var lenis = new Lenis({
         wrapper: wrapper,
         content: content,
+        eventsTarget: window,
         orientation: "vertical",
         gestureOrientation: "vertical",
         smoothWheel: true,
         infinite: false,
-        lerp: 0.06,
-        wheelMultiplier: 1.65,
+        lerp: 0.085,
+        wheelMultiplier: 1.8,
         touchMultiplier: isTouch ? 1.5 : 2.0,
         touchInertiaMultiplier: isTouch ? 20 : 35,
         syncTouch: false, // Prevents trackpad pull-back & touch fighting
