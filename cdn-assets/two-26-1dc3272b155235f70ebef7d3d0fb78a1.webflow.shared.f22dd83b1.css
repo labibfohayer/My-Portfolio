@@ -7673,18 +7673,19 @@ textarea.w-input, textarea.w-select {
 
 
 /* === RESUME 2-COLUMN GRID & FULL A4 DIMENSIONS (GLOBAL IMMUTABLE) === */
+
 .resume-2col-grid {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 3rem !important;
-  width: 100% !important;
   align-items: start !important;
+  width: 100% !important;
 }
 .resume-col {
+  width: 100% !important;
+  min-width: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  min-width: 0 !important;
-  width: 100% !important;
 }
 .resume-col-header {
   display: flex !important;
@@ -7704,20 +7705,26 @@ textarea.w-input, textarea.w-select {
   overflow: hidden !important;
   border: none !important;
   flex: 1 !important;
-  min-height: 1100px !important;
+  min-height: 1280px !important;
+  height: 1280px !important;
+  display: block !important;
 }
 .resume-iframe {
   width: 100% !important;
-  height: 1100px !important;
-  min-height: 1100px !important;
-  aspect-ratio: 1 / 1.414 !important;
+  height: 1280px !important;
+  min-height: 1280px !important;
   border: none !important;
   display: block !important;
+  overflow: hidden !important;
 }
 @media screen and (min-width: 1400px) {
+  .resume-card-box {
+    height: 1320px !important;
+    min-height: 1320px !important;
+  }
   .resume-iframe {
-    height: 1120px !important;
-    min-height: 1120px !important;
+    height: 1320px !important;
+    min-height: 1320px !important;
   }
 }
 @media screen and (max-width: 900px) {
@@ -7726,11 +7733,12 @@ textarea.w-input, textarea.w-select {
     gap: 3.5rem !important;
   }
   .resume-card-box {
-    min-height: 950px !important;
+    height: calc(100vw * 1.414 + 100px) !important;
+    min-height: calc(100vw * 1.414 + 100px) !important;
   }
   .resume-iframe {
-    height: 1100px !important;
-    min-height: 950px !important;
+    height: calc(100vw * 1.414 + 100px) !important;
+    min-height: calc(100vw * 1.414 + 100px) !important;
   }
 }
 @media screen and (max-width: 640px) {
@@ -7739,10 +7747,11 @@ textarea.w-input, textarea.w-select {
     gap: 2.75rem !important;
   }
   .resume-card-box {
-    min-height: 800px !important;
+    height: calc(100vw * 1.414 + 80px) !important;
+    min-height: calc(100vw * 1.414 + 80px) !important;
   }
   .resume-iframe {
-    height: 900px !important;
-    min-height: 800px !important;
+    height: calc(100vw * 1.414 + 80px) !important;
+    min-height: calc(100vw * 1.414 + 80px) !important;
   }
 }
