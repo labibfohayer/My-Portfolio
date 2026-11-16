@@ -5417,13 +5417,11 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           gestureOrientation: "vertical",
           smoothWheel: true,
           infinite: false,
-          duration: isTouch ? 1.0 : 1.5,
-          wheelMultiplier: 0.85,
+          lerp: 0.05,
+          wheelMultiplier: 1.0,
           touchMultiplier: 1.2,
           syncTouch: false, // Prevents pull-back & touch fighting
-          easing: function (t) {
-            return Math.min(1, 1.001 - Math.pow(2, -10 * t));
-          },
+          autoRaf: false,
         });
 
         window.lenis = lenis;
@@ -5528,16 +5526,14 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
         gestureOrientation: "vertical",
         smoothWheel: true,
         infinite: false,
-        duration: isTouch ? 1.0 : 1.2,
+        lerp: 0.05,
         wheelMultiplier: 1.0,
         touchMultiplier: isTouch ? 1.0 : 1.8,
         touchInertiaMultiplier: isTouch ? 18 : 35,
         syncTouch: false, // Prevents trackpad pull-back & touch fighting
         syncTouchLerp: isTouch ? 0.09 : 0.25,
         touchInertiaExponent: 2,
-        easing: function (t) {
-          return Math.min(1, 1.001 - Math.pow(2, -10 * t));
-        },
+        autoRaf: false,
       });
 
       window.lenis = lenis;
