@@ -5479,18 +5479,6 @@ window.__two26LoaderDone = true;
           });
         });
       });
-
-      // Defensive recalculation of document height across all pages
-      if (typeof ScrollTrigger !== "undefined") {
-        try {
-          ScrollTrigger.refresh();
-        } catch (e) {}
-      }
-      if (window.lenis && typeof window.lenis.resize === "function") {
-        try {
-          window.lenis.resize();
-        } catch (e) {}
-      }
     }
 
     window.initTwo26FooterAnimation = initTwo26FooterAnimation;
