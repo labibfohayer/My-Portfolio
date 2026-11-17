@@ -4312,6 +4312,23 @@ window.__two26LoaderDone = true;
         }
       });
 
+      // Responsive SVG Aspect Ratio (Stretch vertically on mobile to match long journey)
+      const updateSvgAspect = () => {
+        const isMob =
+          window.innerWidth <= 768 ||
+          (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+        const servicesSvgs = section.querySelectorAll(".services-path svg");
+        servicesSvgs.forEach((svg) => {
+          if (isMob) {
+            svg.setAttribute("preserveAspectRatio", "none");
+          } else {
+            svg.removeAttribute("preserveAspectRatio");
+          }
+        });
+      };
+      updateSvgAspect();
+      window.addEventListener("resize", updateSvgAspect);
+
       // 2. Setup Service Blocks Initial State & Measure Natural em Sizing
       layers.forEach((layer) => {
         const block = layer.querySelector(".service-block") || layer;
@@ -4418,7 +4435,19 @@ window.__two26LoaderDone = true;
           masterTl.to(
             centerSvg,
             {
-              width: () => parseFloat(centerSvg.dataset.targetWidth) || "auto",
+              width: () => {
+                if (
+                  window.innerWidth <= 768 ||
+                  (window.matchMedia &&
+                    window.matchMedia("(max-width: 768px)").matches)
+                ) {
+                  return Math.min(
+                    44,
+                    Math.max(34, Math.round(window.innerWidth * 0.1)),
+                  );
+                }
+                return parseFloat(centerSvg.dataset.targetWidth) || "auto";
+              },
               scale: 1,
               opacity: 1,
               duration: stepDuration,
