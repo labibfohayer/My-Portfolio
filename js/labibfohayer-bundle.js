@@ -2772,9 +2772,15 @@ window.__two26LoaderDone = true;
       const sections = document.querySelectorAll('.section-about');
       if (!sections.length) return;
 
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 768 || (window.matchMedia && window.matchMedia("(max-width: 768px)").matches)) {
         // Mobile is static, unpinned, solid black text per user request
         sections.forEach((section) => {
+          const pinSpacer = section.closest('.pin-spacer');
+          if (pinSpacer && pinSpacer.parentNode) {
+            pinSpacer.style.paddingBottom = '0px';
+            pinSpacer.style.height = 'auto';
+            pinSpacer.style.minHeight = 'auto';
+          }
           const aboutPara = section.querySelector('.about-para');
           if (aboutPara) {
             aboutPara.style.color = '#000000';
@@ -2980,6 +2986,9 @@ window.__two26LoaderDone = true;
         }
         if (activeCarousel.onPointerUp) {
           window.removeEventListener("pointerup", activeCarousel.onPointerUp);
+          window.removeEventListener("pointercancel", activeCarousel.onPointerUp);
+          window.removeEventListener("touchend", activeCarousel.onPointerUp);
+          window.removeEventListener("touchcancel", activeCarousel.onPointerUp);
         }
         if (activeCarousel.onResize) {
           window.removeEventListener("resize", activeCarousel.onResize);
@@ -3380,17 +3389,24 @@ window.__two26LoaderDone = true;
       state.planes.push(cardMesh);
     });
 
+    var getClientX = function(e) {
+      if (e.touches && e.touches.length > 0) return e.touches[0].clientX;
+      if (e.changedTouches && e.changedTouches.length > 0) return e.changedTouches[0].clientX;
+      return e.clientX;
+    };
+
     var onPointerDown = function(e) {
       state.isDragging = true;
-      state.lastPointerX = e.clientX;
+      state.lastPointerX = getClientX(e);
       state.lastPointerTime = performance.now();
       state.spinVelocity = 0;
     };
 
     var onPointerMove = function(e) {
       if (!state.isDragging) return;
-      var dx = e.clientX - state.lastPointerX;
-      state.lastPointerX = e.clientX;
+      var clientX = getClientX(e);
+      var dx = clientX - state.lastPointerX;
+      state.lastPointerX = clientX;
       state.rotation += dx * state.dragInfluence;
       var now = performance.now();
       var dt = Math.max((now - state.lastPointerTime) / 1000, 0.001);
@@ -3402,13 +3418,16 @@ window.__two26LoaderDone = true;
     var onPointerUp = function() {
       if (!state.isDragging) return;
       state.isDragging = false;
-      var maxVel = isMobile ? 4.0 : 2.5;
+      var maxVel = isMobile ? 3.5 : 2.5;
       state.spinVelocity = Math.max(Math.min(state.spinVelocity, maxVel), -maxVel);
     };
 
     container.addEventListener("pointerdown", onPointerDown);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+    window.addEventListener("touchend", onPointerUp, { passive: true });
+    window.addEventListener("touchcancel", onPointerUp, { passive: true });
 
     var thresholdCos = Math.cos(Math.PI / 3);
     var lastTime = performance.now();
@@ -3435,7 +3454,7 @@ window.__two26LoaderDone = true;
         }
       });
 
-      var baseSpin = isMobile ? -0.075 : -0.04;
+      var baseSpin = isMobile ? -0.32 : -0.04;
       if (!state.isDragging) {
         state.spinVelocity += (baseSpin - state.spinVelocity) * Math.min(dt * 3.2, 1);
         state.rotation += state.spinVelocity * dt;
@@ -3487,6 +3506,8 @@ window.__two26LoaderDone = true;
       onPointerMove: onPointerMove,
       onPointerUp: onPointerUp,
       onResize: onResize,
+      carousel: carousel,
+      state: state,
       animFrameId: null
     };
     window.activeCarousel = activeCarousel;
