@@ -341,4 +341,18 @@ iframe[src*="resume.pdf"] {
     display: block !important;
     margin: 0 auto !important;
   }
+
+  /* =========================================================================
+     PROJECTS END SECTION: HIDE FLOATING DECORATIVE CAPSULES ON MOBILE ONLY
+     ========================================================================= */
+  .projects-pill-first,
+  .projects-pill-second,
+  .projects-pill-third,
+  .projects-pill-fourth,
+  .projects-end [class*="projects-pill"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 }
