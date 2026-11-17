@@ -3226,24 +3226,28 @@ window.__two26LoaderDone = true;
 
     var width = container.clientWidth || window.innerWidth;
     var isMobile = width < 768;
-    var height = isMobile ? (container.clientHeight || 480) : (container.clientHeight || 680);
+    var height = isMobile ? (container.clientHeight || 500) : (container.clientHeight || 680);
 
     function layoutCylinder(isMob) {
-      var numCards = items.length;
-      var theta = (Math.PI * 2) / numCards;
-      var cardW = isMob ? 1.15 : 1.58;
-      var cardH = isMob ? 1.48 : 1.76;
-      var calcRadius = (cardW * 0.5) / Math.tan(theta * 0.5);
-      var radius = isMob ? Math.max(calcRadius * 1.08, 2.9) : 4.3;
-      var scale = isMob ? 0.62 : 1.0;
-      var camZ = isMob ? 11.2 : 8.6;
+      if (!isMob) {
+        // Desktop: 100% original, untouched configuration
+        return {
+          cardWidth: 1.58,
+          cardHeight: 1.76,
+          radius: 4.3,
+          translateZ: 4.3,
+          scale: 1.0,
+          cameraZ: 8.6
+        };
+      }
+      // Mobile: Prominent, larger cards, widened radius to fill screen, pulled close to camera
       return {
-        cardWidth: cardW,
-        cardHeight: cardH,
-        radius: radius,
-        translateZ: radius,
-        scale: scale,
-        cameraZ: camZ
+        cardWidth: 1.48,
+        cardHeight: 1.90,
+        radius: 3.6,
+        translateZ: 3.6,
+        scale: 0.92,
+        cameraZ: 8.1
       };
     }
     window.layoutCylinder = layoutCylinder;
