@@ -4390,9 +4390,9 @@ window.__two26LoaderDone = true;
         scrollTrigger: {
           trigger: section,
           scroller: scrollerEl,
-          start: isMobileServices ? "top 65%" : "top 70%",
-          end: isMobileServices ? "+=150%" : "bottom 70%",
-          scrub: isMobileServices ? 0.8 : 1.2,
+          start: isMobileServices ? "top 60%" : "top 70%",
+          end: isMobileServices ? "+=95%" : "bottom 70%",
+          scrub: isMobileServices ? 0.6 : 1.2,
           invalidateOnRefresh: true,
         },
       });
