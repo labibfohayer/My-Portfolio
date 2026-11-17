@@ -676,4 +676,47 @@ iframe[src*="resume.pdf"] {
     height: auto !important;
     display: block !important;
   }
+
+  /* =========================================================================
+     MOBILE WORK PHILOSOPHY CARD STACKING & PINNING FIX (SCREENS <= 768PX)
+     - Ensure .main has overflow: visible & transform: none so position: sticky can pin
+     - Ensure .section-values and .section-values-wrapper have overflow: visible
+     - Enforce position: sticky on .value-card
+     ========================================================================= */
+  .main {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    transform: none !important;
+  }
+
+  .section-values {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    position: relative !important;
+  }
+
+  .section-values-wrapper {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    transform: none !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  .value-card {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    will-change: transform, top !important;
+  }
 }
