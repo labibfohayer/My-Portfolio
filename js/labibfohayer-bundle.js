@@ -3228,7 +3228,7 @@ window.__two26LoaderDone = true;
 
     var width = container.clientWidth || window.innerWidth;
     var isMobile = width < 768;
-    var height = isMobile ? (container.clientHeight || 500) : (container.clientHeight || 680);
+    var height = isMobile ? (container.clientHeight || 480) : (container.clientHeight || 680);
 
     function layoutCylinder(isMob) {
       if (!isMob) {
@@ -3242,14 +3242,14 @@ window.__two26LoaderDone = true;
           cameraZ: 8.6
         };
       }
-      // Mobile: Prominent, larger cards, widened radius to fill screen, pulled close to camera
+      // Mobile: Balanced medium cards, clear 3D cylinder shape, with left/right breathing margins
       return {
-        cardWidth: 1.48,
-        cardHeight: 1.90,
-        radius: 3.6,
-        translateZ: 3.6,
-        scale: 0.92,
-        cameraZ: 8.1
+        cardWidth: 1.30,
+        cardHeight: 1.68,
+        radius: 3.8,
+        translateZ: 3.8,
+        scale: 0.80,
+        cameraZ: 9.2
       };
     }
     window.layoutCylinder = layoutCylinder;
