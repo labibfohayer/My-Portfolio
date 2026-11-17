@@ -81,3 +81,59 @@
   overflow: hidden !important;
   z-index: -99999 !important;
 }
+
+
+/* =========================================================================
+   GLOBAL MOBILE FOOTER & SCROLL LIMIT FIX (SCREENS <= 768PX)
+   ========================================================================= */
+@media screen and (max-width: 768px) {
+  .footer {
+    height: auto !important;
+    min-height: 100svh !important;
+    min-height: 100dvh !important;
+    margin-bottom: 0 !important;
+    padding-bottom: clamp(60px, 10vh, 100px) !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+  .footer-wrapper {
+    height: auto !important;
+    min-height: 100svh !important;
+    min-height: 100dvh !important;
+    overflow: visible !important;
+    padding-bottom: clamp(40px, 8vh, 80px) !important;
+    box-sizing: border-box !important;
+  }
+  .footer-btm {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding-bottom: 24px !important;
+    box-sizing: border-box !important;
+  }
+  .footer-logo-wrap {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+  }
+  .footer-svg-logo {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .footer-svg-logo svg {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+}
