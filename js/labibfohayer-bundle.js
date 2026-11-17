@@ -3254,9 +3254,9 @@ window.__two26LoaderDone = true;
     var camera = new THREE.PerspectiveCamera(24, width / height, 0.1, 100);
     camera.position.set(0, 0, cylinderConfig.cameraZ);
 
-    var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+    var renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2));
     if (THREE.SRGBColorSpace) renderer.outputColorSpace = THREE.SRGBColorSpace;
     var oldCanvas = container.querySelector("canvas");
     if (oldCanvas) oldCanvas.remove();
@@ -3583,38 +3583,51 @@ window.__two26LoaderDone = true;
           maskWrapper.appendChild(card);
         }
 
+        const isMobileCard =
+          window.innerWidth <= 768 ||
+          (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+
         // Initial State:
-        // 15% width & 15% height mask (inset 42.5% each side) with 36px border radius
+        // 15% width & 15% height mask (inset 42.5% each side) with 36px border radius on desktop
+        // Optimized lighter inset and GPU force3D on mobile
         gsap.set(maskWrapper, {
-          clipPath: "inset(42.5% 42.5% 42.5% 42.5%)",
-          webkitClipPath: "inset(42.5% 42.5% 42.5% 42.5%)",
-          borderRadius: "36px",
+          clipPath: isMobileCard
+            ? "inset(12% 5% 12% 5%)"
+            : "inset(42.5% 42.5% 42.5% 42.5%)",
+          webkitClipPath: isMobileCard
+            ? "inset(12% 5% 12% 5%)"
+            : "inset(42.5% 42.5% 42.5% 42.5%)",
+          borderRadius: isMobileCard ? "16px" : "36px",
           overflow: "hidden",
+          force3D: true,
           willChange: "clip-path, border-radius",
         });
 
-        // Inner card starts scaled at 1.45 with strong 3D perspective tilt
+        // Inner card: Desktop has full 3D perspective tilt; Mobile uses pure GPU 2D scale
         const horizontalTilt = index % 2 === 0 ? -16 : 16;
         const zTilt = index % 2 === 0 ? -4 : 4;
         gsap.set(card, {
-          scale: 1.45,
-          rotationX: 25,
-          rotationY: horizontalTilt,
-          rotation: zTilt,
-          transformPerspective: 800,
+          scale: isMobileCard ? 1.15 : 1.45,
+          rotationX: isMobileCard ? 0 : 25,
+          rotationY: isMobileCard ? 0 : horizontalTilt,
+          rotation: isMobileCard ? 0 : zTilt,
+          transformPerspective: isMobileCard ? 0 : 800,
           transformOrigin: "center center",
+          force3D: true,
           willChange: "transform",
         });
 
         // ScrollTrigger: only animates when entering from top (downwards scroll)
-        // Stays fully revealed when coming back up from below
+        // fastScrollEnd & preventOverlaps for buttery smooth mobile scroll
         const cardTl = gsap.timeline({
           scrollTrigger: {
             trigger: maskWrapper,
             scroller: scrollerEl,
-            start: "top 85%",
+            start: isMobileCard ? "top 90%" : "top 85%",
             toggleActions: "play none none reverse",
             invalidateOnRefresh: true,
+            fastScrollEnd: isMobileCard ? true : undefined,
+            preventOverlaps: isMobileCard ? true : undefined,
           },
         });
 
@@ -3624,8 +3637,9 @@ window.__two26LoaderDone = true;
             clipPath: "inset(0% 0% 0% 0%)",
             webkitClipPath: "inset(0% 0% 0% 0%)",
             borderRadius: "0px",
-            duration: 1.25,
-            ease: "power3.out",
+            duration: isMobileCard ? 0.75 : 1.25,
+            ease: isMobileCard ? "power2.out" : "power3.out",
+            force3D: true,
           },
           0,
         );
@@ -3637,8 +3651,9 @@ window.__two26LoaderDone = true;
             rotationX: 0,
             rotationY: 0,
             rotation: 0,
-            duration: 1.25,
-            ease: "power3.out",
+            duration: isMobileCard ? 0.75 : 1.25,
+            ease: isMobileCard ? "power2.out" : "power3.out",
+            force3D: true,
           },
           0,
         );
@@ -4392,8 +4407,10 @@ window.__two26LoaderDone = true;
           scroller: scrollerEl,
           start: isMobileServices ? "top 60%" : "top 70%",
           end: isMobileServices ? "+=95%" : "bottom 70%",
-          scrub: isMobileServices ? 0.6 : 1.2,
+          scrub: isMobileServices ? 0.35 : 1.2,
           invalidateOnRefresh: true,
+          fastScrollEnd: isMobileServices ? true : undefined,
+          preventOverlaps: isMobileServices ? true : undefined,
         },
       });
 
@@ -4434,31 +4451,36 @@ window.__two26LoaderDone = true;
         const stepDuration = 0.14; // Slower, more deliberate expansion
         const startTime = Math.max(0, point - 0.04);
 
-        // Center SVG container expands with prominent bounce
+        // Center SVG container:
+        // On mobile: NEVER animate width on scroll (prevents layout thrashing / reflow).
+        // Only animate GPU-accelerated transform & opacity with force3D: true.
+        // On desktop: 100% original width expansion behavior.
         if (centerSvg) {
-          masterTl.to(
-            centerSvg,
-            {
-              width: () => {
-                if (
-                  window.innerWidth <= 768 ||
-                  (window.matchMedia &&
-                    window.matchMedia("(max-width: 768px)").matches)
-                ) {
-                  return Math.min(
-                    44,
-                    Math.max(34, Math.round(window.innerWidth * 0.1)),
-                  );
-                }
-                return parseFloat(centerSvg.dataset.targetWidth) || "auto";
+          if (isMobileServices) {
+            masterTl.to(
+              centerSvg,
+              {
+                scale: 1,
+                opacity: 1,
+                duration: stepDuration,
+                ease: "back.out(2.5)",
+                force3D: true,
               },
-              scale: 1,
-              opacity: 1,
-              duration: stepDuration,
-              ease: "back.out(3.5)",
-            },
-            startTime,
-          );
+              startTime,
+            );
+          } else {
+            masterTl.to(
+              centerSvg,
+              {
+                width: parseFloat(centerSvg.dataset.targetWidth) || "auto",
+                scale: 1,
+                opacity: 1,
+                duration: stepDuration,
+                ease: "back.out(3.5)",
+              },
+              startTime,
+            );
+          }
         }
 
         // Paragraph wrapper pops with scale 1, -5deg rotation, and prominent bounce
@@ -4470,7 +4492,8 @@ window.__two26LoaderDone = true;
               rotation: -5,
               opacity: 1,
               duration: stepDuration,
-              ease: "back.out(3.5)",
+              ease: isMobileServices ? "back.out(2.5)" : "back.out(3.5)",
+              force3D: isMobileServices ? true : undefined,
             },
             startTime + 0.02,
           );
@@ -5283,6 +5306,7 @@ window.__two26LoaderDone = true;
           duration: 0.8,
           stagger: 0.1,
           ease: "back.out(1.6)",
+          force3D: true,
           scrollTrigger: {
             id: "footer-heading-reveal",
             trigger: footer,
@@ -5290,6 +5314,8 @@ window.__two26LoaderDone = true;
             start: "top 80%",
             toggleActions: "play none none none",
             invalidateOnRefresh: true,
+            fastScrollEnd: true,
+            preventOverlaps: true,
           },
         });
       }
@@ -5320,6 +5346,8 @@ window.__two26LoaderDone = true;
           start: "top bottom", // Starts when footer top enters bottom of viewport
           end: "bottom bottom", // Ends when page is scrolled all the way to bottom
           invalidateOnRefresh: true,
+          fastScrollEnd: true,
+          preventOverlaps: true,
           onUpdate: (self) => {
             const vel = Math.abs(self.getVelocity() || 0);
             const velStretch = Math.min(vel / 1500, 0.25); // Velocity-reactive stretch boost
@@ -5660,6 +5688,20 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
 
       // 3. Initialize Lenis on BODY / WINDOW (no .page wrapper constraint)
       function initWorkLenis() {
+        var isMobile =
+          window.innerWidth <= 768 ||
+          (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+        if (isMobile) {
+          // MOBILE PERFORMANCE: Disable custom smooth scroll completely. Use native 60fps/120fps touch scroll.
+          if (window.lenis) {
+            try {
+              window.lenis.destroy();
+            } catch (e) {}
+            window.lenis = null;
+          }
+          return;
+        }
+
         if (typeof Lenis === "undefined") return;
         if (window.lenis) return;
 
@@ -5714,6 +5756,35 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
     // Uses .page wrapper as before with full GSAP integration
     // =======================================================
     function initLenis() {
+      var isMobile =
+        window.innerWidth <= 768 ||
+        (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+
+      if (isMobile) {
+        // MOBILE PERFORMANCE OPTIMIZATION: Disable custom smooth scroll completely.
+        // Let mobile devices use native, hardware-accelerated touch scroll (60fps/120fps).
+        if (window.lenis) {
+          try {
+            window.lenis.destroy();
+          } catch (e) {}
+          window.lenis = null;
+        }
+        if (window._lenisTicker && typeof gsap !== "undefined" && gsap.ticker) {
+          gsap.ticker.remove(window._lenisTicker);
+          window._lenisTicker = null;
+        }
+        var wrapper = document.querySelector(".page");
+        if (wrapper) {
+          wrapper.style.overflowY = "auto";
+          wrapper.style.webkitOverflowScrolling = "touch";
+        }
+        if (typeof ScrollTrigger !== "undefined" && wrapper) {
+          ScrollTrigger.defaults({ scroller: wrapper });
+          ScrollTrigger.refresh();
+        }
+        return;
+      }
+
       if (typeof Lenis === "undefined") return;
 
       var wrapper = document.querySelector(".page");

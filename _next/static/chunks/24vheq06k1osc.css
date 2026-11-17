@@ -127,4 +127,31 @@
     position: sticky !important;
     will-change: transform, top !important;
   }
+
+  /* =========================================================================
+     MOBILE HARDWARE ACCELERATION & BUTTERY 60FPS SCROLL OPTIMIZATION
+     ========================================================================= */
+  html, body {
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .page {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
+  }
+
+  /* Force dedicated GPU compositing layers on animated mobile items */
+  .section-slider-wrapper,
+  #three-carousel-container,
+  .service-block,
+  .service-svg,
+  .service-block-para-wrapper,
+  .testimonial-card,
+  .project-card,
+  .project-card-clip-mask {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
 }
