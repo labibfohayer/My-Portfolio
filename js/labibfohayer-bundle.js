@@ -4525,7 +4525,10 @@ window.__two26LoaderDone = true;
       // -----------------------------------------------------------------
       // 1. Organic Aggressive Rotations for Natural Stacked Deck
       // -----------------------------------------------------------------
-      const anglePalette = [-7.5, 6.8, -5.5, 8.2, -8.5, 6.2, -7.0, 7.8];
+      const isMobile = window.innerWidth <= 768;
+      const anglePalette = isMobile
+        ? [-3.5, 3.2, -2.8, 3.8, -4.0, 3.0, -3.2, 3.5]
+        : [-7.5, 6.8, -5.5, 8.2, -8.5, 6.2, -7.0, 7.8];
       const cardRotations = cardElements.map((_, i) => {
         return anglePalette[i % anglePalette.length];
       });
@@ -4748,7 +4751,13 @@ window.__two26LoaderDone = true;
         });
 
         // 2. Outgoing card flies UP out of the deck with dynamic tilt
-        const tiltOffset = outgoingIndex % 2 === 0 ? 9 : -9;
+        const tiltOffset = isMobile
+          ? outgoingIndex % 2 === 0
+            ? 4
+            : -4
+          : outgoingIndex % 2 === 0
+            ? 9
+            : -9;
         gsap.to(outgoingCard, {
           yPercent: -140,
           rotation: cardRotations[outgoingIndex] + tiltOffset,
