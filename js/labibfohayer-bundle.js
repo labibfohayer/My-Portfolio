@@ -2980,9 +2980,11 @@ window.__two26LoaderDone = true;
         }
         if (activeCarousel.container && activeCarousel.onPointerDown) {
           activeCarousel.container.removeEventListener("pointerdown", activeCarousel.onPointerDown);
+          activeCarousel.container.removeEventListener("touchstart", activeCarousel.onPointerDown);
         }
         if (activeCarousel.onPointerMove) {
           window.removeEventListener("pointermove", activeCarousel.onPointerMove);
+          window.removeEventListener("touchmove", activeCarousel.onPointerMove);
         }
         if (activeCarousel.onPointerUp) {
           window.removeEventListener("pointerup", activeCarousel.onPointerUp);
@@ -3399,11 +3401,15 @@ window.__two26LoaderDone = true;
       return e.clientX;
     };
 
+    var velocityHistory = [];
+
     var onPointerDown = function(e) {
       state.isDragging = true;
-      state.lastPointerX = getClientX(e);
+      var clientX = getClientX(e);
+      state.lastPointerX = clientX;
       state.lastPointerTime = performance.now();
       state.spinVelocity = 0;
+      velocityHistory = [{ x: clientX, time: state.lastPointerTime }];
     };
 
     var onPointerMove = function(e) {
@@ -3412,22 +3418,56 @@ window.__two26LoaderDone = true;
       var dx = clientX - state.lastPointerX;
       state.lastPointerX = clientX;
       state.rotation += dx * state.dragInfluence;
+
       var now = performance.now();
-      var dt = Math.max((now - state.lastPointerTime) / 1000, 0.001);
-      state.lastPointerTime = now;
-      var instVel = (dx * state.dragInfluence) / dt;
-      state.spinVelocity = state.spinVelocity * 0.7 + instVel * 0.3;
+      velocityHistory.push({ x: clientX, time: now });
+      // Keep running window of swipe velocity within last 120ms
+      while (velocityHistory.length > 1 && (now - velocityHistory[0].time) > 120) {
+        velocityHistory.shift();
+      }
     };
 
-    var onPointerUp = function() {
+    var onPointerUp = function(e) {
       if (!state.isDragging) return;
       state.isDragging = false;
-      var maxVel = isMobile ? 3.5 : 2.5;
+
+      var now = performance.now();
+      if (e) {
+        var clientX = getClientX(e);
+        if (typeof clientX === "number" && !isNaN(clientX)) {
+          velocityHistory.push({ x: clientX, time: now });
+        }
+      }
+
+      while (velocityHistory.length > 1 && (now - velocityHistory[0].time) > 120) {
+        velocityHistory.shift();
+      }
+
+      if (velocityHistory.length >= 2) {
+        var oldest = velocityHistory[0];
+        var newest = velocityHistory[velocityHistory.length - 1];
+        var timeSpan = (newest.time - oldest.time) / 1000;
+        if (timeSpan > 0.005) {
+          var dist = newest.x - oldest.x;
+          var calculatedVel = (dist * state.dragInfluence) / timeSpan;
+          state.spinVelocity = calculatedVel;
+        } else {
+          state.spinVelocity = 0;
+        }
+      } else {
+        state.spinVelocity = 0;
+      }
+
+      // Allow high-momentum fling speed (fidget spinner feel), clamped to safe maximum
+      var maxVel = isMobile ? 12.0 : 9.0;
       state.spinVelocity = Math.max(Math.min(state.spinVelocity, maxVel), -maxVel);
+      velocityHistory = [];
     };
 
     container.addEventListener("pointerdown", onPointerDown);
+    container.addEventListener("touchstart", onPointerDown, { passive: true });
     window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("touchmove", onPointerMove, { passive: true });
     window.addEventListener("pointerup", onPointerUp);
     window.addEventListener("pointercancel", onPointerUp);
     window.addEventListener("touchend", onPointerUp, { passive: true });
@@ -3458,9 +3498,22 @@ window.__two26LoaderDone = true;
         }
       });
 
-      var baseSpin = isMobile ? -0.32 : -0.04;
+      var baseSpin = isMobile ? -0.32 : -0.06;
       if (!state.isDragging) {
-        state.spinVelocity += (baseSpin - state.spinVelocity) * Math.min(dt * 3.2, 1);
+        var absVel = Math.abs(state.spinVelocity);
+        var absBase = Math.abs(baseSpin);
+
+        if (absVel > absBase) {
+          // Free-spin with friction damping (Inertia physics like a roulette wheel / fidget spinner)
+          // Frame-rate independent exponential damping (~0.955 per 60fps frame)
+          var damping = Math.pow(0.955, dt * 60);
+          state.spinVelocity *= damping;
+        } else {
+          // As momentum decays, seamlessly merge back into endless slow auto-rotation
+          var blendRate = Math.min(dt * 2.2, 1.0);
+          state.spinVelocity += (baseSpin - state.spinVelocity) * blendRate;
+        }
+
         state.rotation += state.spinVelocity * dt;
       }
       carousel.rotation.y = state.rotation;
