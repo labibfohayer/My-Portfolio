@@ -2777,7 +2777,7 @@ window.__two26LoaderDone = true;
       // Responsive scroll distance calculation
       const getPinDistance = () => {
         const width = window.innerWidth;
-        if (width < 480) return 1150; // Mobile (< 480px): 1100-1200px
+        if (width <= 768) return Math.max(Math.round(window.innerHeight * 2.2), 1600); // Mobile (<= 768px): smooth scrub distance
         if (width < 992) return 1550; // Tablet (< 992px): 1500-1600px
         return 2200; // Desktop: 2200px
       };
