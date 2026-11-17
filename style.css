@@ -271,4 +271,54 @@ iframe[src*="resume.pdf"] {
     opacity: 0 !important;
     pointer-events: none !important;
   }
+
+  /* =========================================================================
+     3D CAROUSEL MOBILE VIEWPORT, PERSPECTIVE & CARDS
+     ========================================================================= */
+  .carousel-viewport,
+  .section-slider-wrapper,
+  .section-slider-showcase,
+  #three-carousel-container {
+    height: 480px !important;
+    min-height: 480px !important;
+    max-height: 500px !important;
+    perspective: 850px !important;
+    -webkit-perspective: 850px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow: hidden !important;
+    position: relative !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+
+  .carousel-drum {
+    width: 190px !important;
+    height: 250px !important;
+    position: relative !important;
+    transform-style: preserve-3d !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .carousel-card {
+    width: 190px !important;
+    height: 250px !important;
+    max-width: 75vw !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+  }
+
+  #three-carousel-container canvas,
+  .section-slider-wrapper canvas {
+    width: 100% !important;
+    height: 480px !important;
+    max-height: 480px !important;
+    display: block !important;
+    margin: 0 auto !important;
+  }
 }

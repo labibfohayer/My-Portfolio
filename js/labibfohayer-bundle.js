@@ -3205,12 +3205,34 @@ window.__two26LoaderDone = true;
     });
 
     var width = container.clientWidth || window.innerWidth;
-    var height = container.clientHeight || 680;
     var isMobile = width < 768;
+    var height = isMobile ? (container.clientHeight || 480) : (container.clientHeight || 680);
+
+    function layoutCylinder(isMob) {
+      var numCards = items.length;
+      var theta = (Math.PI * 2) / numCards;
+      var cardW = isMob ? 1.15 : 1.58;
+      var cardH = isMob ? 1.48 : 1.76;
+      var calcRadius = (cardW * 0.5) / Math.tan(theta * 0.5);
+      var radius = isMob ? Math.max(calcRadius * 1.08, 2.9) : 4.3;
+      var scale = isMob ? 0.62 : 1.0;
+      var camZ = isMob ? 11.2 : 8.6;
+      return {
+        cardWidth: cardW,
+        cardHeight: cardH,
+        radius: radius,
+        translateZ: radius,
+        scale: scale,
+        cameraZ: camZ
+      };
+    }
+    window.layoutCylinder = layoutCylinder;
+
+    var cylinderConfig = layoutCylinder(isMobile);
 
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(24, width / height, 0.1, 100);
-    camera.position.set(0, 0, isMobile ? 11.5 : 8.6);
+    camera.position.set(0, 0, cylinderConfig.cameraZ);
 
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(width, height);
@@ -3223,8 +3245,8 @@ window.__two26LoaderDone = true;
     var carousel = new THREE.Group();
     scene.add(carousel);
 
-    var g = 4.3;
-    var scaleFactor = isMobile ? 0.72 : 1.0;
+    var g = cylinderConfig.radius;
+    var scaleFactor = cylinderConfig.scale;
     carousel.scale.setScalar(scaleFactor);
 
     var tiltRad = THREE.MathUtils.degToRad(-13);
@@ -3235,8 +3257,8 @@ window.__two26LoaderDone = true;
     textureLoader.crossOrigin = "anonymous";
 
     var N = items.length;
-    var M = 1.58;
-    var U = 1.76;
+    var M = cylinderConfig.cardWidth;
+    var U = cylinderConfig.cardHeight;
     var I = 0.09;
     var P = 0.12;
     var O = M + 0.30;
@@ -3429,13 +3451,14 @@ window.__two26LoaderDone = true;
 
     var onResize = function() {
       var w = container.clientWidth || window.innerWidth;
-      var h = container.clientHeight || 680;
       var mob = w < 768;
+      var h = mob ? (container.clientHeight || 480) : (container.clientHeight || 680);
+      var cfg = layoutCylinder(mob);
       camera.aspect = w / h;
-      camera.position.z = mob ? 11.5 : 8.6;
+      camera.position.z = cfg.cameraZ;
       camera.updateProjectionMatrix();
-      carousel.scale.setScalar(mob ? 0.72 : 1.0);
-      carousel.position.y = g * (mob ? 0.72 : 1.0) * Math.sin(tiltRad);
+      carousel.scale.setScalar(cfg.scale);
+      carousel.position.y = cfg.radius * cfg.scale * Math.sin(tiltRad);
       state.dragInfluence = mob ? 0.0065 : 0.0035;
       renderer.setSize(w, h);
     };
@@ -3446,6 +3469,7 @@ window.__two26LoaderDone = true;
       renderer: renderer,
       scene: scene,
       camera: camera,
+      layoutCylinder: layoutCylinder,
       pool: null,
       videoTextures: videoTextures,
       onPointerDown: onPointerDown,
