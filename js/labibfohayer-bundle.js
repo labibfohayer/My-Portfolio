@@ -4382,13 +4382,17 @@ window.__two26LoaderDone = true;
       });
 
       // 3. Create Master Scrubbed Timeline
+      const isMobileServices =
+        window.innerWidth <= 768 ||
+        (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+
       const masterTl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           scroller: scrollerEl,
-          start: "top 70%",
-          end: "bottom 70%",
-          scrub: 1.2,
+          start: isMobileServices ? "top 65%" : "top 70%",
+          end: isMobileServices ? "+=150%" : "bottom 70%",
+          scrub: isMobileServices ? 0.8 : 1.2,
           invalidateOnRefresh: true,
         },
       });
