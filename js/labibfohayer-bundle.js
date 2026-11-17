@@ -2772,6 +2772,17 @@ window.__two26LoaderDone = true;
       const sections = document.querySelectorAll('.section-about');
       if (!sections.length) return;
 
+      if (window.innerWidth <= 768) {
+        // Mobile is static, unpinned, solid black text per user request
+        sections.forEach((section) => {
+          const aboutPara = section.querySelector('.about-para');
+          if (aboutPara) {
+            aboutPara.style.color = '#000000';
+          }
+        });
+        return;
+      }
+
       const scrollerEl = document.querySelector('.page') || window;
 
       // Responsive scroll distance calculation
