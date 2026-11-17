@@ -136,8 +136,58 @@
   }
 
   .page {
+    height: 100% !important;
+    height: 100dvh !important;
+    min-height: 100% !important;
+    min-height: 100dvh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior-y: contain !important;
+  }
+
+  /* Remove mobile scroll blockers on footer and ensure clean native slide-up */
+  .footer {
+    height: 100% !important;
+    height: 100dvh !important;
+    min-height: 100% !important;
+    min-height: 100dvh !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  .footer-wrapper {
+    height: 100% !important;
+    min-height: 100% !important;
+    min-height: 100dvh !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .footer-btm {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .footer-logo-wrap,
+  .footer-svg-logo {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .footer-svg-logo svg {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
   }
 
   /* Force dedicated GPU compositing layers on animated mobile items */

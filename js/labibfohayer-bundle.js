@@ -5356,7 +5356,8 @@ window.__two26LoaderDone = true;
             const vel = Math.abs(self.getVelocity() || 0);
             const velStretch = Math.min(vel / 1500, 0.25); // Velocity-reactive stretch boost
 
-            if (self.progress >= 0.9) {
+            var isAtBottom = self.progress >= 0.9 || (typeof self.maxScroll === "function" && self.scroll() >= self.maxScroll() - 20);
+            if (isAtBottom) {
               // Reached bottom region: release into juicy elastic spring bounce (scaleY: 1)
               if (!hasBounced) {
                 hasBounced = true;
@@ -5786,6 +5787,56 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           ScrollTrigger.defaults({ scroller: wrapper });
           ScrollTrigger.refresh();
         }
+
+        // MOBILE GSAP SCROLLTRIGGER HEIGHT CALCULATION & LIFECYCLE REFRESH
+        function mobileRefreshScroll() {
+          if (typeof ScrollTrigger !== "undefined") {
+            try {
+              ScrollTrigger.refresh();
+            } catch (e) {}
+          }
+        }
+
+        // 1. Refresh when window finishes loading
+        if (document.readyState === "complete") {
+          mobileRefreshScroll();
+        } else {
+          window.addEventListener("load", mobileRefreshScroll, { once: true });
+        }
+
+        // 2. Refresh when custom fonts ready
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(mobileRefreshScroll);
+        }
+
+        // 3. Refresh when any images finish loading
+        function bindImgListeners() {
+          var imgs = document.querySelectorAll("img");
+          imgs.forEach(function(img) {
+            if (!img.complete) {
+              img.addEventListener("load", mobileRefreshScroll, { once: true });
+            }
+          });
+        }
+        bindImgListeners();
+
+        // 4. ResizeObserver on .main content to automatically track any dynamic height changes
+        var mainContent = document.querySelector(".main");
+        if (mainContent && typeof ResizeObserver !== "undefined" && !window._mobileMainObserver) {
+          var roTimer = null;
+          window._mobileMainObserver = new ResizeObserver(function() {
+            clearTimeout(roTimer);
+            roTimer = setTimeout(mobileRefreshScroll, 50);
+          });
+          window._mobileMainObserver.observe(mainContent);
+        }
+
+        // 5. Orientation change and window resize refresh
+        window.addEventListener("resize", mobileRefreshScroll);
+        window.addEventListener("orientationchange", function() {
+          setTimeout(mobileRefreshScroll, 200);
+        });
+
         return;
       }
 
@@ -6051,14 +6102,10 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
           }
         } catch(e) {}
       }
-      window.dispatchEvent(new Event("resize"));
-      if (window.ScrollTrigger) {
-        try {
-          window.ScrollTrigger.refresh();
-        } catch(e) {}
-      }
-
-      setTimeout(function() {
+      function triggerRouteRefreshLadder() {
+        if (typeof window.initTwo26FooterAnimation === "function") {
+          window.initTwo26FooterAnimation();
+        }
         if (typeof window.initLenis === "function") {
           window.initLenis();
         }
@@ -6078,7 +6125,23 @@ gsap.registerPlugin(SplitText,ScrollTrigger,DrawSVGPlugin,MotionPathPlugin,Custo
             window.ScrollTrigger.refresh();
           } catch(e) {}
         }
-      }, 60);
+      }
+
+      var routeRefreshDelays = [40, 100, 250, 500, 1000, 1800];
+      routeRefreshDelays.forEach(function(d) {
+        setTimeout(triggerRouteRefreshLadder, d);
+      });
+
+      var routeImgs = document.querySelectorAll("img");
+      routeImgs.forEach(function(img) {
+        if (!img.complete) {
+          img.addEventListener("load", triggerRouteRefreshLadder, { once: true });
+        }
+      });
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(triggerRouteRefreshLadder);
+      }
     }
 
     // 3. If entering Homepage
