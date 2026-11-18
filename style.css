@@ -766,4 +766,35 @@ iframe[src*="resume.pdf"] {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
+
+  /* =========================================================================
+     PAGE TRANSITIONS & HARDWARE ACCELERATION (MOBILE <= 768PX)
+     ========================================================================= */
+  .page-transition-overlay {
+    will-change: opacity, transform !important;
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+  }
+
+  html.page-transitioning .page-transition-overlay {
+    background-color: #FF5400 !important;
+  }
+
+  .page-transition-overlay .svg-tcontact {
+    display: none !important;
+  }
+
+  /* Aggressive GPU acceleration on animated mobile components */
+  .section-work-hero,
+  .work-hero-text,
+  .value-card,
+  .carousel-drum,
+  .carousel-card,
+  .service-block,
+  .testimonial-card,
+  .footer {
+    will-change: transform, opacity;
+  }
 }

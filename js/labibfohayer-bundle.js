@@ -2,6 +2,16 @@
 
 window.__two26LoaderDone = true;
 
+// Mobile Hardware Acceleration (GPU): Push all GSAP tweens onto GPU layers on <= 768px
+if (typeof window !== "undefined" && (window.innerWidth <= 768 || (window.matchMedia && window.matchMedia("(max-width: 768px)").matches))) {
+  if (typeof gsap !== "undefined") {
+    try {
+      gsap.defaults({ force3D: true });
+      if (gsap.config) gsap.config({ force3D: true, autoSleep: 60 });
+    } catch (e) {}
+  }
+}
+
 
 /* === SCRIPT 1 === */
 !function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);
@@ -2287,7 +2297,9 @@ window.__two26LoaderDone = true;
           }
           if (typeof window.triggerPageTransition === "function") {
             e.preventDefault();
-            window.triggerPageTransition("/about");
+            window.triggerPageTransition("/about", function () {
+              window.location.href = "/about";
+            });
             return;
           }
         }
@@ -2308,7 +2320,9 @@ window.__two26LoaderDone = true;
           }
           if (typeof window.triggerPageTransition === "function") {
             e.preventDefault();
-            window.triggerPageTransition("/work");
+            window.triggerPageTransition("/work", function () {
+              window.location.href = "/work";
+            });
             return;
           }
         }
