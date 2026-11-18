@@ -357,6 +357,37 @@ iframe[src*="resume.pdf"] {
   }
 
   /* =========================================================================
+     WORK HERO SECTION: REPOSITION FLOATING PILLS TO CLEAR ORANGE HEADING (MOBILE ONLY)
+     ========================================================================= */
+  .section-work-hero .work-hero-text {
+    padding-top: 1.85rem !important;
+    margin-bottom: 3.5rem !important;
+    position: relative !important;
+  }
+
+  html body .section-work-hero .work-hero-pill.one,
+  html body .work-hero-text .work-hero-pill.one,
+  .work-hero-pill.one {
+    top: auto !important;
+    bottom: -44px !important;
+    left: 6px !important;
+    right: auto !important;
+    rotate: -6deg !important;
+    z-index: 5 !important;
+  }
+
+  html body .section-work-hero .work-hero-pill.two,
+  html body .work-hero-text .work-hero-pill.two,
+  .work-hero-pill.two {
+    top: -14px !important;
+    bottom: auto !important;
+    right: 10px !important;
+    left: auto !important;
+    rotate: 4deg !important;
+    z-index: 5 !important;
+  }
+
+  /* =========================================================================
      SERVICES SECTION: EXPANDED STEP-BY-STEP MOBILE SCROLL JOURNEY
      ========================================================================= */
   .section-services-body {

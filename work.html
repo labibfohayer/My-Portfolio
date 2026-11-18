@@ -2992,10 +2992,38 @@
     }
   }
 
-  /* Reposition "Just a few" floating badge to prevent overlapping letters of PROJECTS */
-  .section-work-hero .work-hero-pill.two {
-    top: 50% !important;
-    right: 17% !important;
+  /* Reposition "Just a few" floating badge on desktop to prevent overlapping letters of PROJECTS */
+  @media screen and (min-width: 769px) {
+    .section-work-hero .work-hero-pill.two {
+      top: 50% !important;
+      right: 17% !important;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .section-work-hero .work-hero-text {
+      padding-top: 1.85rem !important;
+      margin-bottom: 3.5rem !important;
+      position: relative !important;
+    }
+
+    .section-work-hero .work-hero-pill.one {
+      top: auto !important;
+      bottom: -44px !important;
+      left: 6px !important;
+      right: auto !important;
+      rotate: -6deg !important;
+      z-index: 5 !important;
+    }
+
+    .section-work-hero .work-hero-pill.two {
+      top: -14px !important;
+      bottom: auto !important;
+      right: 10px !important;
+      left: auto !important;
+      rotate: 4deg !important;
+      z-index: 5 !important;
+    }
   }
 </style>
 
