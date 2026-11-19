@@ -799,4 +799,190 @@ iframe[src*="resume.pdf"] {
   .footer {
     will-change: transform, opacity;
   }
+
+  /* =========================================================================
+     STRICT MOBILE 2-COLUMN PROJECTS GRID (SCREENS <= 768PX)
+     - 2-column side-by-side grid (two26.studio style)
+     - Tall portrait proportion cards (aspect-ratio: 1 / 1.38)
+     - Compact, perfectly aligned footer row (logo + titles + circular arrow)
+     - 100% responsive without overlapping or horizontal overflow
+     ========================================================================= */
+  .section-projects-wrapper {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding-left: clamp(10px, 3vw, 16px) !important;
+    padding-right: clamp(10px, 3vw, 16px) !important;
+    overflow-x: hidden !important;
+  }
+
+  .projects-list {
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: clamp(10px, 2.5vw, 14px) !important;
+    row-gap: clamp(18px, 4.5vw, 24px) !important;
+    width: 100% !important;
+    padding: 0 !important;
+    align-items: start !important;
+  }
+
+  .project-item,
+  .project-card-clip-mask {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .project-card {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  /* Tall Portrait-Oriented Card Image Wrapper */
+  .project-card-img-wrapper {
+    aspect-ratio: 1 / 1.38 !important;
+    width: 100% !important;
+    border-radius: clamp(12px, 3vw, 16px) !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+  }
+
+  .project-card .project-img,
+  .project-card .project-img-hover {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    position: absolute !important;
+    inset: 0 !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+
+  .project-card .project-img-svg,
+  .project-card .project-card-mask-overlay {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    inset: 0 !important;
+  }
+
+  /* Compact Card Footer Row */
+  .project-detail {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 2px 0 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .project-logo {
+    width: clamp(22px, 5.8vw, 26px) !important;
+    min-width: clamp(22px, 5.8vw, 26px) !important;
+    height: clamp(22px, 5.8vw, 26px) !important;
+    min-height: clamp(22px, 5.8vw, 26px) !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .project-logo-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    display: block !important;
+  }
+
+  .project-detail-header {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    gap: 2px !important;
+    overflow: hidden !important;
+  }
+
+  .project-detail-btm {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    overflow: hidden !important;
+  }
+
+  .project-name-text {
+    font-size: clamp(10px, 2.7vw, 12.5px) !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    text-transform: uppercase !important;
+    color: var(--brand-black, #111) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .project-detail-text {
+    font-size: clamp(7.5px, 2vw, 9px) !important;
+    font-weight: 600 !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    color: var(--brand-primary, #FF5400) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .projects-arrow {
+    width: clamp(20px, 5.2vw, 24px) !important;
+    min-width: clamp(20px, 5.2vw, 24px) !important;
+    height: clamp(20px, 5.2vw, 24px) !important;
+    min-height: clamp(20px, 5.2vw, 24px) !important;
+    padding: clamp(4px, 1.2vw, 6px) !important;
+    border-radius: 50% !important;
+    background-color: var(--brand-primary, #FF5400) !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .projects-arrow .code-embed-7 {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .projects-arrow svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    color: #FFFFFF !important;
+  }
+
 }
