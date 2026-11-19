@@ -158,7 +158,7 @@
       id: "portfolio-website",
       name: "Portfolio Website",
       detail: "WEB DESIGN",
-      href: "https://labibfohayer.github.io/",
+      href: "https://labibfohayer.pages.dev",
       mainImg: "/projects/portfolio-website-static.jpg",
       hoverImg: "/projects/portfolio-website-hover.jpg",
       logo: "/favicon.svg",
