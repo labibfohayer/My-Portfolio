@@ -245,6 +245,42 @@
      * Guarantees the Home page dynamically renders exactly the first 6 projects
      * of window.PORTFOLIO_PROJECTS whenever called.
      */
+    /**
+     * Client-side Synchronizer for Work page project card numbering (01 to 15)
+     */
+    window.syncWorkProjectNumbers = function () {
+      const isWorkPage =
+        window.location.pathname.includes("/work") ||
+        window.location.pathname.includes("/projects") ||
+        window.location.pathname.includes("/portfolio") ||
+        document.querySelector(".section-work-hero");
+
+      if (!isWorkPage) return;
+
+      const container = document.querySelector(".section-projects .projects-list, .projects-list");
+      if (!container) return;
+
+      const items = container.querySelectorAll(".project-item");
+      items.forEach((item, idx) => {
+        let numEl = item.querySelector(".project-card-num");
+        const numText = String(idx + 1).padStart(2, "0");
+        if (!numEl) {
+          numEl = document.createElement("div");
+          numEl.className = "project-card-num";
+          item.insertBefore(numEl, item.firstChild);
+        }
+        if (numEl.textContent !== numText) {
+          numEl.textContent = numText;
+        }
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", window.syncWorkProjectNumbers);
+    } else {
+      window.syncWorkProjectNumbers();
+    }
+
     window.syncFeaturedProjects = function () {
       const container = document.querySelector("#work .projects-list, .section-projects .projects-list");
       if (!container) return;

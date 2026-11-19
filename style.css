@@ -986,3 +986,28 @@ iframe[src*="resume.pdf"] {
   }
 
 }
+
+/* =========================================================================
+   WORK PAGE - PROJECT CARD NUMBERING LABELS (01 to 15)
+   ========================================================================= */
+.project-card-num {
+  color: var(--brand-primary, #FF5400) !important;
+  font-family: var(--font-secondary, "NeueMontreal", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  text-align: left;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+@media screen and (max-width: 768px) {
+  .project-card-num {
+    font-size: 11px !important;
+    margin-bottom: 6px !important;
+    letter-spacing: 0.04em !important;
+  }
+}
