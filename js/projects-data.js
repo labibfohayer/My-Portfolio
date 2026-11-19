@@ -50,6 +50,21 @@
       objectFit: "cover"
     },
     {
+      id: "villa-solenne",
+      name: "Villa Solenne",
+      detail: "LUXURY SEASIDE HOTEL & VILLA WEBSITE",
+      href: "https://villasolenne.pages.dev/",
+      mainImg: "/projects/villa-solenne-cover.jpg",
+      hoverImg: "/projects/villa-solenne-detail.jpg",
+      logo: "/projects/villa-solenne-logo.jpg",
+      bgColor: "#0F3734",
+      color: "#D19E52",
+      alt: "Villa Solenne - Luxury Seaside Hotel & Villa Website",
+      target: "_blank",
+      rel: "noopener noreferrer",
+      objectFit: "cover"
+    },
+    {
       id: "mahadi-portfolio",
       name: "Mahadi's Portfolio",
       detail: "PROFESSIONAL PORTFOLIO WEBSITE",
