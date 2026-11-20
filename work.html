@@ -4770,6 +4770,53 @@
     -webkit-overflow-scrolling: touch;
     box-sizing: border-box;
   }
+
+  /* Work Page Unified Scrolling & Touch Mechanics */
+  .section-work-hero,
+  .section-projects,
+  .section-projects-wrapper,
+  .projects-vertical-wrapper,
+  .projects-list-wrapper,
+  .projects-list,
+  .project-item,
+  .footer-overlay-bg {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    overscroll-behavior: auto !important;
+    overscroll-behavior-y: auto !important;
+    touch-action: pan-y !important;
+  }
+
+  .project-card,
+  .project-card-clip-mask,
+  .project-card-img-wrapper,
+  .project-card img,
+  .project-img,
+  .project-img-hover,
+  .project-img-svg,
+  .project-card-mask-overlay,
+  .project-detail,
+  .project-logo,
+  .project-logo-img,
+  .project-detail-header,
+  .projects-arrow,
+  .project-card-num {
+    touch-action: pan-y !important;
+    -webkit-user-drag: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    overscroll-behavior: auto !important;
+    overscroll-behavior-y: auto !important;
+  }
+
+  .project-card-mask-overlay,
+  .project-img-svg,
+  .project-card-num {
+    pointer-events: none !important;
+  }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js?v=2.0"></script>
