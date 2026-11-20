@@ -807,13 +807,22 @@ iframe[src*="resume.pdf"] {
      - Compact, perfectly aligned footer row (logo + titles + circular arrow)
      - 100% responsive without overlapping or horizontal overflow
      ========================================================================= */
+  .section-projects,
+  .section-projects-wrapper,
+  .projects-vertical-wrapper,
+  .projects-list-wrapper {
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
   .section-projects-wrapper {
     box-sizing: border-box !important;
     width: 100% !important;
     max-width: 100vw !important;
     padding-left: clamp(10px, 3vw, 16px) !important;
     padding-right: clamp(10px, 3vw, 16px) !important;
-    overflow-x: hidden !important;
   }
 
   .projects-list {
@@ -825,6 +834,10 @@ iframe[src*="resume.pdf"] {
     width: 100% !important;
     padding: 0 !important;
     align-items: start !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
   }
 
   .project-item,
@@ -1010,4 +1023,25 @@ iframe[src*="resume.pdf"] {
     margin-bottom: 6px !important;
     letter-spacing: 0.04em !important;
   }
+}
+
+/* =========================================================================
+   ZERO-SCROLLBAR GUARDRAIL: COMPLETELY ELIMINATE ALL SCROLLBARS
+   ========================================================================= */
+html,
+body,
+.page,
+.section-projects,
+.section-projects-wrapper,
+.projects-vertical-wrapper,
+.projects-list-wrapper,
+.projects-list {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
