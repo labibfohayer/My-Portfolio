@@ -1069,8 +1069,7 @@ body,
 .projects-vertical-wrapper,
 .projects-list-wrapper,
 .projects-list,
-.project-item,
-.footer-overlay-bg {
+.project-item {
   overflow: visible !important;
   overflow-x: visible !important;
   overflow-y: visible !important;
@@ -1107,4 +1106,82 @@ body,
 .project-img-svg,
 .project-card-num {
   pointer-events: none !important;
+}
+
+/* =========================================================================
+   FOOTER SEAMLESS ORANGE & BOTTOM ANCHORING FIX (MOBILE & DESKTOP)
+   - Eliminates two-tone seam line and gradient color discrepancy
+   - Enforces 100% unified brand orange background across all pages
+   - Seamlessly integrates SVG swirl texture across full footer area
+   - Anchors giant "LABIB" SVG text cleanly to the bottom edge without extra strip
+   ========================================================================= */
+.footer {
+  background-color: var(--brand-primary, #FF5400) !important;
+  background-image: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.footer-overlay-bg {
+  position: absolute !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.footer-overlay {
+  display: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+.footer-texture {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center bottom !important;
+  opacity: 0.6 !important;
+  background: transparent !important;
+  pointer-events: none !important;
+}
+
+.footer-wrapper {
+  position: relative !important;
+  z-index: 2 !important;
+  padding-bottom: 0 !important;
+}
+
+.footer-btm {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+  gap: 0.5em !important;
+}
+
+.footer-logo-wrap,
+.footer-svg-logo {
+  width: 100% !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  display: flex !important;
+  align-items: flex-end !important;
+}
+
+.footer-svg-logo svg {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  margin-bottom: -2px !important;
+  vertical-align: bottom !important;
 }
