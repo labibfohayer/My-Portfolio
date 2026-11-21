@@ -1,6 +1,6 @@
 # Labib Fohayer - Developer Portfolio and Digital Showcase
 
-A modern, high-performance personal portfolio website showcasing web applications, workflow automation engines, and interactive web experiences engineered by Labib Fohayer. Deployed via GitHub Pages at [labibfohayer.github.io](https://labibfohayer.github.io).
+A modern, high-performance personal portfolio website showcasing web applications, workflow automation engines, and interactive web experiences engineered by Labib Fohayer. Deployed via Cloudflare Pages at [labibfohayer.pages.dev](https://labibfohayer.pages.dev/).
 
 ---
 
@@ -17,7 +17,7 @@ This repository hosts the static export and production assets for Labib Fohayer'
 - Inertial Smooth Scrolling: Integrated Lenis smooth scroll engine providing unified scroll kinematics across touchpads, mice, and mobile touch surfaces.
 - Modular Routing Architecture: Fully static pre-rendered routes including Home (`/`), About Me (`/about-me`), Projects (`/projects`), Work History (`/work`), Personal Interests (`/off-the-clock`), and Resume (`/resume`).
 - Integrated Resume Viewer: Fast client-side resume viewing and direct PDF download pipeline (`Labib_Fohayer_Resume.pdf`).
-- Optimized Static Delivery: Zero-runtime server overhead utilizing optimized static bundles, WebP/SVG vector assets, and `.nojekyll` bypass configuration for GitHub Pages CDN distribution.
+- Optimized Static Delivery: Zero-runtime server overhead utilizing optimized static bundles, WebP/SVG vector assets, and Cloudflare Pages edge CDN distribution.
 
 ---
 
@@ -27,15 +27,15 @@ This repository hosts the static export and production assets for Labib Fohayer'
 - Motion and Animation: GSAP 3, ScrollTrigger, SplitText, DrawSVGPlugin, MotionPathPlugin, Lenis Smooth Scroll
 - Styling: Tailwind CSS, Custom Utility CSS, CSS Keyframe Animations
 - Media and Assets: Scalable Vector Graphics (SVG), WebP image compression, MP4 video preview clips
-- Infrastructure: GitHub Pages, GitHub Actions CI/CD pipeline
+- Infrastructure: Cloudflare Pages, GitHub Actions CI/CD pipeline
 
 ---
 
 ## Directory Structure
 
 ```
-labibfohayer.github.io/
-├── .nojekyll                  # GitHub Pages Jekyll bypass flag
+My-Portfolio/
+├── .nojekyll                  # Static asset preservation flag
 ├── 404.html                   # Static fallback error page
 ├── index.html                 # Main landing page
 ├── about-me.html              # Professional background and biography
@@ -61,8 +61,8 @@ To inspect or serve the static build locally on your development machine:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/labibfohayer/labibfohayer.github.io.git
-cd labibfohayer.github.io
+git clone https://github.com/labibfohayer/My-Portfolio.git
+cd My-Portfolio
 ```
 
 ### 2. Run a Local Static HTTP Server
@@ -82,11 +82,10 @@ Navigate to `http://localhost:8000` to review pages, asset loading, and animatio
 
 ## Deployment Workflow
 
-The repository is configured for automated hosting on GitHub Pages:
+The repository is configured for automated hosting on Cloudflare Pages:
 1. Production builds are generated via static export (`next export` / `output: 'export'`).
 2. Build artifacts are committed directly to the `main` branch.
-3. The `.nojekyll` file ensures that GitHub Pages does not filter directories starting with underscores (such as `_next`).
-4. Updates pushed to the `main` branch deploy globally across GitHub Pages CDN edges within minutes.
+3. Updates pushed to the `main` branch deploy globally across Cloudflare's high-speed global edge network within minutes.
 
 ---
 
@@ -94,7 +93,7 @@ The repository is configured for automated hosting on GitHub Pages:
 
 Developed and maintained by **Labib Fohayer**.
 
-- Portfolio: [https://labibfohayer.github.io](https://labibfohayer.github.io)
+- Portfolio: [https://labibfohayer.pages.dev](https://labibfohayer.pages.dev/)
 - GitHub: [https://github.com/labibfohayer](https://github.com/labibfohayer)
 - LinkedIn: [https://linkedin.com/in/labib-fohayer](https://linkedin.com/in/labib-fohayer)
 - Email: Contact available via portfolio contact portal
