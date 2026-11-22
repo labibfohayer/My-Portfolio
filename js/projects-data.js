@@ -228,6 +228,21 @@
       target: "_blank",
       rel: "noopener noreferrer",
       objectFit: "cover"
+    },
+    {
+      id: "stride-choco",
+      name: "STRIDE",
+      detail: "3D CHOCOLATE BRAND WEBSITE",
+      href: "https://stridechoco.pages.dev/",
+      mainImg: "/projects/stride-cover.jpg",
+      hoverImg: "/projects/stride-detail.jpg",
+      logo: "/projects/stride-logo.jpg",
+      bgColor: "#F7A2C3",
+      color: "#E83D84",
+      alt: "STRIDE - 3D CHOCOLATE BRAND WEBSITE",
+      target: "_blank",
+      rel: "noopener noreferrer",
+      objectFit: "cover"
     }
   ];
 
