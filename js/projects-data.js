@@ -35,6 +35,21 @@
       objectFit: "cover"
     },
     {
+      id: "stride-choco",
+      name: "STRIDE",
+      detail: "3D CHOCOLATE BRAND WEBSITE",
+      href: "https://stridechoco.pages.dev/",
+      mainImg: "/projects/stride-cover.jpg",
+      hoverImg: "/projects/stride-detail.jpg",
+      logo: "/projects/stride-logo.jpg",
+      bgColor: "#F7A2C3",
+      color: "#E83D84",
+      alt: "STRIDE - 3D CHOCOLATE BRAND WEBSITE",
+      target: "_blank",
+      rel: "noopener noreferrer",
+      objectFit: "cover"
+    },
+    {
       id: "maison-dhaka",
       name: "Maison Dhaka",
       detail: "LUXURY ARCHITECTURE & INTERIOR DESIGN",
@@ -65,21 +80,6 @@
       objectFit: "cover"
     },
     {
-      id: "mahadi-portfolio",
-      name: "Mahadi's Portfolio",
-      detail: "PROFESSIONAL PORTFOLIO WEBSITE",
-      href: "https://mahadihasan.pages.dev/",
-      mainImg: "/projects/image_41.png",
-      hoverImg: "/projects/image_42.png",
-      logo: "/projects/mahadi-portfolio-logo.png",
-      bgColor: "#FFFFFF",
-      color: "#FF5400",
-      alt: "Mahadi's Portfolio - Professional Portfolio Website",
-      target: "_blank",
-      rel: "noopener noreferrer",
-      objectFit: "cover"
-    },
-    {
       id: "ladiya-interior",
       name: "Ladiya Interior",
       detail: "INTERIOR DESIGN WEBSITE / WEB DEVELOPMENT",
@@ -90,6 +90,21 @@
       bgColor: "#201A17",
       color: "#C69A57",
       alt: "Ladiya Interior - Interior Design Website / Web Development",
+      target: "_blank",
+      rel: "noopener noreferrer",
+      objectFit: "cover"
+    },
+    {
+      id: "mahadi-portfolio",
+      name: "Mahadi's Portfolio",
+      detail: "PROFESSIONAL PORTFOLIO WEBSITE",
+      href: "https://mahadihasan.pages.dev/",
+      mainImg: "/projects/image_41.png",
+      hoverImg: "/projects/image_42.png",
+      logo: "/projects/mahadi-portfolio-logo.png",
+      bgColor: "#FFFFFF",
+      color: "#FF5400",
+      alt: "Mahadi's Portfolio - Professional Portfolio Website",
       target: "_blank",
       rel: "noopener noreferrer",
       objectFit: "cover"
@@ -225,21 +240,6 @@
       bgColor: "#000000",
       color: "rgb(1, 177, 253)",
       alt: "Github Profile - Developer Profile",
-      target: "_blank",
-      rel: "noopener noreferrer",
-      objectFit: "cover"
-    },
-    {
-      id: "stride-choco",
-      name: "STRIDE",
-      detail: "3D CHOCOLATE BRAND WEBSITE",
-      href: "https://stridechoco.pages.dev/",
-      mainImg: "/projects/stride-cover.jpg",
-      hoverImg: "/projects/stride-detail.jpg",
-      logo: "/projects/stride-logo.jpg",
-      bgColor: "#F7A2C3",
-      color: "#E83D84",
-      alt: "STRIDE - 3D CHOCOLATE BRAND WEBSITE",
       target: "_blank",
       rel: "noopener noreferrer",
       objectFit: "cover"
