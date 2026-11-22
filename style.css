@@ -1109,6 +1109,28 @@ body,
 }
 
 /* =========================================================================
+   PROJECT LOGO CIRCULAR CONTAINER & IMAGE ALIGNMENT GUARANTEE
+   ========================================================================= */
+.project-logo {
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.project-logo-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 50% !important;
+  display: block !important;
+}
+
+/* =========================================================================
    FOOTER SEAMLESS ORANGE & BOTTOM ANCHORING FIX (MOBILE & DESKTOP)
    - Eliminates two-tone seam line and gradient color discrepancy
    - Enforces 100% unified brand orange background across all pages
