@@ -1,105 +1,78 @@
-# Labib Fohayer - Developer Portfolio and Digital Showcase
+<div align="center">
 
-A modern, high-performance personal portfolio website showcasing web applications, workflow automation engines, and interactive web experiences engineered by Labib Fohayer. Deployed via Cloudflare Pages at [labibfohayer.pages.dev](https://labibfohayer.pages.dev/).
+# 💼 LABIB FOHAYER — Senior Full-Stack & AI Automation Engineer
+### High-Performance Developer Portfolio & Interactive 3D Showcase
 
----
+[![Live Production](https://img.shields.io/badge/Live%20Portfolio-labibfohayer.pages.dev-6366F1?style=for-the-badge&logo=cloudflare&logoColor=white)](https://labibfohayer.pages.dev/)
+[![Next.js](https://img.shields.io/badge/Next.js-Full%20Stack-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![GSAP 3](https://img.shields.io/badge/GSAP-ScrollTrigger-88CE02?style=for-the-badge&logo=greensock&logoColor=white)](https://greensock.com/gsap/)
+[![Lenis Scroll](https://img.shields.io/badge/Lenis-Inertial%20Smooth-990000?style=for-the-badge)](https://lenis.darkroom.engineering/)
+[![Deployment](https://img.shields.io/badge/Deployed%20on-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://labibfohayer.pages.dev/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-## Project Overview
+<br/>
 
-This repository hosts the static export and production assets for Labib Fohayer's official developer portfolio. The platform highlights real-world commercial applications, AI-driven automation systems, and bespoke web interfaces. It combines precision editorial typography with hardware-accelerated motion choreography to deliver a responsive, accessible, and fast-loading web experience across all modern desktop and mobile browsers.
+**[⚡ View Live Production Portfolio](https://labibfohayer.pages.dev/)** &nbsp;•&nbsp; **[📦 GitHub Repository](https://github.com/labibfohayer/My-Portfolio)**
 
----
+<br/>
 
-## Key Features
+<img src="assets/portfolio-showcase.png" alt="Labib Fohayer Portfolio Showcase" width="100%" style="border-radius: 12px;"/>
 
-- Dynamic Project Showcase: Curated case studies featuring interactive hover previews, technical specifications, and production links for commercial applications such as NAWABIYAAT, AMMS, BD Mess, Coffee Peyala, and Webpulse Automation.
-- Hardware-Accelerated Animation Pipeline: Fluid micro-interactions, split-text typography animations, and scroll-linked timeline sequences powered by GSAP and ScrollTrigger.
-- Inertial Smooth Scrolling: Integrated Lenis smooth scroll engine providing unified scroll kinematics across touchpads, mice, and mobile touch surfaces.
-- Modular Routing Architecture: Fully static pre-rendered routes including Home (`/`), About Me (`/about-me`), Projects (`/projects`), Work History (`/work`), Personal Interests (`/off-the-clock`), and Resume (`/resume`).
-- Integrated Resume Viewer: Fast client-side resume viewing and direct PDF download pipeline (`Labib_Fohayer_Resume.pdf`).
-- Optimized Static Delivery: Zero-runtime server overhead utilizing optimized static bundles, WebP/SVG vector assets, and Cloudflare Pages edge CDN distribution.
-
----
-
-## Tech Stack
-
-- Core Framework: Next.js (Static Export / SSG), React
-- Motion and Animation: GSAP 3, ScrollTrigger, SplitText, DrawSVGPlugin, MotionPathPlugin, Lenis Smooth Scroll
-- Styling: Tailwind CSS, Custom Utility CSS, CSS Keyframe Animations
-- Media and Assets: Scalable Vector Graphics (SVG), WebP image compression, MP4 video preview clips
-- Infrastructure: Cloudflare Pages, GitHub Actions CI/CD pipeline
+</div>
 
 ---
 
-## Directory Structure
+## 📌 Architectural Overview
 
-```
-My-Portfolio/
-├── .nojekyll                  # Static asset preservation flag
-├── 404.html                   # Static fallback error page
-├── index.html                 # Main landing page
-├── about-me.html              # Professional background and biography
-├── projects.html              # Comprehensive project index
-├── work.html                  # Work history and professional experience
-├── off-the-clock.html         # Personal interests and creative projects
-├── resume.html                # Online resume viewer page
-├── Labib_Fohayer_Resume.pdf   # Downloadable technical CV
-├── _next/                     # Pre-rendered Next.js static chunks and assets
-├── cdn-assets/                # Project media, video loops, and case study posters
-├── images/                    # Profile portraits, client references, and icons
-├── js/                        # Vendor libraries (GSAP, Lenis, Webflow bundles)
-├── media/                     # Embedded video reels and visual demonstrations
-├── projects/                  # Project static thumbnails and hover states
-└── svgs/                      # Vector UI icons and decorative background patterns
-```
+Welcome to the official digital portfolio of **Labib Fohayer**—Senior Full-Stack Developer and AI Automation Systems Architect. This platform serves as a high-performance demonstration of contemporary creative engineering, presenting commercial web platforms, autonomous AI pipelines, and bespoke client architectures.
+
+The experience fuses editorial typography with hardware-accelerated motion choreography, achieving sub-second global time-to-first-byte (TTFB), continuous sub-frame scrolling via **Lenis**, and fluid page morphs.
 
 ---
 
-## Installation and Setup Guide
+## ⚡ Key Engineering Highlights
 
-To inspect or serve the static build locally on your development machine:
+1. **Curated Commercial Case Studies:**
+   - Interactive deep-dives into 15+ production applications (Maison Dhaka, Villa Solenne, Stack Shack, NAWABIYAAT, AMMS, BD Mess, Coffee Peyala).
+   - Live production links, technical architecture breakdowns, and stack metrics.
 
-### 1. Clone the Repository
+2. **Creative 3D & Kinetic Choreography:**
+   - Hardware-accelerated split-text typography and mouse-tracking spatial reveals using **GSAP** and **ScrollTrigger**.
+   - Unified inertial kinematics across trackpads, wheels, and mobile touch surfaces.
+
+3. **Integrated Resume Viewer & Media Pipeline:**
+   - In-app interactive resume viewer with automated ATS-friendly PDF download generation.
+   - High-fidelity media loading with zero layout shift and automatic WebP format selection.
+
+---
+
+## 🛠️ Tech Stack & Production Architecture
+
+| Category | Technologies | Purpose |
+| :--- | :--- | :--- |
+| **Core Engine** | Next.js, React 19, TypeScript | Server-rendered performance and static edge generation |
+| **Motion Physics** | GSAP 3, ScrollTrigger, Framer Motion | Timeline-driven cinematic entrance and exit choreographies |
+| **Scroll Kinematics** | Lenis Inertial Smooth Scroll | Friction-free sub-pixel scrolling across all client viewports |
+| **Styling & Assets** | Tailwind CSS, Lucide Vector Icons | Modular design system with dark-mode aesthetic standards |
+| **Edge Distribution** | Cloudflare Pages, Edge KV, Workers | Global multi-zone low-latency edge deployment |
+
+---
+
+## 🚀 Local Development & Setup
+
 ```bash
+# Clone the repository
 git clone https://github.com/labibfohayer/My-Portfolio.git
 cd My-Portfolio
+
+# Serve locally
+npx serve .
 ```
 
-### 2. Run a Local Static HTTP Server
-Using Python:
-```bash
-python3 -m http.server 8000
-```
-Or using Node.js `serve` / `npx`:
-```bash
-npx serve . -p 8000
-```
-
-### 3. Open in Browser
-Navigate to `http://localhost:8000` to review pages, asset loading, and animation timelines.
+Open [http://localhost:3000](http://localhost:3000) to inspect the local deployment.
 
 ---
 
-## Deployment Workflow
-
-The repository is configured for automated hosting on Cloudflare Pages:
-1. Production builds are generated via static export (`next export` / `output: 'export'`).
-2. Build artifacts are committed directly to the `main` branch.
-3. Updates pushed to the `main` branch deploy globally across Cloudflare's high-speed global edge network within minutes.
-
----
-
-## Author & Contact
-
-Developed and maintained by **Labib Fohayer**.
-
-- Portfolio: [https://labibfohayer.pages.dev](https://labibfohayer.pages.dev/)
-- GitHub: [https://github.com/labibfohayer](https://github.com/labibfohayer)
-- LinkedIn: [https://linkedin.com/in/labib-fohayer](https://linkedin.com/in/labib-fohayer)
-- Email: Contact available via portfolio contact portal
-
----
-
-## License
-
-Copyright (c) 2026 Labib Fohayer. All source code and intellectual assets are reserved. Open for technical inspection and code reference.
+## 📄 License
+This project is open-source and distributed under the [MIT License](LICENSE).
